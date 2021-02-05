@@ -20,6 +20,7 @@ public class SceneJoinGame extends Scene {
 
     private TextField inputIp;
     private TextField inputPort;
+    private TextField inputName;
 
     public SceneJoinGame(Navigator navigator) {
         super(rootNode);
@@ -32,11 +33,22 @@ public class SceneJoinGame extends Scene {
                         "-fx-background-position: center center;"
         );
 
-        VBox contentBox = new VBox(45);
+        VBox contentBox = new VBox(25);
         contentBox.setPadding(new Insets(50, 0, 0, 70));
 
         Button mainMenuBtn = new Button("Hauptmenü");
         mainMenuBtn.setStyle(
+                "-fx-background-radius: 3em;" +
+                        "-fx-min-width: 300px;" +
+                        "-fx-min-height: 45px;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-font-size: 18px;"
+        );
+
+        inputName = new TextField();
+        inputName.setPromptText("Name eingeben:");
+        inputName.setFocusTraversable(false);
+        inputName.setStyle(
                 "-fx-background-radius: 3em;" +
                         "-fx-min-width: 300px;" +
                         "-fx-min-height: 45px;" +
@@ -56,7 +68,7 @@ public class SceneJoinGame extends Scene {
         );
 
         inputPort = new TextField();
-        inputPort.setPromptText("Port eingeben");
+        inputPort.setPromptText("Port eingeben:");
         inputPort.setFocusTraversable(false);
         inputPort.setStyle(
                 "-fx-background-radius: 3em;" +
@@ -75,7 +87,7 @@ public class SceneJoinGame extends Scene {
                         "-fx-font-size: 18px;"
         );
 
-        contentBox.getChildren().addAll(mainMenuBtn, inputIp, inputPort, joinGame);
+        contentBox.getChildren().addAll(mainMenuBtn, inputName, inputIp, inputPort, joinGame);
 
         pane.setLeft(contentBox);
         rootNode.getChildren().add(pane);
@@ -84,6 +96,7 @@ public class SceneJoinGame extends Scene {
         pane.setMinSize(800, 600);
     }
 
+    // @Jan -> noch port Prüfer, Ip Prüfer implementieren + Name einbinden
     private void joinGame() {
         try {
             Client client = new Client(inputIp.getText(), Integer.parseInt(inputPort.getText()));
@@ -92,7 +105,7 @@ public class SceneJoinGame extends Scene {
             Message message = new Message(MessageType.JOIN_LOBBY);
             message.addData("name", "SomeClient");
             client.sendMessage(message);
-        } catch(IOException ioException) {
+        } catch (IOException ioException) {
             ioException.printStackTrace();
         }
 

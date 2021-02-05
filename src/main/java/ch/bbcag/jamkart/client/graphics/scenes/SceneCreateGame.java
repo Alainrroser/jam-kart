@@ -17,6 +17,7 @@ public class SceneCreateGame extends Scene {
     private static Group rootNode = new Group();
 
     private TextField inputPort;
+    private TextField inputName;
 
     public SceneCreateGame(Navigator navigator) {
         super(rootNode);
@@ -30,10 +31,21 @@ public class SceneCreateGame extends Scene {
         );
 
         VBox contentBox = new VBox(45);
-        contentBox.setPadding(new Insets(150, 0, 0, 70));
+        contentBox.setPadding(new Insets(75, 0, 0, 70));
 
         Button mainMenuBtn = new Button("Hauptmenü");
         mainMenuBtn.setStyle(
+                "-fx-background-radius: 3em;" +
+                        "-fx-min-width: 300px;" +
+                        "-fx-min-height: 45px;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-font-size: 18px;"
+        );
+
+        inputName = new TextField();
+        inputName.setPromptText("Name eingeben");
+        inputName.setFocusTraversable(false);
+        inputName.setStyle(
                 "-fx-background-radius: 3em;" +
                         "-fx-min-width: 300px;" +
                         "-fx-min-height: 45px;" +
@@ -61,7 +73,7 @@ public class SceneCreateGame extends Scene {
                         "-fx-font-size: 18px;"
         );
 
-        contentBox.getChildren().addAll(mainMenuBtn, inputPort, createGame);
+        contentBox.getChildren().addAll(mainMenuBtn, inputName, inputPort, createGame);
 
         pane.setLeft(contentBox);
         rootNode.getChildren().add(pane);
@@ -70,11 +82,13 @@ public class SceneCreateGame extends Scene {
         pane.setMinSize(800, 600);
     }
 
+
+    // @Jan -> noch port Prüfer implementieren + Name einbinden
     private void createGame() {
         try {
             Server server = new Server(Integer.parseInt(inputPort.getText()));
             server.start();
-        } catch(IOException ioException) {
+        } catch (IOException ioException) {
             ioException.printStackTrace();
         }
         navigator.navigateTo(SceneType.GAME);
