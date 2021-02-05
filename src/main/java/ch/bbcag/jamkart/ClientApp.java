@@ -1,9 +1,6 @@
 package ch.bbcag.jamkart;
 
-import ch.bbcag.jamkart.client.graphics.scenes.Navigator;
-import ch.bbcag.jamkart.client.graphics.scenes.SceneGame;
-import ch.bbcag.jamkart.client.graphics.scenes.SceneStart;
-import ch.bbcag.jamkart.client.graphics.scenes.SceneType;
+import ch.bbcag.jamkart.client.graphics.scenes.*;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -15,6 +12,10 @@ public class ClientApp extends Application {
         Navigator navigator = new Navigator(primaryStage);
         navigator.registerScene(SceneType.START, new SceneStart(navigator));
         navigator.registerScene(SceneType.GAME, new SceneGame(navigator));
+        navigator.registerScene(SceneType.JOIN, new SceneJoinGame(navigator));
+        navigator.registerScene(SceneType.CREATE, new SceneCreateGame(navigator));
         navigator.navigateTo(SceneType.START);
+
+        primaryStage.setResizable(false);
     }
 }
