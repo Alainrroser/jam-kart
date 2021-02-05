@@ -16,9 +16,10 @@ public class Connection extends Thread {
         this.dataInputStream = new DataInputStream(socket.getInputStream());
     }
 
-    public void sendMessage(String text) {
+    public void sendMessage(Message message) {
         try {
-            dataOutputStream.writeUTF(text);
+            String data = message.getStringFromMap();
+            dataOutputStream.writeUTF(data);
             dataOutputStream.flush();
         } catch (IOException e) {
             e.printStackTrace();
@@ -27,7 +28,9 @@ public class Connection extends Thread {
 
     private void readMessage() throws IOException {
         if (socket.getInputStream().available() > 0) {
-            System.out.println(dataInputStream.readUTF());
+            Message message = new Message();
+            String data = dataInputStream.readUTF();
+            message.setMapFromString(data);
         }
     }
 

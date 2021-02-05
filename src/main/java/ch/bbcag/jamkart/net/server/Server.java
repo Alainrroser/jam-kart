@@ -10,19 +10,21 @@ import java.util.List;
 
 public class Server extends Thread {
     private List<Connection> connections;
+    private ServerSocket serverSocket;
+
+    public Server(int port) throws IOException {
+        serverSocket = new ServerSocket(port);
+    }
 
     @Override
     public void run() {
         try {
-            ServerSocket serverSocket = new ServerSocket(1234);
             connections = new ArrayList<>();
 
             while (!serverSocket.isClosed()) {
                 Socket clientSocket = serverSocket.accept();
                 Connection connection = new Connection(clientSocket);
                 connections.add(connection);
-                connection.sendMessage("Hallo");
-                connection.sendMessage("Wi geits dir");
                 connection.start();
             }
         } catch (IOException e) {

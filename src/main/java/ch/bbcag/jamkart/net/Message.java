@@ -6,6 +6,10 @@ import java.util.Map;
 public class Message {
     private Map<String, String> data = new HashMap<>();
 
+    public Message() {
+
+    }
+
     public Message(MessageType messageType) {
         addData("Type", messageType);
     }

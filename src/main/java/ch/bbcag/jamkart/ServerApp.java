@@ -2,10 +2,11 @@ package ch.bbcag.jamkart;
 
 import ch.bbcag.jamkart.net.server.Server;
 
-public class ServerApp {
+import java.io.IOException;
 
-    public static void main(String[] args) {
-        Server server = new Server();
+public class ServerApp {
+    public static void main(String[] args) throws IOException {
+        Server server = new Server(1234);
         server.start();
     }
 }
