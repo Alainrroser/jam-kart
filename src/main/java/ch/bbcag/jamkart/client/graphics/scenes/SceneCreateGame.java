@@ -1,5 +1,6 @@
 package ch.bbcag.jamkart.client.graphics.scenes;
 
+import ch.bbcag.jamkart.net.server.Server;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -8,10 +9,14 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
+import java.io.IOException;
+
 public class SceneCreateGame extends Scene {
 
     private Navigator navigator;
     private static Group rootNode = new Group();
+
+    private TextField inputPort;
 
     public SceneCreateGame(Navigator navigator) {
         super(rootNode);
@@ -36,7 +41,7 @@ public class SceneCreateGame extends Scene {
                         "-fx-font-size: 18px;"
         );
 
-        TextField inputPort = new TextField();
+        inputPort = new TextField();
         inputPort.setPromptText("Port eingeben");
         inputPort.setFocusTraversable(false);
         inputPort.setStyle(
@@ -61,7 +66,17 @@ public class SceneCreateGame extends Scene {
         pane.setLeft(contentBox);
         rootNode.getChildren().add(pane);
         mainMenuBtn.setOnAction(e -> navigator.navigateTo(SceneType.START)); // ip & Port
-        createGame.setOnAction(e -> navigator.navigateTo(SceneType.GAME)); // ip & Port
+        createGame.setOnAction(e -> createGame()); // ip & Port
         pane.setMinSize(800, 600);
+    }
+
+    private void createGame() {
+        try {
+            Server server = new Server(Integer.parseInt(inputPort.getText()));
+            server.start();
+        } catch(IOException ioException) {
+            ioException.printStackTrace();
+        }
+        navigator.navigateTo(SceneType.GAME);
     }
 }

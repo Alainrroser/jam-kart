@@ -1,20 +1,25 @@
 package ch.bbcag.jamkart.client.graphics.scenes;
 
+import ch.bbcag.jamkart.net.Message;
+import ch.bbcag.jamkart.net.MessageType;
+import ch.bbcag.jamkart.net.client.Client;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+
+import java.io.IOException;
 
 public class SceneJoinGame extends Scene {
 
     private Navigator navigator;
     private static Group rootNode = new Group();
+
+    private TextField inputIp;
+    private TextField inputPort;
 
     public SceneJoinGame(Navigator navigator) {
         super(rootNode);
@@ -39,7 +44,7 @@ public class SceneJoinGame extends Scene {
                         "-fx-font-size: 18px;"
         );
 
-        TextField inputIp = new TextField();
+        inputIp = new TextField();
         inputIp.setPromptText("IP eingeben:");
         inputIp.setFocusTraversable(false);
         inputIp.setStyle(
@@ -50,7 +55,7 @@ public class SceneJoinGame extends Scene {
                         "-fx-font-size: 18px;"
         );
 
-        TextField inputPort = new TextField();
+        inputPort = new TextField();
         inputPort.setPromptText("Port eingeben");
         inputPort.setFocusTraversable(false);
         inputPort.setStyle(
@@ -75,7 +80,22 @@ public class SceneJoinGame extends Scene {
         pane.setLeft(contentBox);
         rootNode.getChildren().add(pane);
         mainMenuBtn.setOnAction(e -> navigator.navigateTo(SceneType.START)); // ip & Port
-        joinGame.setOnAction(e -> navigator.navigateTo(SceneType.GAME)); // ip & Port
+        joinGame.setOnAction(e -> joinGame()); // ip & Port
         pane.setMinSize(800, 600);
+    }
+
+    private void joinGame() {
+        try {
+            Client client = new Client(inputIp.getText(), Integer.parseInt(inputPort.getText()));
+            client.start();
+
+            Message message = new Message(MessageType.JOIN_LOBBY);
+            message.addData("name", "SomeClient");
+            client.sendMessage(message);
+        } catch(IOException ioException) {
+            ioException.printStackTrace();
+        }
+
+        navigator.navigateTo(SceneType.GAME);
     }
 }

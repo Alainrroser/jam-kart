@@ -31,6 +31,10 @@ public class Connection extends Thread {
             Message message = new Message();
             String data = dataInputStream.readUTF();
             message.setMapFromString(data);
+
+            for(String key : message.getData().keySet()) {
+                System.out.println(key + ": " + message.getData().get(key));
+            }
         }
     }
 

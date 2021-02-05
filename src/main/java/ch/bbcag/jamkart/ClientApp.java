@@ -2,8 +2,6 @@ package ch.bbcag.jamkart;
 
 import ch.bbcag.jamkart.client.graphics.scenes.*;
 import javafx.application.Application;
-import javafx.scene.Group;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class ClientApp extends Application {
