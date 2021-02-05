@@ -9,13 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Server extends Thread {
-    private ServerSocket serverSocket;
     private List<Connection> connections;
 
     @Override
     public void run() {
         try {
-            serverSocket = new ServerSocket(1234);
+            ServerSocket serverSocket = new ServerSocket(1234);
             connections = new ArrayList<>();
 
             while (!serverSocket.isClosed()) {
@@ -29,5 +28,9 @@ public class Server extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public List<Connection> getConnections() {
+        return connections;
     }
 }

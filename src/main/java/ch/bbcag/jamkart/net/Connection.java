@@ -16,9 +16,13 @@ public class Connection extends Thread {
         this.dataInputStream = new DataInputStream(socket.getInputStream());
     }
 
-    public void sendMessage(String text) throws IOException {
-        dataOutputStream.writeUTF(text);
-        dataOutputStream.flush();
+    public void sendMessage(String text) {
+        try {
+            dataOutputStream.writeUTF(text);
+            dataOutputStream.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void readMessage() throws IOException {
