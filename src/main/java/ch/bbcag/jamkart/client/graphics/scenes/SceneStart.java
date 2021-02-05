@@ -22,8 +22,9 @@ public class SceneStart extends Scene {
                         "-fx-background-position: center center;"
         );
 
-        VBox btnBox = new VBox(45);
-        btnBox.setPadding(new Insets(180, 0, 0, 70));
+        VBox contentBox = new VBox(45);
+
+        contentBox.setPadding(new Insets(180, 0, 0, 70));
         Button createGame = new Button("Spiel erstellen");
         createGame.setStyle(
                 "-fx-background-radius: 3em;" +
@@ -41,12 +42,12 @@ public class SceneStart extends Scene {
                         "-fx-font-size: 18px;"
         );
 
-        btnBox.getChildren().addAll(createGame, joinGame);
+        contentBox.getChildren().addAll(createGame, joinGame);
 
-        pane.setLeft(btnBox);
+        pane.setLeft(contentBox);
         rootNode.getChildren().add(pane);
-        createGame.setOnAction(e -> navigator.navigateTo(SceneType.GAME)); // Port
-        joinGame.setOnAction(e -> navigator.navigateTo(SceneType.GAME)); // ip & Port
+        createGame.setOnAction(e -> navigator.navigateTo(SceneType.CREATE));
+        joinGame.setOnAction(e -> navigator.navigateTo(SceneType.JOIN));
         pane.setMinSize(800, 600);
     }
 }
