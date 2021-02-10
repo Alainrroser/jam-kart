@@ -20,7 +20,7 @@ public class JamKartApp extends Application {
         navigator.registerScene(SceneType.GAME, new SceneGame(this));
         navigator.registerScene(SceneType.JOIN, new SceneJoinGame(this));
         navigator.registerScene(SceneType.CREATE, new SceneCreateGame(this));
-        navigator.registerScene(SceneType.BACK_TO_MAIN, new SceneBackToStart(navigator));
+        navigator.registerScene(SceneType.BACK_TO_START, new SceneBackToStart(this));
         navigator.navigateTo(SceneType.START);
 
         primaryStage.setResizable(false);
@@ -31,11 +31,20 @@ public class JamKartApp extends Application {
         return navigator;
     }
 
-    public void startClientGame(ClientGame game) {
-        this.clientGame = game;
+    public ClientGame getClientGame() {
+        return clientGame;
     }
 
-    public void startServerGame(ServerGame game) {
+    public void setClientGame(ClientGame game) {
+        this.clientGame = game;
+        serverGame.stop();
+    }
+
+    public ServerGame getServerGame() {
+        return serverGame;
+    }
+
+    public void setServerGame(ServerGame game) {
         this.serverGame = game;
     }
 

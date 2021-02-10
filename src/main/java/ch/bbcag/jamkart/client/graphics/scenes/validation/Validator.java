@@ -23,10 +23,7 @@ public class Validator {
     }
 
     public static boolean validatePort(String port) {
-        if(isNumeric(port) && Integer.parseInt(port) < 65535 && Integer.parseInt(port) > 1024){
-            return true;
-        }
-        return false;
+        return isNumeric(port) && Integer.parseInt(port) < 65535 && Integer.parseInt(port) > 1024;
     }
 
     public static boolean isNumeric(String text) {
@@ -34,7 +31,7 @@ public class Validator {
             return false;
         }
         try {
-            double d = Double.parseDouble(text);
+            Integer.parseInt(text);
         } catch (NumberFormatException nfe) {
             return false;
         }

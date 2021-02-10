@@ -5,5 +5,5 @@ public enum SceneType {
     GAME,
     JOIN,
     CREATE,
-    BACK_TO_MAIN
+    BACK_TO_START
 }

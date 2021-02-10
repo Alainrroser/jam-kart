@@ -1,6 +1,7 @@
 package ch.bbcag.jamkart.client.map.objects;
 
 import ch.bbcag.jamkart.utils.Point;
+import javafx.scene.canvas.GraphicsContext;
 
 public abstract class GameObject {
 
@@ -14,7 +15,7 @@ public abstract class GameObject {
         return position;
     }
 
-    public abstract void draw();
+    public abstract void draw(GraphicsContext context);
     public abstract void update(float deltaTimeInSeconds);
 
 }

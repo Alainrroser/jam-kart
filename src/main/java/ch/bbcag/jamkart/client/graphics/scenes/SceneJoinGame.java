@@ -1,6 +1,7 @@
 package ch.bbcag.jamkart.client.graphics.scenes;
 
 import ch.bbcag.jamkart.JamKartApp;
+import ch.bbcag.jamkart.client.ClientGame;
 import ch.bbcag.jamkart.client.graphics.scenes.validation.Validator;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
@@ -102,37 +103,31 @@ public class SceneJoinGame extends Scene {
 
         pane.setLeft(contentBox);
         rootNode.getChildren().add(pane);
-        mainMenuBtn.setOnAction(e -> app.getNavigator().navigateTo(SceneType.START)); // ip & Port
-        joinGame.setOnAction(e -> joinGame(ipError, portError)); // ip & Port
+        mainMenuBtn.setOnAction(e -> app.getNavigator().navigateTo(SceneType.START));
+        joinGame.setOnAction(e -> validateInputAndJoinGame(ipError, portError));
         pane.setMinSize(800, 600);
     }
 
-    public void setIPError(Text errorMessage) {
-        if (!Validator.validateIP(inputIp.getText())) {
-            errorMessage.setText("invalide IP-Adresse");
-        } else {
-            errorMessage.setText("");
-        }
-    }
-
-    public void setPortError(Text errorMessage) {
-        if (Validator.validatePort(inputPort.getText())) {
-            errorMessage.setText("");
-        } else {
-            errorMessage.setText("invalider Port");
-        }
-    }
-
-    private void joinGame(Text ipError, Text portError) {
+    private void validateInputAndJoinGame(Text ipError, Text portError) {
         if (Validator.validateIP(inputIp.getText()) && Validator.validatePort(inputPort.getText())) {
-            int port = Integer.parseInt(inputPort.getText());
-
-            SceneGame sceneGame = (SceneGame) app.getNavigator().getScene(SceneType.GAME);
-            sceneGame.enter(inputIp.getText(), port, inputName.getText());
-            app.getNavigator().navigateTo(SceneType.GAME);
+            ipError.setText("");
+            portError.setText("");
+            joinGame();
         } else {
-            setIPError(ipError);
-            setPortError(portError);
+            ipError.setText("invalide IP-Adresse");
+            portError.setText("invalider Port");
         }
+    }
+
+    private void joinGame() {
+        int port = Integer.parseInt(inputPort.getText());
+
+        SceneGame newScene = (SceneGame) app.getNavigator().getScene(SceneType.GAME);
+        ClientGame clientGame = new ClientGame(newScene.getCanvas());
+        clientGame.load();
+        clientGame.start(inputIp.getText(), port, inputName.getText());
+        app.setClientGame(clientGame);
+
+        app.getNavigator().navigateTo(SceneType.GAME);
     }
 }

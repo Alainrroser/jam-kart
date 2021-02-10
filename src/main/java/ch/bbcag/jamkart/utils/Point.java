@@ -27,4 +27,9 @@ public class Point {
         return new Direction(other.x - x, other.y - y);
     }
 
+    public void moveInDirection(Direction direction) {
+        this.x += direction.getX();
+        this.y += direction.getY();
+    }
+
 }

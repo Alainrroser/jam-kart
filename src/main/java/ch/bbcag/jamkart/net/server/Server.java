@@ -34,7 +34,7 @@ public class Server extends Thread {
                 connection.start();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Couldn't accept new client: " + e.getMessage());
         }
     }
 

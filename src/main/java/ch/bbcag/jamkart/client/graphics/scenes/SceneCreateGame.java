@@ -1,6 +1,7 @@
 package ch.bbcag.jamkart.client.graphics.scenes;
 
 import ch.bbcag.jamkart.JamKartApp;
+import ch.bbcag.jamkart.client.ClientGame;
 import ch.bbcag.jamkart.client.graphics.scenes.validation.Validator;
 import ch.bbcag.jamkart.server.ServerGame;
 import javafx.geometry.Insets;
@@ -85,31 +86,32 @@ public class SceneCreateGame extends Scene {
         pane.setLeft(contentBox);
         rootNode.getChildren().add(pane);
         mainMenuBtn.setOnAction(e -> app.getNavigator().navigateTo(SceneType.START));
-        createGame.setOnAction(e -> createGame(portError));
+        createGame.setOnAction(e -> validateInputAndCreateGame(portError));
         pane.setMinSize(800, 600);
     }
 
-    public void setPortError(Text portError) {
+    private void validateInputAndCreateGame(Text errorMessage) {
         if (Validator.validatePort(inputPort.getText())) {
-            portError.setText("");
+            errorMessage.setText("");
+            createGame();
         } else {
-            portError.setText("invalider Port");
+            errorMessage.setText("invalider Port");
         }
     }
 
-    private void createGame(Text errorMessage) {
-        if (Validator.validatePort(inputPort.getText())) {
-            int port = Integer.parseInt(inputPort.getText());
+    private void createGame() {
+        int port = Integer.parseInt(inputPort.getText());
 
-            ServerGame game = new ServerGame();
-            game.start(port);
-            app.startServerGame(game);
+        ServerGame serverGame = new ServerGame();
+        serverGame.start(port);
+        app.setServerGame(serverGame);
 
-            SceneGame sceneGame = (SceneGame) app.getNavigator().getScene(SceneType.GAME);
-            sceneGame.enter("localhost", port, inputName.getText());
-            app.getNavigator().navigateTo(SceneType.GAME);
-        }else{
-            setPortError(errorMessage);
-        }
+        SceneGame newScene = (SceneGame) app.getNavigator().getScene(SceneType.GAME);
+        ClientGame clientGame = new ClientGame(newScene.getCanvas());
+        clientGame.load();
+        clientGame.start("localhost", port, inputName.getText());
+        app.setClientGame(clientGame);
+
+        app.getNavigator().navigateTo(SceneType.GAME);
     }
 }

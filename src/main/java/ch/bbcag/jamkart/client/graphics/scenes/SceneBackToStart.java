@@ -1,5 +1,6 @@
 package ch.bbcag.jamkart.client.graphics.scenes;
 
+import ch.bbcag.jamkart.JamKartApp;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -10,12 +11,12 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 public class SceneBackToStart extends Scene {
-    private Navigator navigator;
+    private JamKartApp app;
     private static Group rootNode = new Group();
 
-    public SceneBackToStart(Navigator navigator) {
+    public SceneBackToStart(JamKartApp app) {
         super(rootNode);
-        this.navigator = navigator;
+        this.app = app;
 
         BorderPane pane = new BorderPane();
         pane.setStyle(
@@ -28,7 +29,7 @@ public class SceneBackToStart extends Scene {
         contentBox.setPadding(new Insets(75, 0, 0, 70));
 
         VBox errorBox = new VBox();
-        Text errorMessage = new Text("Falsche Eingabe");
+        Text errorMessage = new Text("Konnte nicht mit dem Server verbinden");
         Button mainMenuBtn = new Button("Hauptmenü");
         mainMenuBtn.setStyle(
                 "-fx-background-radius: 3em;" +
@@ -43,7 +44,7 @@ public class SceneBackToStart extends Scene {
 
         pane.setLeft(contentBox);
         rootNode.getChildren().add(pane);
-        mainMenuBtn.setOnAction(e -> navigator.navigateTo(SceneType.START));
+        mainMenuBtn.setOnAction(e -> app.getNavigator().navigateTo(SceneType.START));
         pane.setMinSize(800, 600);
     }
 }
