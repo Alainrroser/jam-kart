@@ -11,8 +11,8 @@ public class Point {
     }
 
     public Point(Point other) {
-        this.x = x;
-        this.y = y;
+        this.x = other.x;
+        this.y = other.y;
     }
 
     public float getX() {

@@ -1,6 +1,7 @@
 package ch.bbcag.jamkart.client.graphics.scenes;
 
-import ch.bbcag.jamkart.net.server.Server;
+import ch.bbcag.jamkart.JamKartApp;
+import ch.bbcag.jamkart.server.ServerGame;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -9,19 +10,17 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
-import java.io.IOException;
-
 public class SceneCreateGame extends Scene {
 
-    private Navigator navigator;
+    private JamKartApp app;
     private static Group rootNode = new Group();
 
     private TextField inputPort;
     private TextField inputName;
 
-    public SceneCreateGame(Navigator navigator) {
+    public SceneCreateGame(JamKartApp app) {
         super(rootNode);
-        this.navigator = navigator;
+        this.app = app;
 
         BorderPane pane = new BorderPane();
         pane.setStyle(
@@ -77,7 +76,7 @@ public class SceneCreateGame extends Scene {
 
         pane.setLeft(contentBox);
         rootNode.getChildren().add(pane);
-        mainMenuBtn.setOnAction(e -> navigator.navigateTo(SceneType.START)); // ip & Port
+        mainMenuBtn.setOnAction(e -> app.getNavigator().navigateTo(SceneType.START)); // ip & Port
         createGame.setOnAction(e -> createGame()); // ip & Port
         pane.setMinSize(800, 600);
     }
@@ -85,12 +84,14 @@ public class SceneCreateGame extends Scene {
 
     // @Jan -> noch port Prüfer implementieren + Name einbinden
     private void createGame() {
-        try {
-            Server server = new Server(Integer.parseInt(inputPort.getText()));
-            server.start();
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
-        }
-        navigator.navigateTo(SceneType.GAME);
+        int port = Integer.parseInt(inputPort.getText());
+
+        ServerGame game = new ServerGame();
+        game.start(port);
+        app.startServerGame(game);
+
+        SceneGame sceneGame = (SceneGame) app.getNavigator().getScene(SceneType.GAME);
+        sceneGame.enter("localhost", port, inputName.getText());
+        app.getNavigator().navigateTo(SceneType.GAME);
     }
 }

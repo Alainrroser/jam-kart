@@ -23,4 +23,8 @@ public class Navigator {
     public void registerScene(SceneType sceneType, Scene scene){
         sceneMap.put(sceneType, scene);
     }
+
+    public Scene getScene(SceneType type) {
+        return sceneMap.get(type);
+    }
 }

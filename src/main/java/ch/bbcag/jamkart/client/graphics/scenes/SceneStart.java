@@ -1,5 +1,6 @@
 package ch.bbcag.jamkart.client.graphics.scenes;
 
+import ch.bbcag.jamkart.JamKartApp;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -11,12 +12,12 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 public class SceneStart extends Scene {
-    private Navigator navigator;
+    private JamKartApp app;
     private static Group rootNode = new Group();
 
-    public SceneStart(Navigator navigator) {
+    public SceneStart(JamKartApp app) {
         super(rootNode);
-        this.navigator = navigator;
+        this.app = app;
 
         BorderPane pane = new BorderPane();
         pane.setStyle(
@@ -63,8 +64,8 @@ public class SceneStart extends Scene {
 
         pane.setLeft(contentBox);
         rootNode.getChildren().add(pane);
-        createGame.setOnAction(e -> navigator.navigateTo(SceneType.CREATE));
-        joinGame.setOnAction(e -> navigator.navigateTo(SceneType.JOIN));
+        createGame.setOnAction(e -> app.getNavigator().navigateTo(SceneType.CREATE));
+        joinGame.setOnAction(e -> app.getNavigator().navigateTo(SceneType.JOIN));
         pane.setMinSize(800, 600);
     }
 }

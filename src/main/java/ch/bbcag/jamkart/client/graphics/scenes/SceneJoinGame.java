@@ -1,9 +1,7 @@
 package ch.bbcag.jamkart.client.graphics.scenes;
 
+import ch.bbcag.jamkart.JamKartApp;
 import ch.bbcag.jamkart.client.graphics.scenes.validation.Validator;
-import ch.bbcag.jamkart.net.Message;
-import ch.bbcag.jamkart.net.MessageType;
-import ch.bbcag.jamkart.net.client.Client;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -13,20 +11,18 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-import java.io.IOException;
-
 public class SceneJoinGame extends Scene {
 
-    private Navigator navigator;
+    private JamKartApp app;
     private static Group rootNode = new Group();
 
     private TextField inputIp;
     private TextField inputPort;
     private TextField inputName;
 
-    public SceneJoinGame(Navigator navigator) {
+    public SceneJoinGame(JamKartApp app) {
         super(rootNode);
-        this.navigator = navigator;
+        this.app = app;
 
         BorderPane pane = new BorderPane();
         pane.setStyle(
@@ -109,7 +105,7 @@ public class SceneJoinGame extends Scene {
 
         pane.setLeft(contentBox);
         rootNode.getChildren().add(pane);
-        mainMenuBtn.setOnAction(e -> navigator.navigateTo(SceneType.START)); // ip & Port
+        mainMenuBtn.setOnAction(e -> app.getNavigator().navigateTo(SceneType.START)); // ip & Port
         joinGame.setOnAction(e -> joinGame(ipError, portError)); // ip & Port
         pane.setMinSize(800, 600);
     }
@@ -132,17 +128,11 @@ public class SceneJoinGame extends Scene {
 
     private void joinGame(Text ipError, Text portError) {
         if (Validator.validateIP(inputIp.getText()) && Validator.validatePort(inputPort.getText())) {
-            try {
-                Client client = new Client(inputIp.getText(), Integer.parseInt(inputPort.getText()));
-                client.start();
+            int port = Integer.parseInt(inputPort.getText());
 
-                Message message = new Message(MessageType.JOIN_LOBBY);
-                message.addValue("name", "SomeClient");
-                client.sendMessage(message);
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
-            navigator.navigateTo(SceneType.GAME);
+            SceneGame sceneGame = (SceneGame) app.getNavigator().getScene(SceneType.GAME);
+            sceneGame.enter(inputIp.getText(), port, inputName.getText());
+            app.getNavigator().navigateTo(SceneType.GAME);
         } else {
             setIPError(ipError);
             setPortError(portError);

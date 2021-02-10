@@ -1,45 +1,31 @@
 package ch.bbcag.jamkart.client.graphics.scenes;
 
-import javafx.geometry.Insets;
+import ch.bbcag.jamkart.JamKartApp;
+import ch.bbcag.jamkart.client.ClientGame;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
+import javafx.scene.canvas.Canvas;
 
 public class SceneGame extends Scene {
-    private Navigator navigator;
+    private JamKartApp app;
     private static Group rootNode = new Group();
 
-    public SceneGame(Navigator navigator) {
+    private Canvas canvas;
+    private ClientGame game;
+
+    public SceneGame(JamKartApp app) {
         super(rootNode);
-        this.navigator = navigator;
+        this.app = app;
 
-        BorderPane pane = new BorderPane();
-        pane.setStyle(
-                "-fx-background-image: url('main_menu.png');" +
-                        "-fx-background-repeat: stretch;" +
-                        "-fx-background-position: center center;"
-        );
+        canvas = new Canvas(800, 600);
+        rootNode.getChildren().add(canvas);
+    }
 
-        VBox btnBox = new VBox(45);
-        btnBox.setPadding(new Insets(180, 0, 0, 70));
-        Text header = new Text("Game");
-        Button createGame = new Button("Zurück");
-        createGame.setStyle(
-                "-fx-background-radius: 3em;" +
-                        "-fx-min-width: 300px;" +
-                        "-fx-min-height: 45px;" +
-                        "-fx-font-weight: bold;" +
-                        "-fx-font-size: 18px;"
-        );
+    public void enter(String ip, int port, String name) {
+        game = new ClientGame(canvas);
+        game.load();
+        game.start(ip, port, name);
 
-        btnBox.getChildren().add(createGame);
-
-        pane.setLeft(btnBox);
-        rootNode.getChildren().add(pane);
-        createGame.setOnAction(e -> navigator.navigateTo(SceneType.START)); // Port
-        pane.setMinSize(800, 600);
+        app.startClientGame(game);
     }
 }
