@@ -1,17 +1,26 @@
 package ch.bbcag.jamkart.client.graphics.scenes;
 
+import ch.bbcag.jamkart.client.graphics.scenes.validation.Validator;
 import ch.bbcag.jamkart.net.Message;
 import ch.bbcag.jamkart.net.MessageType;
 import ch.bbcag.jamkart.net.client.Client;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SceneJoinGame extends Scene {
 
@@ -56,7 +65,14 @@ public class SceneJoinGame extends Scene {
                         "-fx-font-size: 18px;"
         );
 
+        VBox ipBox = new VBox();
         inputIp = new TextField();
+        Text ipError = new Text();
+        ipError.setStyle(
+                "-fx-font-weight: bold;" +
+                        "-fx-font-size: 14px;"
+        );
+        VBox.setMargin(ipError, new Insets(-10, 0, 0, 15));
         inputIp.setPromptText("IP eingeben:");
         inputIp.setFocusTraversable(false);
         inputIp.setStyle(
@@ -66,8 +82,16 @@ public class SceneJoinGame extends Scene {
                         "-fx-font-weight: bold;" +
                         "-fx-font-size: 18px;"
         );
+        ipBox.getChildren().addAll(ipError, inputIp);
 
+        VBox portBox = new VBox();
         inputPort = new TextField();
+        Text portError = new Text();
+        portError.setStyle(
+                "-fx-font-weight: bold;" +
+                        "-fx-font-size: 14px;"
+        );
+        VBox.setMargin(portError, new Insets(-10, 0, 0, 15));
         inputPort.setPromptText("Port eingeben:");
         inputPort.setFocusTraversable(false);
         inputPort.setStyle(
@@ -77,6 +101,7 @@ public class SceneJoinGame extends Scene {
                         "-fx-font-weight: bold;" +
                         "-fx-font-size: 18px;"
         );
+        portBox.getChildren().addAll(portError, inputPort);
 
         Button joinGame = new Button("Spiel beitreten");
         joinGame.setStyle(
@@ -87,28 +112,48 @@ public class SceneJoinGame extends Scene {
                         "-fx-font-size: 18px;"
         );
 
-        contentBox.getChildren().addAll(mainMenuBtn, inputName, inputIp, inputPort, joinGame);
+        contentBox.getChildren().addAll(mainMenuBtn, inputName, ipBox, portBox, joinGame);
 
         pane.setLeft(contentBox);
         rootNode.getChildren().add(pane);
         mainMenuBtn.setOnAction(e -> navigator.navigateTo(SceneType.START)); // ip & Port
-        joinGame.setOnAction(e -> joinGame()); // ip & Port
+        joinGame.setOnAction(e -> joinGame(ipError, portError)); // ip & Port
         pane.setMinSize(800, 600);
     }
 
-    // @Jan -> noch port Prüfer, Ip Prüfer implementieren + Name einbinden
-    private void joinGame() {
-        try {
-            Client client = new Client(inputIp.getText(), Integer.parseInt(inputPort.getText()));
-            client.start();
-
-            Message message = new Message(MessageType.JOIN_LOBBY);
-            message.addData("name", "SomeClient");
-            client.sendMessage(message);
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
+    public void setIPError(Text errorMessage) {
+        if (!Validator.validateIP(inputIp.getText())) {
+            errorMessage.setText("invalide IP-Adresse");
+        } else {
+            errorMessage.setText("");
         }
+    }
 
-        navigator.navigateTo(SceneType.GAME);
+    public void setPortError(Text errorMessage) {
+        if (Validator.validatePort(inputPort.getText())) {
+            errorMessage.setText("");
+        } else {
+            errorMessage.setText("invalider Port");
+        }
+    }
+
+    // @Jan -> noch port Prüfer, Ip Prüfer implementieren + Name einbinden
+    private void joinGame(Text ipError, Text portError) {
+        if (Validator.validateIP(inputIp.getText()) && Validator.validatePort(inputPort.getText())) {
+            try {
+                Client client = new Client(inputIp.getText(), Integer.parseInt(inputPort.getText()));
+                client.start();
+
+                Message message = new Message(MessageType.JOIN_LOBBY);
+                message.addData("name", "SomeClient");
+                client.sendMessage(message);
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+            navigator.navigateTo(SceneType.GAME);
+        } else {
+            setIPError(ipError);
+            setPortError(portError);
+        }
     }
 }
