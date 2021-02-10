@@ -9,6 +9,7 @@ public class Connection extends Thread {
     private Socket socket;
     private DataOutputStream dataOutputStream;
     private DataInputStream dataInputStream;
+    private MessageHandler messageHandler;
 
     public Connection(Socket socket) throws IOException {
         this.socket = socket;
@@ -31,9 +32,8 @@ public class Connection extends Thread {
             Message message = new Message();
             String data = dataInputStream.readUTF();
             message.setMapFromString(data);
-
-            for(String key : message.getData().keySet()) {
-                System.out.println(key + ": " + message.getData().get(key));
+            if (messageHandler != null) {
+                messageHandler.handle(message);
             }
         }
     }
@@ -47,5 +47,13 @@ public class Connection extends Thread {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public MessageHandler getMessageHandler() {
+        return messageHandler;
+    }
+
+    public void setMessageHandler(MessageHandler messageHandler) {
+        this.messageHandler = messageHandler;
     }
 }
