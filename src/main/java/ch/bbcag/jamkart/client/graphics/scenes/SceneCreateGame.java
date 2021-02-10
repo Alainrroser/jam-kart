@@ -1,6 +1,7 @@
 package ch.bbcag.jamkart.client.graphics.scenes;
 
 import ch.bbcag.jamkart.JamKartApp;
+import ch.bbcag.jamkart.client.graphics.scenes.validation.Validator;
 import ch.bbcag.jamkart.server.ServerGame;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
@@ -9,6 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 
 public class SceneCreateGame extends Scene {
 
@@ -42,8 +44,7 @@ public class SceneCreateGame extends Scene {
         );
 
         inputName = new TextField();
-        inputName.setPromptText("Name eingeben");
-        inputName.setFocusTraversable(false);
+        inputName.setPromptText("Name eingeben:");
         inputName.setStyle(
                 "-fx-background-radius: 3em;" +
                         "-fx-min-width: 300px;" +
@@ -52,9 +53,15 @@ public class SceneCreateGame extends Scene {
                         "-fx-font-size: 18px;"
         );
 
+        VBox portBox = new VBox();
         inputPort = new TextField();
-        inputPort.setPromptText("Port eingeben");
-        inputPort.setFocusTraversable(false);
+        Text portError = new Text();
+        portError.setStyle(
+                "-fx-font-weight: bold;" +
+                        "-fx-font-size: 14px;"
+        );
+        VBox.setMargin(portError, new Insets(-10, 0, 0, 15));
+        inputPort.setPromptText("Port eingeben:");
         inputPort.setStyle(
                 "-fx-background-radius: 3em;" +
                         "-fx-min-width: 300px;" +
@@ -62,6 +69,7 @@ public class SceneCreateGame extends Scene {
                         "-fx-font-weight: bold;" +
                         "-fx-font-size: 18px;"
         );
+        portBox.getChildren().addAll(portError, inputPort);
 
         Button createGame = new Button("Spiel erstellen");
         createGame.setStyle(
@@ -72,26 +80,36 @@ public class SceneCreateGame extends Scene {
                         "-fx-font-size: 18px;"
         );
 
-        contentBox.getChildren().addAll(mainMenuBtn, inputName, inputPort, createGame);
+        contentBox.getChildren().addAll(mainMenuBtn, inputName, portBox, createGame);
 
         pane.setLeft(contentBox);
         rootNode.getChildren().add(pane);
-        mainMenuBtn.setOnAction(e -> app.getNavigator().navigateTo(SceneType.START)); // ip & Port
-        createGame.setOnAction(e -> createGame()); // ip & Port
+        mainMenuBtn.setOnAction(e -> app.getNavigator().navigateTo(SceneType.START));
+        createGame.setOnAction(e -> createGame(portError));
         pane.setMinSize(800, 600);
     }
 
+    public void setPortError(Text portError) {
+        if (Validator.validatePort(inputPort.getText())) {
+            portError.setText("");
+        } else {
+            portError.setText("invalider Port");
+        }
+    }
 
-    // @Jan -> noch port Prüfer implementieren + Name einbinden
-    private void createGame() {
-        int port = Integer.parseInt(inputPort.getText());
+    private void createGame(Text errorMessage) {
+        if (Validator.validatePort(inputPort.getText())) {
+            int port = Integer.parseInt(inputPort.getText());
 
-        ServerGame game = new ServerGame();
-        game.start(port);
-        app.startServerGame(game);
+            ServerGame game = new ServerGame();
+            game.start(port);
+            app.startServerGame(game);
 
-        SceneGame sceneGame = (SceneGame) app.getNavigator().getScene(SceneType.GAME);
-        sceneGame.enter("localhost", port, inputName.getText());
-        app.getNavigator().navigateTo(SceneType.GAME);
+            SceneGame sceneGame = (SceneGame) app.getNavigator().getScene(SceneType.GAME);
+            sceneGame.enter("localhost", port, inputName.getText());
+            app.getNavigator().navigateTo(SceneType.GAME);
+        }else{
+            setPortError(errorMessage);
+        }
     }
 }

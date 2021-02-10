@@ -5,6 +5,7 @@ import ch.bbcag.jamkart.net.Message;
 import ch.bbcag.jamkart.net.MessageType;
 import ch.bbcag.jamkart.net.client.Client;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 import java.io.IOException;
@@ -17,8 +18,11 @@ public class ClientGame {
     public ClientGame(Canvas canvas) {
         this.canvas = canvas;
 
-        canvas.getGraphicsContext2D().setFill(Color.GREEN);
+        Image grass = new Image(getClass().getResourceAsStream("/grass.png"));
+
         canvas.getGraphicsContext2D().fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        canvas.getGraphicsContext2D().drawImage(grass, 0, 0, 1500, 800);
+
     }
 
     public void load() {

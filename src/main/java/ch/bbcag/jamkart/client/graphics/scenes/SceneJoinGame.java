@@ -45,7 +45,6 @@ public class SceneJoinGame extends Scene {
 
         inputName = new TextField();
         inputName.setPromptText("Name eingeben:");
-        inputName.setFocusTraversable(false);
         inputName.setStyle(
                 "-fx-background-radius: 3em;" +
                         "-fx-min-width: 300px;" +
@@ -63,7 +62,6 @@ public class SceneJoinGame extends Scene {
         );
         VBox.setMargin(ipError, new Insets(-10, 0, 0, 15));
         inputIp.setPromptText("IP eingeben:");
-        inputIp.setFocusTraversable(false);
         inputIp.setStyle(
                 "-fx-background-radius: 3em;" +
                         "-fx-min-width: 300px;" +
@@ -82,7 +80,6 @@ public class SceneJoinGame extends Scene {
         );
         VBox.setMargin(portError, new Insets(-10, 0, 0, 15));
         inputPort.setPromptText("Port eingeben:");
-        inputPort.setFocusTraversable(false);
         inputPort.setStyle(
                 "-fx-background-radius: 3em;" +
                         "-fx-min-width: 300px;" +

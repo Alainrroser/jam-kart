@@ -17,7 +17,7 @@ public class SceneGame extends Scene {
         super(rootNode);
         this.app = app;
 
-        canvas = new Canvas(800, 600);
+        canvas = new Canvas(1500, 800);
         rootNode.getChildren().add(canvas);
     }
 

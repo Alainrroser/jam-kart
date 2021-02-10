@@ -20,6 +20,7 @@ public class JamKartApp extends Application {
         navigator.registerScene(SceneType.GAME, new SceneGame(this));
         navigator.registerScene(SceneType.JOIN, new SceneJoinGame(this));
         navigator.registerScene(SceneType.CREATE, new SceneCreateGame(this));
+        navigator.registerScene(SceneType.BACK_TO_MAIN, new SceneBackToStart(navigator));
         navigator.navigateTo(SceneType.START);
 
         primaryStage.setResizable(false);
