@@ -137,7 +137,6 @@ public class SceneJoinGame extends Scene {
         }
     }
 
-    // @Jan -> noch port Prüfer, Ip Prüfer implementieren + Name einbinden
     private void joinGame(Text ipError, Text portError) {
         if (Validator.validateIP(inputIp.getText()) && Validator.validatePort(inputPort.getText())) {
             try {
