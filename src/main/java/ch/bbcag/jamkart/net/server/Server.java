@@ -1,8 +1,6 @@
 package ch.bbcag.jamkart.net.server;
 
 import ch.bbcag.jamkart.net.Connection;
-import ch.bbcag.jamkart.net.Message;
-import ch.bbcag.jamkart.net.MessageHandler;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -50,5 +48,13 @@ public class Server extends Thread {
 
     public void setServerMessageHandler(ServerMessageHandler serverMessageHandler) {
         this.serverMessageHandler = serverMessageHandler;
+    }
+
+    public void close() {
+        try {
+            serverSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

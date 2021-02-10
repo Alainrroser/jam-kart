@@ -5,22 +5,15 @@ import ch.bbcag.jamkart.net.Message;
 import ch.bbcag.jamkart.net.MessageType;
 import ch.bbcag.jamkart.net.client.Client;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 
 import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class SceneJoinGame extends Scene {
 
@@ -144,7 +137,7 @@ public class SceneJoinGame extends Scene {
                 client.start();
 
                 Message message = new Message(MessageType.JOIN_LOBBY);
-                message.addData("name", "SomeClient");
+                message.addValue("name", "SomeClient");
                 client.sendMessage(message);
             } catch (IOException ioException) {
                 ioException.printStackTrace();

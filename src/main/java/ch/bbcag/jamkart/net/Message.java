@@ -5,16 +5,23 @@ import java.util.Map;
 
 public class Message {
     private Map<String, String> data = new HashMap<>();
+    public static final String TYPE = "type";
 
-    public Message() {
-
-    }
+    public Message() {}
 
     public Message(MessageType messageType) {
-        addData("Type", messageType);
+        addValue(TYPE, messageType);
     }
 
-    public void addData(String key, Object value) {
+    public Map<String, String> getData() {
+        return data;
+    }
+
+    public Object getValue(String key) {
+        return data.get(key);
+    }
+
+    public void addValue(String key, Object value) {
         data.put(key, value.toString());
     }
 
@@ -42,11 +49,12 @@ public class Message {
         }
     }
 
-    public Map<String, String> getData() {
-        return data;
+    public MessageType getMessageType() {
+        return MessageType.valueOf(data.get(TYPE));
     }
 
-    public MessageType getMessageType() {
-        return MessageType.valueOf(data.get("Type"));
+    @Override
+    public String toString() {
+        return getStringFromMap();
     }
 }

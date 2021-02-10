@@ -20,8 +20,12 @@ public class Connection extends Thread {
     public void sendMessage(Message message) {
         try {
             String data = message.getStringFromMap();
-            dataOutputStream.writeUTF(data);
-            dataOutputStream.flush();
+            if (data.contains(Message.TYPE)) {
+                dataOutputStream.writeUTF(data);
+                dataOutputStream.flush();
+            } else {
+                throw new IllegalArgumentException("The message has to contain a type");
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -55,5 +59,21 @@ public class Connection extends Thread {
 
     public void setMessageHandler(MessageHandler messageHandler) {
         this.messageHandler = messageHandler;
+    }
+
+    public String getIP() {
+        return socket.getInetAddress().toString();
+    }
+
+    public int getPort() {
+        return socket.getPort();
+    }
+
+    public void close() {
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
