@@ -4,6 +4,7 @@ import ch.bbcag.jamkart.client.ClientGame;
 import ch.bbcag.jamkart.client.graphics.scenes.*;
 import ch.bbcag.jamkart.server.ServerGame;
 import javafx.application.Application;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class JamKartApp extends Application {
@@ -22,6 +23,7 @@ public class JamKartApp extends Application {
         navigator.navigateTo(SceneType.START);
 
         primaryStage.setResizable(false);
+        primaryStage.getIcons().add(new Image("/icon.png"));
     }
 
     public Navigator getNavigator() {
