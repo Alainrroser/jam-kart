@@ -7,11 +7,13 @@ public class ServerCar {
     private Point position = new Point(0.0f, 0.0f);
     private float rotation = 0.0f;
     private Connection connection;
-    private int id = 0;
+    private int id;
+    private String name;
 
-    public ServerCar(Connection connection, int id) {
+    public ServerCar(Connection connection, int id, String name) {
         this.connection = connection;
         this.id = id;
+        this.name = name;
     }
 
     public void setPosition(Point position) {
@@ -36,5 +38,9 @@ public class ServerCar {
 
     public int getId() {
         return id;
+    }
+
+    public String getName() {
+        return name;
     }
 }

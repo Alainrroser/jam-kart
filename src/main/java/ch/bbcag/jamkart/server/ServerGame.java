@@ -33,11 +33,10 @@ public class ServerGame {
                 if (timer >= 0.1) {
                     for (ServerCar car : carList) {
                         Message message = new Message(MessageType.UPDATE);
-                        float x = car.getPosition().getX();
-                        float y = car.getPosition().getY();
-                        message.addValue("x", x);
-                        message.addValue("y", y);
+                        message.addValue("x", car.getPosition().getX());
+                        message.addValue("y", car.getPosition().getY());
                         message.addValue("rotation", car.getRotation());
+                        message.addValue("name", car.getName());
                         message.addValue("id", car.getId());
                         for (ServerCar otherCar : carList) {
                             if (otherCar.getConnection() != car.getConnection()) {
@@ -61,8 +60,7 @@ public class ServerGame {
                 Message idMessage = new Message(MessageType.ID);
                 idMessage.addValue("id", id);
                 connection.sendMessage(idMessage);
-
-                carList.add(new ServerCar(connection, id));
+                carList.add(new ServerCar(connection, id, message.getValue("name")));
                 id++;
                 System.out.println("new player joined the game!");
                 System.out.println("name: " + message.getValue("name"));
@@ -70,12 +68,8 @@ public class ServerGame {
             case UPDATE:
                 for (ServerCar car : carList) {
                     if (car.getConnection() == connection) {
-                        float x = Float.parseFloat((String) message.getValue("x"));
-                        float y = Float.parseFloat((String) message.getValue("y"));
-                        float rotation = Float.parseFloat((String) message.getValue("rotation"));
-                        Point position = new Point(x, y);
-                        car.setPosition(position);
-                        car.setRotation(rotation);
+                        car.setPosition(new Point(Float.parseFloat(message.getValue("x")), Float.parseFloat(message.getValue("y"))));
+                        car.setRotation(Float.parseFloat(message.getValue("rotation")));
                     }
                 }
                 break;

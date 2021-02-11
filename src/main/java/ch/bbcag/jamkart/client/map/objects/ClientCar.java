@@ -6,12 +6,10 @@ import ch.bbcag.jamkart.client.map.Map;
 import ch.bbcag.jamkart.net.Message;
 import ch.bbcag.jamkart.net.MessageType;
 import ch.bbcag.jamkart.net.client.Client;
-import ch.bbcag.jamkart.server.ServerCar;
 import ch.bbcag.jamkart.utils.Direction;
 import ch.bbcag.jamkart.utils.Point;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
 
 public class ClientCar extends GameObject {
     public static final float SIZE = 100.0f;
@@ -19,11 +17,10 @@ public class ClientCar extends GameObject {
     private int id;
     private Image image;
     private Map map;
+    private String name;
     private KeyEventHandler keyEventHandler;
-
     private float timer = 0;
     private ClientGame clientGame;
-
     private float rotation = 0.0f;
     private Direction velocity = new Direction();
 
@@ -125,5 +122,13 @@ public class ClientCar extends GameObject {
     public void setId(int id) {
         this.id = id;
         image = new Image(getClass().getResourceAsStream("/car_" + id + ".png"));
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

@@ -131,21 +131,9 @@ public class SceneJoinGame extends Scene {
             setErrorMessage(true, nameError);
             joinGame();
         } else {
-            if (!Validator.validateIP(inputIp.getText())) {
-                setErrorMessage(false, ipError);
-            } else {
-                setErrorMessage(true, ipError);
-            }
-            if (!Validator.validatePort(inputPort.getText())) {
-                setErrorMessage(false, portError);
-            } else{
-                setErrorMessage(true, portError);
-            }
-            if (!Validator.validateName(inputName.getText())) {
-                setErrorMessage(false, nameError);
-            } else {
-                setErrorMessage(true, nameError);
-            }
+            setErrorMessage(Validator.validateIP(inputIp.getText()), ipError);
+            setErrorMessage(Validator.validatePort(inputPort.getText()), portError);
+            setErrorMessage(Validator.validateName(inputName.getText()), nameError);
         }
     }
 

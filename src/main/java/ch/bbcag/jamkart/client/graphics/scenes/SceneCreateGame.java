@@ -112,16 +112,8 @@ public class SceneCreateGame extends Scene {
             setErrorMessage(true, nameError);
             createGame();
         } else {
-            if (!Validator.validatePort(inputPort.getText())) {
-                setErrorMessage(false, portError);
-            } else{
-                setErrorMessage(true, portError);
-            }
-            if (!Validator.validateName(inputName.getText())) {
-                setErrorMessage(false, nameError);
-            } else {
-                setErrorMessage(true, nameError);
-            }
+            setErrorMessage(Validator.validatePort(inputPort.getText()), portError);
+            setErrorMessage(Validator.validateName(inputName.getText()), nameError);
         }
     }
 

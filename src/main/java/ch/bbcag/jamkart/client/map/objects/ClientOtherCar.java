@@ -7,6 +7,7 @@ public class ClientOtherCar extends GameObject {
     private float rotation;
     private int id;
     private Image image;
+    private String name;
 
     public ClientOtherCar(int id) {
         this.id = id;
@@ -41,5 +42,13 @@ public class ClientOtherCar extends GameObject {
 
     public int getId() {
         return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

@@ -49,26 +49,26 @@ public class ClientGame {
     }
 
     public void start(String ip, int port, String name) {
-        createClient(ip, port, name);
+        car.setName(name);
+        createClient(ip, port);
         camera = new Camera(new Point(100, 0));
         createLoop();
     }
 
-    private void createClient(String ip, int port, String name) {
+    private void createClient(String ip, int port) {
         try {
             client = new Client(ip, port);
             client.setMessageHandler(this::processMessage);
             client.start();
-
-            sendJoinMessage(name);
+            sendJoinMessage();
         } catch(IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void sendJoinMessage(String name) {
+    private void sendJoinMessage() {
         Message message = new Message(MessageType.JOIN_GAME);
-        message.addValue("name", name);
+        message.addValue("name", car.getName());
         client.sendMessage(message);
     }
 
@@ -94,12 +94,8 @@ public class ClientGame {
                     map.getGameObjects().add(otherCar);
                 }
 
-                float x = Float.parseFloat(message.getValue("x"));
-                float y = Float.parseFloat(message.getValue("y"));
-                float rotation = Float.parseFloat(message.getValue("rotation"));
-                Point position = new Point(x, y);
-                otherCar.setPosition(position);
-                otherCar.setRotation(rotation);
+                otherCar.setPosition(new Point(Float.parseFloat(message.getValue("x")), Float.parseFloat(message.getValue("y"))));
+                otherCar.setRotation(Float.parseFloat(message.getValue("rotation")));
                 break;
             default:
                 break;
