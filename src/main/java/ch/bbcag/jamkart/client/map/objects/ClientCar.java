@@ -1,20 +1,27 @@
 package ch.bbcag.jamkart.client.map.objects;
 
+import ch.bbcag.jamkart.client.ClientGame;
 import ch.bbcag.jamkart.client.KeyEventHandler;
 import ch.bbcag.jamkart.client.map.Map;
+import ch.bbcag.jamkart.net.Message;
+import ch.bbcag.jamkart.net.MessageType;
+import ch.bbcag.jamkart.net.client.Client;
 import ch.bbcag.jamkart.utils.Direction;
 import ch.bbcag.jamkart.utils.Point;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
-public class Car extends GameObject {
+public class ClientCar extends GameObject {
 
-    private static final Image IMAGE = new Image(Car.class.getResourceAsStream("/car_red.png"));
+    private static final Image IMAGE = new Image(ClientCar.class.getResourceAsStream("/car_3.png"));
     public static final float SIZE = 100.0f;
 
     private Map map;
     private KeyEventHandler keyEventHandler;
+
+    private float timer = 0;
+    private ClientGame clientGame;
 
     private float rotation = 0.0f;
     private Direction velocity = new Direction();
@@ -25,9 +32,10 @@ public class Car extends GameObject {
     private static final float STANDARD_DAMPING = 0.05f;
     private static final float BRAKING_DAMPING = 0.2f;
 
-    public Car(Map map, KeyEventHandler keyEventHandler) {
+    public ClientCar(Map map, KeyEventHandler keyEventHandler, ClientGame clientGame) {
         this.map = map;
         this.keyEventHandler = keyEventHandler;
+        this.clientGame = clientGame;
     }
 
     public Point getCenter() {
@@ -46,10 +54,28 @@ public class Car extends GameObject {
         context.drawImage(IMAGE, getPosition().getX(), getPosition().getY(), SIZE, SIZE);
     }
 
+    public float getRotation() {
+        return rotation;
+    }
+
     @Override
     public void update(float deltaTimeInSec) {
         updateRotation(deltaTimeInSec);
         updateMovement(deltaTimeInSec);
+
+        timer += deltaTimeInSec;
+        if (timer >= 0.1) {
+            Message message = new Message(MessageType.UPDATE);
+            float rotation = getRotation();
+            float x = getPosition().getX();
+            float y = getPosition().getY();
+            message.addValue("x", x);
+            message.addValue("y", y);
+            message.addValue("rotation", rotation);
+            Client client = clientGame.getClient();
+            client.sendMessage(message);
+            timer = 0;
+        }
     }
 
     private void updateRotation(float deltaTimeInSec) {

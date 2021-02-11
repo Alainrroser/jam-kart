@@ -1,18 +1,15 @@
 package ch.bbcag.jamkart.client;
 
 import ch.bbcag.jamkart.client.map.Map;
-import ch.bbcag.jamkart.client.map.objects.Car;
+import ch.bbcag.jamkart.client.map.objects.ClientCar;
 import ch.bbcag.jamkart.client.map.objects.GameObject;
 import ch.bbcag.jamkart.common.GameLoop;
-import ch.bbcag.jamkart.net.Connection;
 import ch.bbcag.jamkart.net.Message;
 import ch.bbcag.jamkart.net.MessageType;
 import ch.bbcag.jamkart.net.client.Client;
 import ch.bbcag.jamkart.utils.Point;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Polyline;
 
 import java.io.IOException;
 
@@ -27,7 +24,7 @@ public class ClientGame {
 
     private Camera camera;
 
-    private Car car;
+    private ClientCar car;
 
     private static final Image GRASS = new Image(ClientGame.class.getResourceAsStream("/grass.png"));
 
@@ -39,7 +36,7 @@ public class ClientGame {
     public void load() {
         map = new Map();
 
-        car = new Car(map, keyEventHandler);
+        car = new ClientCar(map, keyEventHandler, this);
         car.setPosition(new Point(200, 200));
         map.getGameObjects().add(car);
 
@@ -99,8 +96,8 @@ public class ClientGame {
         for(GameObject gameObject : map.getGameObjects()) {
             gameObject.update(deltaTimeInSec);
         }
-        camera.setX(car.getPosition().getX()-(float) (canvas.getWidth()/2) + Car.SIZE/2);
-        camera.setY(car.getPosition().getY()-(float) (canvas.getHeight()/2) + Car.SIZE/2);
+        camera.setX(car.getPosition().getX()-(float) (canvas.getWidth()/2) + ClientCar.SIZE/2);
+        camera.setY(car.getPosition().getY()-(float) (canvas.getHeight()/2) + ClientCar.SIZE/2);
     }
 
     private void draw() {
@@ -125,4 +122,7 @@ public class ClientGame {
         client.close();
     }
 
+    public Client getClient() {
+        return client;
+    }
 }
