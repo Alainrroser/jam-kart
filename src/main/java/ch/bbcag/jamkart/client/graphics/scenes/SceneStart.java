@@ -64,8 +64,8 @@ public class SceneStart extends Scene {
 
         pane.setLeft(contentBox);
         rootNode.getChildren().add(pane);
-        createGame.setOnAction(e -> app.getNavigator().navigateTo(SceneType.CREATE));
-        joinGame.setOnAction(e -> app.getNavigator().navigateTo(SceneType.JOIN));
+        createGame.setOnAction(e -> app.getNavigator().navigateTo(SceneType.CREATE, false));
+        joinGame.setOnAction(e -> app.getNavigator().navigateTo(SceneType.JOIN, false));
         pane.setMinSize(800, 600);
     }
 }

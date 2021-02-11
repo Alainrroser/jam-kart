@@ -5,11 +5,8 @@ import ch.bbcag.jamkart.net.Connection;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Server extends Thread {
-    private List<Connection> connections;
     private ServerSocket serverSocket;
     private ServerMessageHandler serverMessageHandler;
 
@@ -20,12 +17,9 @@ public class Server extends Thread {
     @Override
     public void run() {
         try {
-            connections = new ArrayList<>();
-
             while (!serverSocket.isClosed()) {
                 Socket clientSocket = serverSocket.accept();
                 Connection connection = new Connection(clientSocket);
-                connections.add(connection);
                 connection.setMessageHandler(message -> {
                     if (serverMessageHandler != null) {
                         serverMessageHandler.handle(message, connection);
@@ -36,10 +30,6 @@ public class Server extends Thread {
         } catch (IOException e) {
             System.err.println("Couldn't accept new client: " + e.getMessage());
         }
-    }
-
-    public List<Connection> getConnections() {
-        return connections;
     }
 
     public ServerMessageHandler getServerMessageHandler() {

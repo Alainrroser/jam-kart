@@ -1,5 +1,6 @@
 package ch.bbcag.jamkart.client.map.objects;
 
+import ch.bbcag.jamkart.Constants;
 import ch.bbcag.jamkart.client.ClientGame;
 import ch.bbcag.jamkart.client.KeyEventHandler;
 import ch.bbcag.jamkart.client.map.Map;
@@ -7,34 +8,45 @@ import ch.bbcag.jamkart.net.Message;
 import ch.bbcag.jamkart.net.MessageType;
 import ch.bbcag.jamkart.net.client.Client;
 import ch.bbcag.jamkart.utils.Direction;
+import ch.bbcag.jamkart.utils.MathUtils;
 import ch.bbcag.jamkart.utils.Point;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
 public class ClientCar extends GameObject {
-    public static final float SIZE = 100.0f;
 
-    private int id;
-    private Image image;
     private Map map;
-    private String name;
     private KeyEventHandler keyEventHandler;
-    private float timer = 0;
     private ClientGame clientGame;
+
+    private Image image;
+    private String name;
     private float rotation = 0.0f;
     private Direction velocity = new Direction();
 
+    private float timer = 0.0f;
+    private float oilTimer = 0.0f;
+
+    public static final float SIZE = 100.0f;
+
     private static final float ROTATION_SPEED = 180.0f;
-    private static final float ENGINE_POWER_FORWARD = 50.0f;
-    private static final float ENGINE_POWER_BACKWARD = 25.0f;
-    private static final float STANDARD_DAMPING = 0.05f;
-    private static final float BRAKING_DAMPING = 0.2f;
+    private static final float ROTATION_SPEED_OILED = 1440.0f;
+
+    private static final float SPEED_FORWARD = 50.0f;
+    private static final float SPEED_BACKWARD = 25.0f;
+    private static final float SPEED_OILED = 1200.0f;
+
+    private static final float DAMPING_STANDARD = 0.05f;
+    private static final float DAMPING_BRAKING = 0.2f;
+    private static final float DAMPING_FACTOR_GRASS = 3.0f;
+
+    private static final float OIL_TIME = 1.0f;
+    private static final float OIL_COLLISION_DISTANCE = OilPuddle.SIZE;
 
     public ClientCar(Map map, KeyEventHandler keyEventHandler, ClientGame clientGame) {
         this.map = map;
         this.keyEventHandler = keyEventHandler;
         this.clientGame = clientGame;
-
     }
 
     public Point getCenter() {
@@ -63,38 +75,55 @@ public class ClientCar extends GameObject {
         updateRotation(deltaTimeInSec);
         updateMovement(deltaTimeInSec);
 
+        if(oilTimer > 0.0f) {
+            oilTimer -= deltaTimeInSec;
+        } else {
+            oilTimer = 0.0f;
+
+            for(GameObject object : map.getGameObjects()) {
+                if(object instanceof OilPuddle) {
+                    float distanceX = object.getPosition().getX() - getPosition().getX();
+                    float distanceY = object.getPosition().getY() - getPosition().getY();
+                    float distance = MathUtils.sqrt(distanceX * distanceX + distanceY * distanceY);
+
+                    if(distance < OIL_COLLISION_DISTANCE) {
+                        oilTimer = OIL_TIME;
+                    }
+                }
+            }
+        }
+
         timer += deltaTimeInSec;
-        if (timer >= 0.1) {
-            Message message = new Message(MessageType.UPDATE);
-            float rotation = getRotation();
-            float x = getPosition().getX();
-            float y = getPosition().getY();
-            message.addValue("x", x);
-            message.addValue("y", y);
-            message.addValue("rotation", rotation);
-            Client client = clientGame.getClient();
-            client.sendMessage(message);
-            timer = 0;
+        if (timer >= Constants.NETWORK_TICK_TIME) {
+            sendMyState();
         }
     }
 
     private void updateRotation(float deltaTimeInSec) {
-        if(keyEventHandler.isRightPressed()) {
-            rotation += ROTATION_SPEED * deltaTimeInSec;
-        }
+        if(oilTimer <= 0.0f) {
+            if(keyEventHandler.isRightPressed()) {
+                rotation += ROTATION_SPEED * deltaTimeInSec;
+            }
 
-        if(keyEventHandler.isLeftPressed()) {
-            rotation -= ROTATION_SPEED * deltaTimeInSec;
+            if(keyEventHandler.isLeftPressed()) {
+                rotation -= ROTATION_SPEED * deltaTimeInSec;
+            }
+        } else {
+            rotation += ROTATION_SPEED_OILED * (oilTimer / OIL_TIME) * deltaTimeInSec;
         }
     }
 
     private void updateMovement(float deltaTimeInSec) {
-        float speed = getSpeed();
-        Direction direction = new Direction();
-        direction.setFromAngleAndLength(rotation, speed);
-        velocity = velocity.add(direction);
+        if(oilTimer <= 0.0f) {
+            float speed = getSpeed();
+            Direction direction = new Direction();
+            direction.setFromAngleAndLength(rotation, speed);
+            velocity = velocity.add(direction);
 
-        applyDamping();
+            applyDamping();
+        } else {
+            velocity = velocity.normalized().scale(SPEED_OILED * (oilTimer / OIL_TIME));
+        }
 
         Direction movement = velocity.scale(deltaTimeInSec);
         getPosition().moveInDirection(movement);
@@ -102,25 +131,38 @@ public class ClientCar extends GameObject {
 
     private float getSpeed() {
         if(keyEventHandler.isForwardPressed()) {
-            return ENGINE_POWER_FORWARD;
+            return SPEED_FORWARD;
         } else if(keyEventHandler.isBackwardPressed()) {
-            return -ENGINE_POWER_BACKWARD;
+            return -SPEED_BACKWARD;
         }
 
         return 0.0f;
     }
 
     private void applyDamping() {
-        float damping = keyEventHandler.isSpacePressed() ? BRAKING_DAMPING : STANDARD_DAMPING;
+        float damping = DAMPING_STANDARD;
+
+        if(keyEventHandler.isSpacePressed()) {
+            damping = DAMPING_BRAKING;
+        }
+
         if(!map.getRoad().isInside(getCenter())) {
-            damping *= 4.0f;
+            damping *= DAMPING_FACTOR_GRASS;
         }
 
         velocity = velocity.scale(1.0f - damping);
     }
 
+    private void sendMyState() {
+        Message message = new Message(MessageType.UPDATE);
+        message.addValue("x", getPosition().getX());
+        message.addValue("y", getPosition().getY());
+        message.addValue("rotation", getRotation());
+
+        clientGame.getClient().sendMessage(message);
+    }
+
     public void setId(int id) {
-        this.id = id;
         image = new Image(getClass().getResourceAsStream("/car_" + id + ".png"));
     }
 

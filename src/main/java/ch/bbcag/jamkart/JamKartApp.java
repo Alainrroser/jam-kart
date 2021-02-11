@@ -5,7 +5,10 @@ import ch.bbcag.jamkart.client.graphics.scenes.*;
 import ch.bbcag.jamkart.server.ServerGame;
 import javafx.application.Application;
 import javafx.scene.image.Image;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class JamKartApp extends Application {
 
@@ -23,7 +26,7 @@ public class JamKartApp extends Application {
         navigator.registerScene(SceneType.JOIN, new SceneJoinGame(this));
         navigator.registerScene(SceneType.CREATE, new SceneCreateGame(this));
         navigator.registerScene(SceneType.BACK_TO_START, new SceneBackToStart(this));
-        navigator.navigateTo(SceneType.START);
+        navigator.navigateTo(SceneType.START, true);
 
         primaryStage.setResizable(false);
         primaryStage.getIcons().add(new Image("/icon.png"));

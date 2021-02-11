@@ -15,9 +15,13 @@ public class Navigator {
         this.stage = stage;
     }
 
-    public void navigateTo(SceneType sceneType){
+    public void navigateTo(SceneType sceneType, boolean centerStage){
         stage.setScene(sceneMap.get(sceneType));
         stage.show();
+
+        if(centerStage) {
+            stage.centerOnScreen();
+        }
     }
 
     public void registerScene(SceneType sceneType, Scene scene){

@@ -111,7 +111,7 @@ public class SceneJoinGame extends Scene {
 
         pane.setLeft(contentBox);
         rootNode.getChildren().add(pane);
-        mainMenuBtn.setOnAction(e -> app.getNavigator().navigateTo(SceneType.START));
+        mainMenuBtn.setOnAction(e -> app.getNavigator().navigateTo(SceneType.START, false));
         joinGame.setOnAction(e -> validateInputAndJoinGame(ipError, portError, nameError));
         pane.setMinSize(800, 600);
     }
@@ -141,13 +141,12 @@ public class SceneJoinGame extends Scene {
         int port = Integer.parseInt(inputPort.getText());
 
         SceneGame newScene = (SceneGame) app.getNavigator().getScene(SceneType.GAME);
-        ClientGame clientGame = new ClientGame(newScene.getCanvas(), newScene.getKeyEventHandler());
+        ClientGame clientGame = new ClientGame(newScene.getCanvas(), newScene.getKeyEventHandler(), app.getNavigator());
         clientGame.load();
+
+        app.getNavigator().navigateTo(SceneType.GAME, true);
+
         clientGame.start(inputIp.getText(), port, inputName.getText());
         app.setClientGame(clientGame);
-
-        app.getNavigator().navigateTo(SceneType.GAME);
-
-        app.getPrimaryStage().centerOnScreen();
     }
 }

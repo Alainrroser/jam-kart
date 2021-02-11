@@ -1,9 +1,12 @@
 package ch.bbcag.jamkart.client;
 
+import ch.bbcag.jamkart.client.graphics.scenes.Navigator;
+import ch.bbcag.jamkart.client.graphics.scenes.SceneType;
 import ch.bbcag.jamkart.client.map.Map;
 import ch.bbcag.jamkart.client.map.objects.ClientCar;
 import ch.bbcag.jamkart.client.map.objects.ClientOtherCar;
 import ch.bbcag.jamkart.client.map.objects.GameObject;
+import ch.bbcag.jamkart.client.map.objects.OilPuddle;
 import ch.bbcag.jamkart.common.GameLoop;
 import ch.bbcag.jamkart.net.Message;
 import ch.bbcag.jamkart.net.MessageType;
@@ -18,20 +21,29 @@ public class ClientGame {
 
     private Canvas canvas;
     private KeyEventHandler keyEventHandler;
+    private Navigator navigator;
+
     private Client client;
     private Map map;
     private Camera camera;
     private ClientCar car;
 
+    private GameLoop loop;
+
     private static final Image GRASS = new Image(ClientGame.class.getResourceAsStream("/grass.png"));
 
-    public ClientGame(Canvas canvas, KeyEventHandler keyEventHandler) {
+    public ClientGame(Canvas canvas, KeyEventHandler keyEventHandler, Navigator navigator) {
         this.canvas = canvas;
         this.keyEventHandler = keyEventHandler;
+        this.navigator = navigator;
     }
 
     public void load() {
         map = new Map();
+
+        OilPuddle puddle = new OilPuddle();
+        puddle.setPosition(new Point(800, 200));
+        map.getGameObjects().add(puddle);
 
         car = new ClientCar(map, keyEventHandler, this);
         car.setPosition(new Point(200, 200));
@@ -51,8 +63,11 @@ public class ClientGame {
     public void start(String ip, int port, String name) {
         car.setName(name);
         createClient(ip, port);
-        camera = new Camera(new Point(100, 0));
-        createLoop();
+
+        if(client != null) { // Check whether the client has been connected to the server
+            camera = new Camera(new Point(100, 0));
+            createLoop();
+        }
     }
 
     private void createClient(String ip, int port) {
@@ -62,7 +77,9 @@ public class ClientGame {
             client.start();
             sendJoinMessage();
         } catch(IOException e) {
-            e.printStackTrace();
+            // The client couldn't connect to the server
+            navigator.navigateTo(SceneType.BACK_TO_START, true);
+            System.err.println("couldn't connect to server");
         }
     }
 
@@ -103,13 +120,14 @@ public class ClientGame {
     }
 
     private void createLoop() {
-        new GameLoop() {
+        loop = new GameLoop() {
             @Override
             public void update(float deltaTimeInSec) {
                 ClientGame.this.update(deltaTimeInSec);
                 draw();
             }
-        }.start();
+        };
+        loop.start();
     }
 
     private void update(float deltaTimeInSec) {
@@ -118,6 +136,11 @@ public class ClientGame {
         }
         camera.setX(car.getPosition().getX()-(float) (canvas.getWidth()/2) + ClientCar.SIZE/2);
         camera.setY(car.getPosition().getY()-(float) (canvas.getHeight()/2) + ClientCar.SIZE/2);
+
+        if(client.isDisconnected()) {
+            stop();
+            navigator.navigateTo(SceneType.BACK_TO_START, true);
+        }
     }
 
     private void draw() {
@@ -139,6 +162,7 @@ public class ClientGame {
     }
 
     public void stop() {
+        loop.stop();
         client.close();
     }
 

@@ -1,5 +1,6 @@
 package ch.bbcag.jamkart.server;
 
+import ch.bbcag.jamkart.Constants;
 import ch.bbcag.jamkart.common.GameLoop;
 import ch.bbcag.jamkart.net.Connection;
 import ch.bbcag.jamkart.net.Message;
@@ -30,28 +31,35 @@ public class ServerGame {
             @Override
             public void update(float deltaTimeInSec) {
                 timer += deltaTimeInSec;
-                if (timer >= 0.1) {
-                    for (ServerCar car : carList) {
-                        Message message = new Message(MessageType.UPDATE);
-                        message.addValue("x", car.getPosition().getX());
-                        message.addValue("y", car.getPosition().getY());
-                        message.addValue("rotation", car.getRotation());
-                        message.addValue("name", car.getName());
-                        message.addValue("id", car.getId());
-                        for (ServerCar otherCar : carList) {
-                            if (otherCar.getConnection() != car.getConnection()) {
-                                otherCar.getConnection().sendMessage(message);
-                            }
-                        }
-                    }
+                if (timer >= Constants.NETWORK_TICK_TIME) {
+                    networkTick();
                     timer = 0;
                 }
             }
         }.start();
     }
 
-    public void stop() {
-        server.close();
+    private void networkTick() {
+        for (ServerCar car : carList) {
+            Message message = createUpdateMessageForCar(car);
+
+            for (ServerCar otherCar : carList) {
+                if (otherCar.getConnection() != car.getConnection()) {
+                    otherCar.getConnection().sendMessage(message);
+                }
+            }
+        }
+    }
+
+    private Message createUpdateMessageForCar(ServerCar car) {
+        Message message = new Message(MessageType.UPDATE);
+        message.addValue("x", car.getPosition().getX());
+        message.addValue("y", car.getPosition().getY());
+        message.addValue("rotation", car.getRotation());
+        message.addValue("name", car.getName());
+        message.addValue("id", car.getId());
+
+        return message;
     }
 
     private void processMessage(Message message, Connection connection) {
@@ -60,8 +68,10 @@ public class ServerGame {
                 Message idMessage = new Message(MessageType.ID);
                 idMessage.addValue("id", id);
                 connection.sendMessage(idMessage);
+
                 carList.add(new ServerCar(connection, id, message.getValue("name")));
                 id++;
+
                 System.out.println("new player joined the game!");
                 System.out.println("name: " + message.getValue("name"));
                 break;
@@ -76,5 +86,9 @@ public class ServerGame {
             default:
                 break;
         }
+    }
+
+    public void stop() {
+        server.close();
     }
 }

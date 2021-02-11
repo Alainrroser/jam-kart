@@ -11,6 +11,8 @@ public class Connection extends Thread {
     private DataInputStream dataInputStream;
     private MessageHandler messageHandler;
 
+    private boolean disconnected = false;
+
     public Connection(Socket socket) throws IOException {
         this.socket = socket;
         this.dataOutputStream = new DataOutputStream(socket.getOutputStream());
@@ -27,7 +29,8 @@ public class Connection extends Thread {
                 throw new IllegalArgumentException("The message has to contain a type");
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Couldn't write to socket");
+            disconnected = true;
         }
     }
 
@@ -49,7 +52,8 @@ public class Connection extends Thread {
                 readMessage();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Couldn't read from socket");
+            disconnected = true;
         }
     }
 
@@ -67,6 +71,10 @@ public class Connection extends Thread {
 
     public int getPort() {
         return socket.getPort();
+    }
+
+    public boolean isDisconnected() {
+        return disconnected;
     }
 
     public void close() {
