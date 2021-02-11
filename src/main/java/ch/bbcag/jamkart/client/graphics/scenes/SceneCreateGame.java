@@ -44,7 +44,14 @@ public class SceneCreateGame extends Scene {
                         "-fx-font-size: 18px;"
         );
 
+        VBox nameBox = new VBox();
         inputName = new TextField();
+        Text nameError = new Text();
+        nameError.setStyle(
+                "-fx-font-weight: bold;" +
+                        "-fx-font-size: 14px;"
+        );
+        VBox.setMargin(nameError, new Insets(-10, 0, 0, 15));
         inputName.setPromptText("Name eingeben:");
         inputName.setStyle(
                 "-fx-background-radius: 3em;" +
@@ -53,6 +60,7 @@ public class SceneCreateGame extends Scene {
                         "-fx-font-weight: bold;" +
                         "-fx-font-size: 18px;"
         );
+        nameBox.getChildren().addAll(nameError, inputName);
 
         VBox portBox = new VBox();
         inputPort = new TextField();
@@ -81,23 +89,42 @@ public class SceneCreateGame extends Scene {
                         "-fx-font-size: 18px;"
         );
 
-        contentBox.getChildren().addAll(mainMenuBtn, inputName, portBox, createGame);
+        contentBox.getChildren().addAll(mainMenuBtn, nameBox, portBox, createGame);
 
         pane.setLeft(contentBox);
         rootNode.getChildren().add(pane);
         mainMenuBtn.setOnAction(e -> app.getNavigator().navigateTo(SceneType.START));
-        createGame.setOnAction(e -> validateInputAndCreateGame(portError));
+        createGame.setOnAction(e -> validateInputAndCreateGame(portError, nameError));
         pane.setMinSize(800, 600);
     }
 
-    private void validateInputAndCreateGame(Text errorMessage) {
-        if (Validator.validatePort(inputPort.getText())) {
+    private void setErrorMessage(boolean isCorrect, Text errorMessage) {
+        if (isCorrect) {
             errorMessage.setText("");
-            createGame();
         } else {
-            errorMessage.setText("invalider Port");
+            errorMessage.setText("invalide Eingabe");
         }
     }
+
+    private void validateInputAndCreateGame(Text portError, Text nameError) {
+        if (Validator.validatePort(inputPort.getText()) && Validator.validateName(inputName.getText())) {
+            setErrorMessage(true, portError);
+            setErrorMessage(true, nameError);
+            createGame();
+        } else {
+            if (!Validator.validatePort(inputPort.getText())) {
+                setErrorMessage(false, portError);
+            } else{
+                setErrorMessage(true, portError);
+            }
+            if (!Validator.validateName(inputName.getText())) {
+                setErrorMessage(false, nameError);
+            } else {
+                setErrorMessage(true, nameError);
+            }
+        }
+    }
+
 
     private void createGame() {
         int port = Integer.parseInt(inputPort.getText());

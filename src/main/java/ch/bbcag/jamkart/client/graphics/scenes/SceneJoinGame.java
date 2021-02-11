@@ -44,7 +44,14 @@ public class SceneJoinGame extends Scene {
                         "-fx-font-size: 18px;"
         );
 
+        VBox nameBox = new VBox();
         inputName = new TextField();
+        Text nameError = new Text();
+        nameError.setStyle(
+                "-fx-font-weight: bold;" +
+                        "-fx-font-size: 14px;"
+        );
+        VBox.setMargin(nameError, new Insets(-10, 0, 0, 15));
         inputName.setPromptText("Name eingeben:");
         inputName.setStyle(
                 "-fx-background-radius: 3em;" +
@@ -53,6 +60,7 @@ public class SceneJoinGame extends Scene {
                         "-fx-font-weight: bold;" +
                         "-fx-font-size: 18px;"
         );
+        nameBox.getChildren().addAll(nameError, inputName);
 
         VBox ipBox = new VBox();
         inputIp = new TextField();
@@ -99,23 +107,45 @@ public class SceneJoinGame extends Scene {
                         "-fx-font-size: 18px;"
         );
 
-        contentBox.getChildren().addAll(mainMenuBtn, inputName, ipBox, portBox, joinGame);
+        contentBox.getChildren().addAll(mainMenuBtn, nameBox, ipBox, portBox, joinGame);
 
         pane.setLeft(contentBox);
         rootNode.getChildren().add(pane);
         mainMenuBtn.setOnAction(e -> app.getNavigator().navigateTo(SceneType.START));
-        joinGame.setOnAction(e -> validateInputAndJoinGame(ipError, portError));
+        joinGame.setOnAction(e -> validateInputAndJoinGame(ipError, portError, nameError));
         pane.setMinSize(800, 600);
     }
 
-    private void validateInputAndJoinGame(Text ipError, Text portError) {
-        if (Validator.validateIP(inputIp.getText()) && Validator.validatePort(inputPort.getText())) {
-            ipError.setText("");
-            portError.setText("");
+    private void setErrorMessage(boolean isCorrect, Text errorMessage) {
+        if (isCorrect) {
+            errorMessage.setText("");
+        } else {
+            errorMessage.setText("invalide Eingabe");
+        }
+    }
+
+    private void validateInputAndJoinGame(Text ipError, Text portError, Text nameError) {
+        if (Validator.validateIP(inputIp.getText()) && Validator.validatePort(inputPort.getText()) && Validator.validateName(inputName.getText())) {
+            setErrorMessage(true, ipError);
+            setErrorMessage(true, portError);
+            setErrorMessage(true, nameError);
             joinGame();
         } else {
-            ipError.setText("invalide IP-Adresse");
-            portError.setText("invalider Port");
+            if (!Validator.validateIP(inputIp.getText())) {
+                setErrorMessage(false, ipError);
+            } else {
+                setErrorMessage(true, ipError);
+            }
+            if (!Validator.validatePort(inputPort.getText())) {
+                setErrorMessage(false, portError);
+            } else{
+                setErrorMessage(true, portError);
+            }
+            if (!Validator.validateName(inputName.getText())) {
+                setErrorMessage(false, nameError);
+            } else {
+                setErrorMessage(true, nameError);
+            }
         }
     }
 

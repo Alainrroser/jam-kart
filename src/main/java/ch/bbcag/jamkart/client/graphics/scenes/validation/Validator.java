@@ -37,4 +37,8 @@ public class Validator {
         }
         return true;
     }
+
+    public static boolean validateName(String name){
+        return name.matches("(?i)(^[a-z]+)[a-z .,-]((?! .,-)$){1,25}$");
+    }
 }
