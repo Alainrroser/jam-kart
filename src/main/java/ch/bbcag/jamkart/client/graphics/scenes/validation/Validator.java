@@ -39,6 +39,6 @@ public class Validator {
     }
 
     public static boolean validateName(String name){
-        return name.matches("(?i)(^[a-z]+)[a-z .,-]((?! .,-)$){1,25}$");
+        return name.matches("(^[a-zA-Z0-9]([. _-](?![. _-])|[a-zA-Z0-9]){0,18}[a-zA-Z0-9]$)");
     }
 }
