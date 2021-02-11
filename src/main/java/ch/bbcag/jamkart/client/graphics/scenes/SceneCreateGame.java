@@ -140,5 +140,7 @@ public class SceneCreateGame extends Scene {
         app.setClientGame(clientGame);
 
         app.getNavigator().navigateTo(SceneType.GAME);
+
+        app.getPrimaryStage().centerOnScreen();
     }
 }

@@ -24,6 +24,8 @@ public class ClientGame {
 
     private Map map;
 
+    private Camera camera;
+
     private Car car;
 
     private static final Image GRASS = new Image(ClientGame.class.getResourceAsStream("/grass.png"));
@@ -50,6 +52,7 @@ public class ClientGame {
 
     public void start(String ip, int port, String name) {
         createClient(ip, port, name);
+        camera = new Camera(new Point(100, 0));
         createLoop();
     }
 
@@ -92,12 +95,19 @@ public class ClientGame {
         for(GameObject gameObject : map.getGameObjects()) {
             gameObject.update(deltaTimeInSec);
         }
+        camera.setX(car.getPosition().getX()-(float) (canvas.getWidth()/2) + Car.SIZE/2);
+        camera.setY(car.getPosition().getY()-(float) (canvas.getHeight()/2) + Car.SIZE/2);
     }
 
     private void draw() {
         canvas.getGraphicsContext2D().save();
 
-        canvas.getGraphicsContext2D().drawImage(GRASS, 0, 0, 1500, 800);
+        canvas.getGraphicsContext2D().translate(-camera.getX(), -camera.getY());
+        for(int y = -10000; y < 10000; y += 800) {
+            for (int x = -10000; x < 10000; x += 1500) {
+                canvas.getGraphicsContext2D().drawImage(GRASS, x, y, 1500, 800);
+            }
+        }
         map.getRoad().draw(canvas.getGraphicsContext2D());
 
         for(GameObject gameObject : map.getGameObjects()) {

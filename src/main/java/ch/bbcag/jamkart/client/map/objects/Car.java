@@ -11,7 +11,7 @@ import javafx.scene.paint.Color;
 public class Car extends GameObject {
 
     private static final Image IMAGE = new Image(Car.class.getResourceAsStream("/car_red.png"));
-    private static final float SIZE = 100.0f;
+    public static final float SIZE = 100.0f;
 
     private Map map;
     private KeyEventHandler keyEventHandler;

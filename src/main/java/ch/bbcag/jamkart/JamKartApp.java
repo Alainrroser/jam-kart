@@ -12,9 +12,11 @@ public class JamKartApp extends Application {
     private Navigator navigator;
     private ClientGame clientGame;
     private ServerGame serverGame;
+    private Stage primaryStage;
 
     @Override
     public void start(Stage primaryStage) {
+        this.primaryStage = primaryStage;
         navigator = new Navigator(primaryStage);
         navigator.registerScene(SceneType.START, new SceneStart(this));
         navigator.registerScene(SceneType.GAME, new SceneGame(this));
@@ -35,9 +37,12 @@ public class JamKartApp extends Application {
         return clientGame;
     }
 
+    public Stage getPrimaryStage(){
+        return primaryStage;
+    }
+
     public void setClientGame(ClientGame game) {
         this.clientGame = game;
-        serverGame.stop();
     }
 
     public ServerGame getServerGame() {
