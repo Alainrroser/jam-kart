@@ -11,24 +11,25 @@ import java.util.List;
 
 public class Road {
 
-    private Polygon polygon = new Polygon();
+    private Polyline polyline = new Polyline();
+    private static final float WIDTH = 300.0f;
 
-    public Polygon getPolygon() {
-        return polygon;
+    public Road() {
+        polyline.setStrokeWidth(WIDTH);
     }
 
     public void addPoint(Point point) {
-        polygon.getPoints().addAll((double) point.getX(), (double) point.getY());
+        polyline.getPoints().addAll((double) point.getX(), (double) point.getY());
     }
 
     public List<Point> getPoints() {
         List<Point> points = new ArrayList<>();
 
-        int numberOfPoints = polygon.getPoints().size() / 2;
+        int numberOfPoints = polyline.getPoints().size() / 2;
 
         for(int i = 0; i < numberOfPoints; i++) {
-            float x = polygon.getPoints().get(i * 2).floatValue();
-            float y = polygon.getPoints().get(i * 2 + 1).floatValue();
+            float x = polyline.getPoints().get(i * 2).floatValue();
+            float y = polyline.getPoints().get(i * 2 + 1).floatValue();
             points.add(new Point(x, y));
         }
 
@@ -36,21 +37,28 @@ public class Road {
     }
 
     public boolean isInside(Point point) {
-        return polygon.contains(point.getX(), point.getY());
+        return polyline.contains(point.getX(), point.getY());
     }
 
     public void draw(GraphicsContext context) {
-        int numberOfPoints = polygon.getPoints().size() / 2;
+        int numberOfPoints = polyline.getPoints().size() / 2;
         double[] xPoints = new double[numberOfPoints];
         double[] yPoints = new double[numberOfPoints];
 
         for(int i = 0; i < numberOfPoints; i++) {
-            xPoints[i] = polygon.getPoints().get(i * 2);
-            yPoints[i] = polygon.getPoints().get(i * 2 + 1);
+            xPoints[i] = polyline.getPoints().get(i * 2);
+            yPoints[i] = polyline.getPoints().get(i * 2 + 1);
         }
 
-        context.setFill(Color.GRAY);
-        context.fillPolygon(xPoints, yPoints, numberOfPoints);
+        context.setStroke(Color.GRAY);
+        context.setLineWidth(WIDTH);
+        context.setLineDashes(0);
+        context.strokePolyline(xPoints, yPoints, numberOfPoints);
+
+        context.setStroke(Color.WHITE);
+        context.setLineWidth(20);
+        context.setLineDashes(100);
+        context.strokePolyline(xPoints, yPoints, numberOfPoints);
     }
 
 }

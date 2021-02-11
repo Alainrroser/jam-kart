@@ -12,6 +12,7 @@ import ch.bbcag.jamkart.utils.Point;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Polyline;
 
 import java.io.IOException;
 
@@ -42,12 +43,15 @@ public class ClientGame {
         car.setPosition(new Point(200, 200));
         map.getGameObjects().add(car);
 
-        float yCenter = (float) canvas.getHeight() / 2;
-
-        map.getRoad().addPoint(new Point(0, yCenter - 200));
-        map.getRoad().addPoint(new Point((float) canvas.getWidth(), yCenter - 200));
-        map.getRoad().addPoint(new Point((float) canvas.getWidth(), yCenter + 200));
-        map.getRoad().addPoint(new Point(0, yCenter + 200));
+        map.getRoad().addPoint(new Point(0, 300));
+        map.getRoad().addPoint(new Point(1000, 300));
+        map.getRoad().addPoint(new Point(1500, 0));
+        map.getRoad().addPoint(new Point(1500, -500));
+        map.getRoad().addPoint(new Point(1000, -700));
+        map.getRoad().addPoint(new Point(1000, -1000));
+        map.getRoad().addPoint(new Point(1800, -1500));
+        map.getRoad().addPoint(new Point(2500, -1300));
+        map.getRoad().addPoint(new Point(2500, -500));
     }
 
     public void start(String ip, int port, String name) {

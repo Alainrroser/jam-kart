@@ -20,8 +20,8 @@ public class Car extends GameObject {
     private Direction velocity = new Direction();
 
     private static final float ROTATION_SPEED = 180.0f;
-    private static final float ENGINE_POWER_FORWARD = 40.0f;
-    private static final float ENGINE_POWER_BACKWARD = -20.0f;
+    private static final float ENGINE_POWER_FORWARD = 50.0f;
+    private static final float ENGINE_POWER_BACKWARD = 25.0f;
     private static final float STANDARD_DAMPING = 0.05f;
     private static final float BRAKING_DAMPING = 0.2f;
 
@@ -48,6 +48,11 @@ public class Car extends GameObject {
 
     @Override
     public void update(float deltaTimeInSec) {
+        updateRotation(deltaTimeInSec);
+        updateMovement(deltaTimeInSec);
+    }
+
+    private void updateRotation(float deltaTimeInSec) {
         if(keyEventHandler.isRightPressed()) {
             rotation += ROTATION_SPEED * deltaTimeInSec;
         }
@@ -55,28 +60,37 @@ public class Car extends GameObject {
         if(keyEventHandler.isLeftPressed()) {
             rotation -= ROTATION_SPEED * deltaTimeInSec;
         }
+    }
 
-        float speed = 0.0f;
-        if(keyEventHandler.isForwardPressed()) {
-            speed = ENGINE_POWER_FORWARD;
-        } else if(keyEventHandler.isBackwardPressed()) {
-            speed = -ENGINE_POWER_BACKWARD;
-        }
-
+    private void updateMovement(float deltaTimeInSec) {
+        float speed = getSpeed();
         Direction direction = new Direction();
         direction.setFromAngleAndLength(rotation, speed);
-
         velocity = velocity.add(direction);
 
+        applyDamping();
+
+        Direction movement = velocity.scale(deltaTimeInSec);
+        getPosition().moveInDirection(movement);
+    }
+
+    private float getSpeed() {
+        if(keyEventHandler.isForwardPressed()) {
+            return ENGINE_POWER_FORWARD;
+        } else if(keyEventHandler.isBackwardPressed()) {
+            return -ENGINE_POWER_BACKWARD;
+        }
+
+        return 0.0f;
+    }
+
+    private void applyDamping() {
         float damping = keyEventHandler.isSpacePressed() ? BRAKING_DAMPING : STANDARD_DAMPING;
         if(!map.getRoad().isInside(getCenter())) {
             damping *= 4.0f;
         }
 
         velocity = velocity.scale(1.0f - damping);
-
-        Direction movement = velocity.scale(deltaTimeInSec);
-        getPosition().moveInDirection(movement);
     }
 
 }
