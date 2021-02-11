@@ -17,7 +17,7 @@ public class Message {
         return data;
     }
 
-    public Object getValue(String key) {
+    public String getValue(String key) {
         return data.get(key);
     }
 

@@ -34,7 +34,7 @@ public class ServerCar {
         return connection;
     }
 
-    public void setConnection(Connection connection) {
-        this.connection = connection;
+    public int getId() {
+        return id;
     }
 }

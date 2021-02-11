@@ -13,10 +13,9 @@ import java.util.List;
 
 public class ServerGame {
     private Server server;
-    private Connection connection;
     private float timer = 0;
-    private int id = 0;
     private List<ServerCar> carList = new ArrayList<>();
+    private int id = 0;
 
     public void start(int port) {
         try {
@@ -36,11 +35,10 @@ public class ServerGame {
                         Message message = new Message(MessageType.UPDATE);
                         float x = car.getPosition().getX();
                         float y = car.getPosition().getY();
-                        float rotation = car.getRotation();
                         message.addValue("x", x);
                         message.addValue("y", y);
-                        message.addValue("rotation", rotation);
-                        message.addValue("id", id);
+                        message.addValue("rotation", car.getRotation());
+                        message.addValue("id", car.getId());
                         for (ServerCar otherCar : carList) {
                             if (otherCar.getConnection() != car.getConnection()) {
                                 otherCar.getConnection().sendMessage(message);
@@ -58,9 +56,12 @@ public class ServerGame {
     }
 
     private void processMessage(Message message, Connection connection) {
-        this.connection = connection;
         switch (message.getMessageType()) {
             case JOIN_GAME:
+                Message idMessage = new Message(MessageType.ID);
+                idMessage.addValue("id", id);
+                connection.sendMessage(idMessage);
+
                 carList.add(new ServerCar(connection, id));
                 id++;
                 System.out.println("new player joined the game!");
@@ -77,6 +78,7 @@ public class ServerGame {
                         car.setRotation(rotation);
                     }
                 }
+                break;
             default:
                 break;
         }

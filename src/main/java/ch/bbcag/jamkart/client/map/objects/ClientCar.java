@@ -6,6 +6,7 @@ import ch.bbcag.jamkart.client.map.Map;
 import ch.bbcag.jamkart.net.Message;
 import ch.bbcag.jamkart.net.MessageType;
 import ch.bbcag.jamkart.net.client.Client;
+import ch.bbcag.jamkart.server.ServerCar;
 import ch.bbcag.jamkart.utils.Direction;
 import ch.bbcag.jamkart.utils.Point;
 import javafx.scene.canvas.GraphicsContext;
@@ -13,10 +14,10 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 public class ClientCar extends GameObject {
-
-    private static final Image IMAGE = new Image(ClientCar.class.getResourceAsStream("/car_3.png"));
     public static final float SIZE = 100.0f;
 
+    private int id;
+    private Image image;
     private Map map;
     private KeyEventHandler keyEventHandler;
 
@@ -36,6 +37,7 @@ public class ClientCar extends GameObject {
         this.map = map;
         this.keyEventHandler = keyEventHandler;
         this.clientGame = clientGame;
+
     }
 
     public Point getCenter() {
@@ -44,14 +46,15 @@ public class ClientCar extends GameObject {
 
     @Override
     public void draw(GraphicsContext context) {
-        context.setFill(Color.RED);
-        context.fillOval(getCenter().getX() - 5, getCenter().getY() - 5, 10, 10);
+        context.save();
 
         context.translate(getPosition().getX() + SIZE / 2, getPosition().getY() + SIZE / 2);
         context.rotate(rotation);
         context.translate(-(getPosition().getX() + SIZE / 2), -(getPosition().getY() + SIZE / 2));
 
-        context.drawImage(IMAGE, getPosition().getX(), getPosition().getY(), SIZE, SIZE);
+        context.drawImage(image, getPosition().getX(), getPosition().getY(), SIZE, SIZE);
+
+        context.restore();
     }
 
     public float getRotation() {
@@ -119,4 +122,8 @@ public class ClientCar extends GameObject {
         velocity = velocity.scale(1.0f - damping);
     }
 
+    public void setId(int id) {
+        this.id = id;
+        image = new Image(getClass().getResourceAsStream("/car_" + id + ".png"));
+    }
 }

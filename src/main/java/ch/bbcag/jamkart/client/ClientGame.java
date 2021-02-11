@@ -2,6 +2,7 @@ package ch.bbcag.jamkart.client;
 
 import ch.bbcag.jamkart.client.map.Map;
 import ch.bbcag.jamkart.client.map.objects.ClientCar;
+import ch.bbcag.jamkart.client.map.objects.ClientOtherCar;
 import ch.bbcag.jamkart.client.map.objects.GameObject;
 import ch.bbcag.jamkart.common.GameLoop;
 import ch.bbcag.jamkart.net.Message;
@@ -17,13 +18,9 @@ public class ClientGame {
 
     private Canvas canvas;
     private KeyEventHandler keyEventHandler;
-
     private Client client;
-
     private Map map;
-
     private Camera camera;
-
     private ClientCar car;
 
     private static final Image GRASS = new Image(ClientGame.class.getResourceAsStream("/grass.png"));
@@ -77,6 +74,33 @@ public class ClientGame {
 
     private void processMessage(Message message) {
         switch (message.getMessageType()) {
+            case ID:
+                car.setId(Integer.parseInt(message.getValue("id")));
+                break;
+            case UPDATE:
+                int id = Integer.parseInt(message.getValue("id"));
+                ClientOtherCar otherCar = null;
+
+                for (GameObject gameObject : map.getGameObjects()) {
+                    if (gameObject instanceof ClientOtherCar) {
+                        if (((ClientOtherCar) gameObject).getId() == id) {
+                            otherCar = (ClientOtherCar) gameObject;
+                        }
+                    }
+                }
+
+                if (otherCar == null) {
+                    otherCar = new ClientOtherCar(id);
+                    map.getGameObjects().add(otherCar);
+                }
+
+                float x = Float.parseFloat(message.getValue("x"));
+                float y = Float.parseFloat(message.getValue("y"));
+                float rotation = Float.parseFloat(message.getValue("rotation"));
+                Point position = new Point(x, y);
+                otherCar.setPosition(position);
+                otherCar.setRotation(rotation);
+                break;
             default:
                 break;
         }
