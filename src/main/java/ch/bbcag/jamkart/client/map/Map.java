@@ -8,9 +8,14 @@ import java.util.List;
 public class Map {
 
     private List<GameObject> gameObjects = new ArrayList<>();
+    private Road road = new Road();
 
     public List<GameObject> getGameObjects() {
         return gameObjects;
+    }
+
+    public Road getRoad() {
+        return road;
     }
 
 }

@@ -36,9 +36,16 @@ public class ClientGame {
     public void load() {
         map = new Map();
 
-        car = new Car(keyEventHandler);
+        car = new Car(map, keyEventHandler);
         car.setPosition(new Point(200, 200));
         map.getGameObjects().add(car);
+
+        float yCenter = (float) canvas.getHeight() / 2;
+
+        map.getRoad().addPoint(new Point(0, yCenter - 200));
+        map.getRoad().addPoint(new Point((float) canvas.getWidth(), yCenter - 200));
+        map.getRoad().addPoint(new Point((float) canvas.getWidth(), yCenter + 200));
+        map.getRoad().addPoint(new Point(0, yCenter + 200));
     }
 
     public void start(String ip, int port, String name) {
@@ -91,6 +98,7 @@ public class ClientGame {
         canvas.getGraphicsContext2D().save();
 
         canvas.getGraphicsContext2D().drawImage(GRASS, 0, 0, 1500, 800);
+        map.getRoad().draw(canvas.getGraphicsContext2D());
 
         for(GameObject gameObject : map.getGameObjects()) {
             gameObject.draw(canvas.getGraphicsContext2D());
