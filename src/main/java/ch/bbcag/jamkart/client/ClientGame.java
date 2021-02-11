@@ -18,6 +18,8 @@ import java.io.IOException;
 public class ClientGame {
 
     private Canvas canvas;
+    private KeyEventHandler keyEventHandler;
+
     private Client client;
 
     private Map map;
@@ -26,14 +28,15 @@ public class ClientGame {
 
     private static final Image GRASS = new Image(ClientGame.class.getResourceAsStream("/grass.png"));
 
-    public ClientGame(Canvas canvas) {
+    public ClientGame(Canvas canvas, KeyEventHandler keyEventHandler) {
         this.canvas = canvas;
+        this.keyEventHandler = keyEventHandler;
     }
 
     public void load() {
         map = new Map();
 
-        car = new Car();
+        car = new Car(keyEventHandler);
         car.setPosition(new Point(200, 200));
         map.getGameObjects().add(car);
     }

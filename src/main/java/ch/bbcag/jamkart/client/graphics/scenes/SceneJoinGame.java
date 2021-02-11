@@ -123,7 +123,7 @@ public class SceneJoinGame extends Scene {
         int port = Integer.parseInt(inputPort.getText());
 
         SceneGame newScene = (SceneGame) app.getNavigator().getScene(SceneType.GAME);
-        ClientGame clientGame = new ClientGame(newScene.getCanvas());
+        ClientGame clientGame = new ClientGame(newScene.getCanvas(), newScene.getKeyEventHandler());
         clientGame.load();
         clientGame.start(inputIp.getText(), port, inputName.getText());
         app.setClientGame(clientGame);

@@ -107,7 +107,7 @@ public class SceneCreateGame extends Scene {
         app.setServerGame(serverGame);
 
         SceneGame newScene = (SceneGame) app.getNavigator().getScene(SceneType.GAME);
-        ClientGame clientGame = new ClientGame(newScene.getCanvas());
+        ClientGame clientGame = new ClientGame(newScene.getCanvas(), newScene.getKeyEventHandler());
         clientGame.load();
         clientGame.start("localhost", port, inputName.getText());
         app.setClientGame(clientGame);

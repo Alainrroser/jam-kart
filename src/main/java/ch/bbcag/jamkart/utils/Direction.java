@@ -31,15 +31,17 @@ public class Direction {
         return MathUtils.sqrt(MathUtils.sqr(x) + MathUtils.sqr(y));
     }
 
-    public void scale(float scale) {
-        this.x *= scale;
-        this.y *= scale;
+    public Direction add(Direction other) {
+        return new Direction(x + other.x, y + other.y);
     }
 
-    public void normalize() {
+    public Direction scale(float scale) {
+        return new Direction(x * scale, y * scale);
+    }
+
+    public Direction normalized() {
         float length = getLength();
-        x /= length;
-        y /= length;
+        return new Direction(x / length, y / length);
     }
 
     public void setFromAngleAndLength(float angleInDegrees, float length) {
