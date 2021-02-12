@@ -7,6 +7,8 @@ import ch.bbcag.jamkart.client.graphics.scenes.Navigator;
 import ch.bbcag.jamkart.client.graphics.scenes.SceneBackToStart;
 import ch.bbcag.jamkart.client.graphics.scenes.SceneType;
 import ch.bbcag.jamkart.client.map.Map;
+import ch.bbcag.jamkart.client.map.RoadPathMarker;
+import ch.bbcag.jamkart.client.map.RoadPathTracker;
 import ch.bbcag.jamkart.client.map.objects.*;
 import ch.bbcag.jamkart.common.GameLoop;
 import ch.bbcag.jamkart.net.Message;
@@ -31,6 +33,8 @@ public class ClientGame {
     private Camera camera;
     private ClientCar car;
 
+    private RoadPathTracker roadPathTracker;
+
     private GameLoop loop;
 
     private JamKartApp app;
@@ -46,6 +50,9 @@ public class ClientGame {
 
     public void load() {
         map = new Map();
+
+        map.getRoad().addPathMarker(new RoadPathMarker(new Point(300, 200), 300));
+        map.getRoad().addPathMarker(new RoadPathMarker(new Point(1000, 100), 200));
 
         map.getRoad().addPoint(new Point(200, 200));
         map.getGameObjects().add(new BoostPad(new Point(700,65),90));
@@ -170,6 +177,7 @@ public class ClientGame {
 
         if (client != null) {
             camera = new Camera(new Point(100, 0));
+            roadPathTracker = new RoadPathTracker(map.getRoad(), car);
             createLoop();
         }
     }
@@ -264,6 +272,8 @@ public class ClientGame {
         for (GameObject gameObject : map.getGameObjects()) {
             gameObject.update(deltaTimeInSec);
         }
+        roadPathTracker.update();
+
         camera.setX(car.getPosition().getX() - (float) (canvas.getWidth() / 2) + Constants.CAR_SIZE / 2);
         camera.setY(car.getPosition().getY() - (float) (canvas.getHeight() / 2) + Constants.CAR_SIZE / 2);
 

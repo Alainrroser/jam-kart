@@ -1,6 +1,7 @@
 package ch.bbcag.jamkart.client.map.objects;
 
 import ch.bbcag.jamkart.Constants;
+import ch.bbcag.jamkart.utils.DrawingUtils;
 import ch.bbcag.jamkart.utils.Point;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -20,15 +21,7 @@ public class BoostPad extends GameObject {
 
     @Override
     public void draw(GraphicsContext context) {
-        context.save();
-
-        context.translate(getPosition().getX() + SIZE / 2, getPosition().getY() + SIZE / 2);
-        context.rotate(rotation);
-        context.translate(-(getPosition().getX() + SIZE / 2), -(getPosition().getY() + SIZE / 2));
-
-        context.drawImage(IMAGE, getPosition().getX(), getPosition().getY(), SIZE, SIZE);
-
-        context.restore();
+        DrawingUtils.drawRotated(context, IMAGE, getPosition(), SIZE, SIZE, rotation);
     }
 
     @Override

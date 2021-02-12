@@ -5,6 +5,8 @@ import ch.bbcag.jamkart.client.graphics.scenes.*;
 import ch.bbcag.jamkart.server.ServerGame;
 import javafx.application.Application;
 import javafx.scene.image.Image;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
 public class JamKartApp extends Application {
@@ -12,6 +14,8 @@ public class JamKartApp extends Application {
     private Navigator navigator;
     private ClientGame clientGame;
     private ServerGame serverGame;
+
+    private MediaPlayer mediaPlayer; // must be added here so it doesn't get collected by garbage collector
 
     @Override
     public void start(Stage primaryStage) {
@@ -25,6 +29,19 @@ public class JamKartApp extends Application {
 
         primaryStage.setResizable(false);
         primaryStage.getIcons().add(new Image("/icon.png"));
+
+//        startMusic();
+    }
+
+    private void startMusic() {
+        try {
+            Media music = new Media(getClass().getResource("/music.wav").toURI().toString());
+            mediaPlayer = new MediaPlayer(music);
+            mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+            mediaPlayer.play();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public Navigator getNavigator() {

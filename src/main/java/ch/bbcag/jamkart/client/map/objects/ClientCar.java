@@ -7,6 +7,7 @@ import ch.bbcag.jamkart.client.map.Map;
 import ch.bbcag.jamkart.net.Message;
 import ch.bbcag.jamkart.net.MessageType;
 import ch.bbcag.jamkart.utils.Direction;
+import ch.bbcag.jamkart.utils.DrawingUtils;
 import ch.bbcag.jamkart.utils.MathUtils;
 import ch.bbcag.jamkart.utils.Point;
 import javafx.scene.canvas.GraphicsContext;
@@ -57,15 +58,7 @@ public class ClientCar extends GameObject {
 
     @Override
     public void draw(GraphicsContext context) {
-        context.save();
-
-        context.translate(getPosition().getX() + Constants.CAR_SIZE / 2, getPosition().getY() + Constants.CAR_SIZE / 2);
-        context.rotate(rotation);
-        context.translate(-(getPosition().getX() + Constants.CAR_SIZE / 2), -(getPosition().getY() + Constants.CAR_SIZE / 2));
-
-        context.drawImage(image, getPosition().getX(), getPosition().getY(), Constants.CAR_SIZE, Constants.CAR_SIZE);
-
-        context.restore();
+        DrawingUtils.drawRotated(context, image, getPosition(), Constants.CAR_SIZE, Constants.CAR_SIZE, rotation);
     }
 
     public float getRotation() {
