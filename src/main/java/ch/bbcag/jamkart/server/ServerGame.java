@@ -23,22 +23,30 @@ public class ServerGame {
     private Server server;
     private boolean startMessageSent = false;
 
-    private float timer = 0;
-
     private List<ServerCar> carList = new CopyOnWriteArrayList<>();
 
     private List<Integer> availableIdList = new CopyOnWriteArrayList<>();
+    private static final int NUMBER_OF_PLAYERS = 4;
+
+    private float networkTickTimer = 0;
 
     public ServerGame(Navigator navigator) {
         this.navigator = navigator;
 
-        int numberOfPlayers = 4;
-        for (int i = 0; i < numberOfPlayers; i++) {
+        for (int i = 0; i < NUMBER_OF_PLAYERS; i++) {
             availableIdList.add(i);
         }
     }
 
     public void start(int port) {
+        createServer(port);
+
+        if(server != null) {
+            createLoop();
+        }
+    }
+
+    private void createServer(int port) {
         try {
             server = new Server(port);
             server.setServerMessageHandler(this::processMessage);
@@ -50,56 +58,47 @@ public class ServerGame {
 
             System.err.println("couldn't start server");
         }
+    }
 
-        if(server != null) {
-            new GameLoop() {
-                @Override
-                public void update(float deltaTimeInSec) {
-                    timer += deltaTimeInSec;
-                    if (timer >= Constants.NETWORK_TICK_TIME) {
-                        networkTick();
-                        timer = 0;
-                    }
+    private void createLoop() {
+        new GameLoop() {
+            @Override
+            public void update(float deltaTimeInSec) {
+                networkTickTimer += deltaTimeInSec;
+                if (networkTickTimer >= Constants.NETWORK_TICK_TIME) {
+                    networkTick();
+                    networkTickTimer = 0;
                 }
-            }.start();
-        }
+            }
+        }.start();
     }
 
     private void networkTick() {
         for (ServerCar car : carList) {
             if (car.getConnection().isDisconnected()) {
-                carList.remove(car);
                 Message disconnectedMessage = new Message(MessageType.DISCONNECTED);
                 disconnectedMessage.addValue("id", car.getId());
-                for (ServerCar otherCar : carList) {
-                    if (otherCar.getConnection() != car.getConnection()) {
-                        otherCar.getConnection().sendMessage(disconnectedMessage);
-                    }
-                }
+                sendMessageToOtherCars(car, disconnectedMessage);
+
+                carList.remove(car);
+
+                // Make the car's id available for other cars
                 availableIdList.add(0, car.getId());
             }
         }
-    }
-
-    private Message createUpdateMessageForCar(ServerCar car) {
-        Message message = new Message(MessageType.UPDATE);
-        message.addValue("x", car.getPosition().getX());
-        message.addValue("y", car.getPosition().getY());
-        message.addValue("rotation", car.getRotation());
-        message.addValue("name", car.getName());
-        message.addValue("id", car.getId());
-
-        return message;
     }
 
     private void processMessage(Message message, Connection connection) {
         switch (message.getMessageType()) {
             case JOIN_GAME:
                 if (startMessageSent || availableIdList.isEmpty()) {
+                    // We don't allow connections if the game has already started or
+                    // if there are no available ids left
                     connection.close();
                 } else {
-                    Message idMessage = new Message(MessageType.INITIAL_STATE);
                     int y = availableIdList.get(0) * 50 + 65;
+
+                    Message idMessage = new Message(MessageType.INITIAL_STATE);
                     idMessage.addValue("id", availableIdList.get(0));
                     idMessage.addValue("x", 0);
                     idMessage.addValue("y", y);
@@ -118,19 +117,26 @@ public class ServerGame {
                         car.setPosition(new Point(Float.parseFloat(message.getValue("x")), Float.parseFloat(message.getValue("y"))));
                         car.setRotation(Float.parseFloat(message.getValue("rotation")));
 
+                        // Send the cars state to the other players
                         Message serverUpdateMessage = createUpdateMessageForCar(car);
-
-                        for (ServerCar otherCar : carList) {
-                            if (otherCar.getConnection() != car.getConnection()) {
-                                otherCar.getConnection().sendMessage(serverUpdateMessage);
-                            }
-                        }
+                        sendMessageToOtherCars(car, serverUpdateMessage);
                     }
                 }
                 break;
             default:
                 break;
         }
+    }
+
+    private Message createUpdateMessageForCar(ServerCar car) {
+        Message message = new Message(MessageType.UPDATE);
+        message.addValue("x", car.getPosition().getX());
+        message.addValue("y", car.getPosition().getY());
+        message.addValue("rotation", car.getRotation());
+        message.addValue("name", car.getName());
+        message.addValue("id", car.getId());
+
+        return message;
     }
 
     public void stop() {
@@ -146,4 +152,13 @@ public class ServerGame {
             startMessageSent = true;
         }
     }
+
+    private void sendMessageToOtherCars(ServerCar car, Message message) {
+        for (ServerCar otherCar : carList) {
+            if (otherCar.getConnection() != car.getConnection()) {
+                otherCar.getConnection().sendMessage(message);
+            }
+        }
+    }
+
 }
