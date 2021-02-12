@@ -30,7 +30,7 @@ public class JamKartApp extends Application {
         primaryStage.setResizable(false);
         primaryStage.getIcons().add(new Image("/icon.png"));
 
-//        startMusic();
+        startMusic();
     }
 
     private void startMusic() {

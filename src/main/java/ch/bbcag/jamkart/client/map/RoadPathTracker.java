@@ -29,8 +29,6 @@ public class RoadPathTracker {
         if(nextPathMarkerIndex == road.getPathMarkers().size()) {
             passedLapCounter++;
             nextPathMarkerIndex = 0;
-
-            System.out.println("lap " + passedLapCounter + " passed!");
         }
     }
 }

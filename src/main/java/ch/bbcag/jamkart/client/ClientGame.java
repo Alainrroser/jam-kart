@@ -17,6 +17,8 @@ import ch.bbcag.jamkart.net.client.Client;
 import ch.bbcag.jamkart.utils.Point;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 import java.io.IOException;
 
@@ -52,8 +54,8 @@ public class ClientGame {
     public void load() {
         map = new Map();
 
-        map.getRoad().addPathMarker(new RoadPathMarker(new Point(300, 200), 300));
-        map.getRoad().addPathMarker(new RoadPathMarker(new Point(1000, 100), 200));
+        map.getRoad().addPathMarker(new RoadPathMarker(new Point(3400, -2050), 500));
+        map.getRoad().addPathMarker(new RoadPathMarker(new Point(-300, -200), 300));
 
         map.getRoad().addPoint(new Point(200, 200));
         map.getGameObjects().add(new BoostPad(new Point(700, 150), 90));
@@ -317,6 +319,11 @@ public class ClientGame {
         }
 
         canvas.getGraphicsContext2D().restore();
+
+        String lapIndicator = "Runde " + (roadPathTracker.getPassedLapCounter() + 1) + " / 3";
+        canvas.getGraphicsContext2D().setFont(new Font(40));
+        canvas.getGraphicsContext2D().setFill(Color.BLACK);
+        canvas.getGraphicsContext2D().fillText(lapIndicator, 20, 50);
 
         if (countdown != null) {
             countdown.drawCountdown(canvas.getGraphicsContext2D());
