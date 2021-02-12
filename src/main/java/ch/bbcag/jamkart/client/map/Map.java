@@ -4,10 +4,11 @@ import ch.bbcag.jamkart.client.map.objects.GameObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Map {
 
-    private List<GameObject> gameObjects = new ArrayList<>();
+    private List<GameObject> gameObjects = new CopyOnWriteArrayList<>();
     private Road road = new Road();
 
     public List<GameObject> getGameObjects() {

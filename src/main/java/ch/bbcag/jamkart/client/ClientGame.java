@@ -159,7 +159,7 @@ public class ClientGame {
         car.setName(name);
         createClient(ip, port);
 
-        if(client != null) { // Check whether the client has been connected to the server
+        if(client != null) {
             camera = new Camera(new Point(100, 0));
             createLoop();
         }
@@ -172,7 +172,6 @@ public class ClientGame {
             client.start();
             sendJoinMessage();
         } catch(IOException e) {
-            // The client couldn't connect to the server
             navigator.navigateTo(SceneType.BACK_TO_START, true);
             System.err.println("couldn't connect to server");
         }
@@ -208,6 +207,16 @@ public class ClientGame {
 
                 otherCar.setPosition(new Point(Float.parseFloat(message.getValue("x")), Float.parseFloat(message.getValue("y"))));
                 otherCar.setRotation(Float.parseFloat(message.getValue("rotation")));
+                break;
+            case DISCONNECTED:
+                int disconnectedId = Integer.parseInt(message.getValue("id"));
+                for (GameObject gameObject : map.getGameObjects()) {
+                    if (gameObject instanceof ClientOtherCar) {
+                        if (((ClientOtherCar) gameObject).getId() == disconnectedId) {
+                            map.getGameObjects().remove(gameObject);
+                        }
+                    }
+                }
                 break;
             default:
                 break;

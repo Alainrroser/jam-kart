@@ -11,11 +11,12 @@ import ch.bbcag.jamkart.utils.Point;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ServerGame {
     private Server server;
     private float timer = 0;
-    private List<ServerCar> carList = new ArrayList<>();
+    private List<ServerCar> carList = new CopyOnWriteArrayList<>();
     private int id = 0;
 
     public void start(int port) {
@@ -46,6 +47,18 @@ public class ServerGame {
             for (ServerCar otherCar : carList) {
                 if (otherCar.getConnection() != car.getConnection()) {
                     otherCar.getConnection().sendMessage(message);
+                }
+            }
+
+            if (car.getConnection().isDisconnected()) {
+                carList.remove(car);
+                System.out.println();
+                Message disconnectedMessage = new Message(MessageType.DISCONNECTED);
+                disconnectedMessage.addValue("id", car.getId());
+                for (ServerCar otherCar : carList) {
+                    if (otherCar.getConnection() != car.getConnection()) {
+                        otherCar.getConnection().sendMessage(disconnectedMessage);
+                    }
                 }
             }
         }
