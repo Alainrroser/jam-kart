@@ -23,13 +23,13 @@ public class KeyEventHandler implements EventHandler<KeyEvent> {
     }
 
     private void onKeyPressed(KeyEvent event) {
-        if(event.getCode() == KeyCode.W) {
+        if(event.getCode() == KeyCode.UP) {
             isForwardPressed = true;
-        } else if(event.getCode() == KeyCode.S) {
+        } else if(event.getCode() == KeyCode.DOWN) {
             isBackwardPressed = true;
-        } else if(event.getCode() == KeyCode.A) {
+        } else if(event.getCode() == KeyCode.LEFT) {
             isLeftPressed = true;
-        } else if(event.getCode() == KeyCode.D) {
+        } else if(event.getCode() == KeyCode.RIGHT) {
             isRightPressed = true;
         } else if(event.getCode() == KeyCode.SPACE) {
             isSpacePressed = true;
@@ -37,13 +37,13 @@ public class KeyEventHandler implements EventHandler<KeyEvent> {
     }
 
     private void onKeyReleased(KeyEvent event) {
-        if(event.getCode() == KeyCode.W) {
+        if(event.getCode() == KeyCode.UP) {
             isForwardPressed = false;
-        } else if(event.getCode() == KeyCode.S) {
+        } else if(event.getCode() == KeyCode.DOWN) {
             isBackwardPressed = false;
-        } else if(event.getCode() == KeyCode.A) {
+        } else if(event.getCode() == KeyCode.LEFT) {
             isLeftPressed = false;
-        } else if(event.getCode() == KeyCode.D) {
+        } else if(event.getCode() == KeyCode.RIGHT) {
             isRightPressed = false;
         } else if(event.getCode() == KeyCode.SPACE) {
             isSpacePressed = false;

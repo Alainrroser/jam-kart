@@ -6,7 +6,6 @@ import ch.bbcag.jamkart.client.KeyEventHandler;
 import ch.bbcag.jamkart.client.map.Map;
 import ch.bbcag.jamkart.net.Message;
 import ch.bbcag.jamkart.net.MessageType;
-import ch.bbcag.jamkart.net.client.Client;
 import ch.bbcag.jamkart.utils.Direction;
 import ch.bbcag.jamkart.utils.MathUtils;
 import ch.bbcag.jamkart.utils.Point;
@@ -35,6 +34,7 @@ public class ClientCar extends GameObject {
     private static final float SPEED_FORWARD = 50.0f;
     private static final float SPEED_BACKWARD = 25.0f;
     private static final float SPEED_OILED = 1200.0f;
+    private static final float SPEED_BOOST_PAD = 3000.0f;
 
     private static final float DAMPING_STANDARD = 0.05f;
     private static final float DAMPING_BRAKING = 0.2f;
@@ -42,6 +42,8 @@ public class ClientCar extends GameObject {
 
     private static final float OIL_TIME = 1.0f;
     private static final float OIL_COLLISION_DISTANCE = OilPuddle.SIZE;
+
+    private static final float BOOST_PAD_COLLISION_DISTANCE = BoostPad.SIZE * 0.5f;
 
     public ClientCar(Map map, KeyEventHandler keyEventHandler, ClientGame clientGame) {
         this.map = map;
@@ -81,13 +83,19 @@ public class ClientCar extends GameObject {
             oilTimer = 0.0f;
 
             for(GameObject object : map.getGameObjects()) {
-                if(object instanceof OilPuddle) {
-                    float distanceX = object.getPosition().getX() - getPosition().getX();
-                    float distanceY = object.getPosition().getY() - getPosition().getY();
-                    float distance = MathUtils.sqrt(distanceX * distanceX + distanceY * distanceY);
+                float distanceX = object.getPosition().getX() - getPosition().getX();
+                float distanceY = object.getPosition().getY() - getPosition().getY();
+                float distance = MathUtils.sqrt(distanceX * distanceX + distanceY * distanceY);
 
+                if(object instanceof OilPuddle) {
                     if(distance < OIL_COLLISION_DISTANCE) {
                         oilTimer = OIL_TIME;
+                    }
+                } else if(object instanceof BoostPad) {
+                    if(distance < BOOST_PAD_COLLISION_DISTANCE && velocity.getLength() < SPEED_BOOST_PAD) {
+                        float angle = ((BoostPad) object).getRotation();
+                        velocity.setFromAngleAndLength(angle, SPEED_BOOST_PAD);
+                        rotation = angle;
                     }
                 }
             }
