@@ -186,6 +186,8 @@ public class ClientGame {
         car.setName(name);
         createClient(ip, port);
 
+        lobby = new Lobby(canvas, app);
+
         if (client != null) {
             camera = new Camera(new Point(100, 0));
             roadPathTracker = new RoadPathTracker(map.getRoad(), car);
@@ -318,7 +320,7 @@ public class ClientGame {
 
         if (countdown != null) {
             countdown.drawCountdown(canvas.getGraphicsContext2D());
-        }else{
+        } else {
             lobby.drawLobby(car, map.getAllGameObjectsFromType(ClientOtherCar.class));
         }
     }
