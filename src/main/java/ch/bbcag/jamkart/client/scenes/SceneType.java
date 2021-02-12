@@ -1,4 +1,4 @@
-package ch.bbcag.jamkart.client.graphics.scenes;
+package ch.bbcag.jamkart.client.scenes;
 
 public enum SceneType {
     START,

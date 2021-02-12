@@ -2,7 +2,7 @@ package ch.bbcag.jamkart;
 
 public class Constants {
 
-    public static final float NETWORK_TICK_TIME = 0.1f;
+    public static final float NETWORK_TICK_TIME = 0.05f;
 
     public static final int START_WINDOW_WIDTH = 800;
     public static final int START_WINDOW_HEIGHT = 600;

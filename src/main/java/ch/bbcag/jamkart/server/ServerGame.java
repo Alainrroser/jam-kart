@@ -2,9 +2,9 @@ package ch.bbcag.jamkart.server;
 
 import ch.bbcag.jamkart.Constants;
 import ch.bbcag.jamkart.NetErrorMessages;
-import ch.bbcag.jamkart.client.graphics.scenes.Navigator;
-import ch.bbcag.jamkart.client.graphics.scenes.SceneBackToStart;
-import ch.bbcag.jamkart.client.graphics.scenes.SceneType;
+import ch.bbcag.jamkart.client.scenes.Navigator;
+import ch.bbcag.jamkart.client.scenes.SceneBackToStart;
+import ch.bbcag.jamkart.client.scenes.SceneType;
 import ch.bbcag.jamkart.common.GameLoop;
 import ch.bbcag.jamkart.net.Connection;
 import ch.bbcag.jamkart.net.Message;
@@ -67,14 +67,6 @@ public class ServerGame {
 
     private void networkTick() {
         for (ServerCar car : carList) {
-            Message message = createUpdateMessageForCar(car);
-
-            for (ServerCar otherCar : carList) {
-                if (otherCar.getConnection() != car.getConnection()) {
-                    otherCar.getConnection().sendMessage(message);
-                }
-            }
-
             if (car.getConnection().isDisconnected()) {
                 carList.remove(car);
                 Message disconnectedMessage = new Message(MessageType.DISCONNECTED);
@@ -125,6 +117,14 @@ public class ServerGame {
                     if (car.getConnection() == connection) {
                         car.setPosition(new Point(Float.parseFloat(message.getValue("x")), Float.parseFloat(message.getValue("y"))));
                         car.setRotation(Float.parseFloat(message.getValue("rotation")));
+
+                        Message serverUpdateMessage = createUpdateMessageForCar(car);
+
+                        for (ServerCar otherCar : carList) {
+                            if (otherCar.getConnection() != car.getConnection()) {
+                                otherCar.getConnection().sendMessage(serverUpdateMessage);
+                            }
+                        }
                     }
                 }
                 break;

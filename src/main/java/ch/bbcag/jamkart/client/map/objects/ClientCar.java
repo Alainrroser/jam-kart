@@ -81,6 +81,7 @@ public class ClientCar extends GameObject {
         timer += deltaTimeInSec;
         if (timer >= Constants.NETWORK_TICK_TIME) {
             sendMyState();
+            timer = 0.0f;
         }
     }
 
