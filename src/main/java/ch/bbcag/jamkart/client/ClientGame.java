@@ -21,6 +21,8 @@ public class ClientGame {
     private Navigator navigator;
 
     private Client client;
+
+    private Countdown countdown;
     private Map map;
     private Camera camera;
     private ClientCar car;
@@ -38,12 +40,12 @@ public class ClientGame {
     public void load() {
         map = new Map();
 
-        map.getGameObjects().add(new OilPuddle(new Point(350,200)));
-        map.getGameObjects().add(new BoostPad(new Point(250,200),90));
-
         map.getRoad().addPoint(new Point(200, 200));
+        map.getGameObjects().add(new BoostPad(new Point(700,65),90));
+        map.getGameObjects().add(new BoostPad(new Point(700,215),90));
         map.getRoad().addPoint(new Point(2000, 200));
         map.getRoad().addPoint(new Point(2050, 175));
+        map.getGameObjects().add(new OilPuddle(new Point(2160,122)));
         map.getRoad().addPoint(new Point(2300, 0));
         map.getRoad().addPoint(new Point(2450, -350));
         map.getRoad().addPoint(new Point(2450, -450));
@@ -51,27 +53,23 @@ public class ClientGame {
         map.getRoad().addPoint(new Point(2050, -1050));
         map.getRoad().addPoint(new Point(2000, -1075));
         map.getRoad().addPoint(new Point(1700, -1075));
-
         map.getRoad().addPoint(new Point(1650, -1100));
         map.getRoad().addPoint(new Point(1600, -1150));
         map.getRoad().addPoint(new Point(1550, -1250));
         map.getRoad().addPoint(new Point(1550, -1350));
         map.getRoad().addPoint(new Point(1600, -1450));
         map.getRoad().addPoint(new Point(3000, -1600));
-
         map.getRoad().addPoint(new Point(3050, -1625));
         map.getRoad().addPoint(new Point(3250, -1750));
         map.getRoad().addPoint(new Point(3400, -2050));
         map.getRoad().addPoint(new Point(3400, -2150));
         map.getRoad().addPoint(new Point(3250, -2450));
-
         map.getRoad().addPoint(new Point(3000, -2450));
         map.getRoad().addPoint(new Point(2950, -2500));
         map.getRoad().addPoint(new Point(2900, -2600));
         map.getRoad().addPoint(new Point(2900, -2700));
         map.getRoad().addPoint(new Point(2950, -2800));
         map.getRoad().addPoint(new Point(3000, -2900));
-
         map.getRoad().addPoint(new Point(3400, -3000));
         map.getRoad().addPoint(new Point(3450, -3050));
         map.getRoad().addPoint(new Point(3500, -3100));
@@ -85,7 +83,6 @@ public class ClientGame {
         map.getRoad().addPoint(new Point(3450, -4600));
         map.getRoad().addPoint(new Point(3400, -4650));
         map.getRoad().addPoint(new Point(2000, -4650));
-
         map.getRoad().addPoint(new Point(1950, -4600));
         map.getRoad().addPoint(new Point(1900, -4550));
         map.getRoad().addPoint(new Point(1850, -4475));
@@ -104,19 +101,16 @@ public class ClientGame {
         map.getRoad().addPoint(new Point(950, -5100));
         map.getRoad().addPoint(new Point(900, -5150));
         map.getRoad().addPoint(new Point(700, -5150));
-
         map.getRoad().addPoint(new Point(650, -5100));
         map.getRoad().addPoint(new Point(600, -5050));
         map.getRoad().addPoint(new Point(550, -5000));
         map.getRoad().addPoint(new Point(350, -2700));
-
         map.getRoad().addPoint(new Point(300, -2550));
         map.getRoad().addPoint(new Point(250, -2450));
         map.getRoad().addPoint(new Point(100, -2400));
         map.getRoad().addPoint(new Point(-100, -2350));
         map.getRoad().addPoint(new Point(-300, -2250));
         map.getRoad().addPoint(new Point(-300, -2050));
-
         map.getRoad().addPoint(new Point(-250, -2000));
         map.getRoad().addPoint(new Point(100, -1750));
         map.getRoad().addPoint(new Point(150, -1700));
@@ -148,7 +142,6 @@ public class ClientGame {
         map.getRoad().addPoint(new Point(-300, 200));
         map.getRoad().addPoint(new Point(200, 200));
 
-
         car = new ClientCar(map, keyEventHandler, this);
         car.setPosition(new Point(200, 200));
         map.getGameObjects().add(car);
@@ -159,7 +152,7 @@ public class ClientGame {
         car.setName(name);
         createClient(ip, port);
 
-        if(client != null) {
+        if (client != null) {
             camera = new Camera(new Point(100, 0));
             createLoop();
         }
@@ -171,7 +164,7 @@ public class ClientGame {
             client.setMessageHandler(this::processMessage);
             client.start();
             sendJoinMessage();
-        } catch(IOException e) {
+        } catch (IOException e) {
             navigator.navigateTo(SceneType.BACK_TO_START, true);
             System.err.println("couldn't connect to server");
         }
@@ -235,13 +228,17 @@ public class ClientGame {
     }
 
     private void update(float deltaTimeInSec) {
-        for(GameObject gameObject : map.getGameObjects()) {
+        if (countdown != null) {
+            countdown.update(deltaTimeInSec);
+        }
+
+        for (GameObject gameObject : map.getGameObjects()) {
             gameObject.update(deltaTimeInSec);
         }
-        camera.setX(car.getPosition().getX()-(float) (canvas.getWidth()/2) + ClientCar.SIZE/2);
-        camera.setY(car.getPosition().getY()-(float) (canvas.getHeight()/2) + ClientCar.SIZE/2);
+        camera.setX(car.getPosition().getX() - (float) (canvas.getWidth() / 2) + ClientCar.SIZE / 2);
+        camera.setY(car.getPosition().getY() - (float) (canvas.getHeight() / 2) + ClientCar.SIZE / 2);
 
-        if(client.isDisconnected()) {
+        if (client.isDisconnected()) {
             stop();
             navigator.navigateTo(SceneType.BACK_TO_START, true);
         }
@@ -250,19 +247,24 @@ public class ClientGame {
     private void draw() {
         canvas.getGraphicsContext2D().save();
 
+
         canvas.getGraphicsContext2D().translate(-camera.getX(), -camera.getY());
-        for(int y = -10000; y < 10000; y += 800) {
+        for (int y = -10000; y < 10000; y += 800) {
             for (int x = -10000; x < 10000; x += 1500) {
                 canvas.getGraphicsContext2D().drawImage(GRASS, x, y, 1500, 800);
             }
         }
         map.getRoad().draw(canvas.getGraphicsContext2D());
 
-        for(GameObject gameObject : map.getGameObjects()) {
+        for (GameObject gameObject : map.getGameObjects()) {
             gameObject.draw(canvas.getGraphicsContext2D());
         }
 
         canvas.getGraphicsContext2D().restore();
+
+        if (countdown != null) {
+            countdown.drawCountdown();
+        }
     }
 
     public void stop() {
