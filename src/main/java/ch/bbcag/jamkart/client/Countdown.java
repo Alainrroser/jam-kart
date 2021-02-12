@@ -1,31 +1,47 @@
 package ch.bbcag.jamkart.client;
 
 import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 
 public class Countdown {
-    private Canvas canvas;
+    private ClientGame game;
     private float timer = 3;
 
-    public Countdown(Canvas canvas) {
-        this.canvas = canvas;
+    public Countdown(ClientGame game) {
+        this.game = game;
     }
 
-    public void drawCountdown() {
-        canvas.getGraphicsContext2D().setFont(new Font("Arial", 150));
-        canvas.getGraphicsContext2D().setFill(Color.BLACK);
-
+    public void drawCountdown(GraphicsContext context) {
+        String text = null;
         int roundedTimer = (int) Math.ceil(timer);
 
         if (roundedTimer == 0) {
-            canvas.getGraphicsContext2D().fillText("GO!", 600, 400);
+            text = "GO!";
         } else if(roundedTimer > -1) {
-            canvas.getGraphicsContext2D().fillText(String.valueOf(roundedTimer), 700, 400);
+            text = String.valueOf(roundedTimer);
         }
+
+        context.setFont(new Font("Arial", 150));
+
+        Text textBox = new Text(text);
+        textBox.setFont(context.getFont());
+        double textWidth = textBox.getLayoutBounds().getWidth();
+        double textX = context.getCanvas().getWidth() / 2 - textWidth / 2;
+
+        context.setFill(Color.BLACK);
+        context.fillText(text, textX, 210);
+        context.setFill(Color.ORANGE);
+        context.fillText(text, textX, 200);
     }
 
     public void update(float deltaTimeInSec) {
         timer -= deltaTimeInSec;
+
+        if(timer <= 0.0f) {
+            game.getCar().setControllable(true);
+        }
     }
 }

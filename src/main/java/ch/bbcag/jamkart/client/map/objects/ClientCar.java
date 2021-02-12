@@ -20,11 +20,13 @@ public class ClientCar extends GameObject {
 
     private Image image;
     private String name;
-    private float rotation = 0.0f;
+    private float rotation = 90.0f;
     private Direction velocity = new Direction();
 
     private float timer = 0.0f;
     private float oilTimer = 0.0f;
+
+    private boolean isControllable = false;
 
     public static final float SIZE = 100.0f;
 
@@ -74,31 +76,15 @@ public class ClientCar extends GameObject {
 
     @Override
     public void update(float deltaTimeInSec) {
-        updateRotation(deltaTimeInSec);
-        updateMovement(deltaTimeInSec);
+        if(isControllable) {
+            updateRotation(deltaTimeInSec);
+            updateMovement(deltaTimeInSec);
 
-        if(oilTimer > 0.0f) {
-            oilTimer -= deltaTimeInSec;
-        } else {
-            oilTimer = 0.0f;
-
-            for(GameObject object : map.getGameObjects()) {
-                float distanceX = object.getPosition().getX() - getPosition().getX();
-                float distanceY = object.getPosition().getY() - getPosition().getY();
-                float distance = MathUtils.sqrt(distanceX * distanceX + distanceY * distanceY);
-
-                if(object instanceof OilPuddle) {
-                    if(distance < OIL_COLLISION_DISTANCE) {
-                        oilTimer = OIL_TIME;
-                    }
-                } else if(object instanceof BoostPad) {
-                    if(distance < BOOST_PAD_COLLISION_DISTANCE && velocity.getLength() < SPEED_BOOST_PAD) {
-                        float angle = ((BoostPad) object).getRotation();
-                        velocity.setFromAngleAndLength(angle, SPEED_BOOST_PAD);
-                        rotation = angle;
-                    }
-                }
+            if(oilTimer > 0.0f) {
+                oilTimer -= deltaTimeInSec;
             }
+
+            checkCollisions();
         }
 
         timer += deltaTimeInSec;
@@ -161,6 +147,28 @@ public class ClientCar extends GameObject {
         velocity = velocity.scale(1.0f - damping);
     }
 
+    private void checkCollisions() {
+        for(GameObject object : map.getGameObjects()) {
+            float distanceX = object.getPosition().getX() - getPosition().getX();
+            float distanceY = object.getPosition().getY() - getPosition().getY();
+            float distance = MathUtils.sqrt(distanceX * distanceX + distanceY * distanceY);
+
+            if(object instanceof OilPuddle) {
+                if(oilTimer <= 0.0f) {
+                    if(distance < OIL_COLLISION_DISTANCE) {
+                        oilTimer = OIL_TIME;
+                    }
+                }
+            } else if(object instanceof BoostPad) {
+                if(distance < BOOST_PAD_COLLISION_DISTANCE && velocity.getLength() < SPEED_BOOST_PAD) {
+                    float angle = ((BoostPad) object).getRotation();
+                    velocity.setFromAngleAndLength(angle, SPEED_BOOST_PAD);
+                    rotation = angle;
+                }
+            }
+        }
+    }
+
     private void sendMyState() {
         Message message = new Message(MessageType.UPDATE);
         message.addValue("x", getPosition().getX());
@@ -181,4 +189,13 @@ public class ClientCar extends GameObject {
     public void setName(String name) {
         this.name = name;
     }
+
+    public boolean isControllable() {
+        return isControllable;
+    }
+
+    public void setControllable(boolean isControllable) {
+        this.isControllable = isControllable;
+    }
+
 }

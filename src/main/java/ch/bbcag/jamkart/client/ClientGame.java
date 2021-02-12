@@ -216,7 +216,7 @@ public class ClientGame {
                 }
                 break;
             case START_GAME:
-                countdown = new Countdown(canvas);
+                countdown = new Countdown(this);
             default:
                 break;
         }
@@ -259,7 +259,6 @@ public class ClientGame {
     private void draw() {
         canvas.getGraphicsContext2D().save();
 
-
         canvas.getGraphicsContext2D().translate(-camera.getX(), -camera.getY());
         for (int y = -10000; y < 10000; y += 800) {
             for (int x = -10000; x < 10000; x += 1500) {
@@ -275,7 +274,7 @@ public class ClientGame {
         canvas.getGraphicsContext2D().restore();
 
         if (countdown != null) {
-            countdown.drawCountdown();
+            countdown.drawCountdown(canvas.getGraphicsContext2D());
         }
     }
 
@@ -287,4 +286,9 @@ public class ClientGame {
     public Client getClient() {
         return client;
     }
+
+    public ClientCar getCar() {
+        return car;
+    }
+
 }
