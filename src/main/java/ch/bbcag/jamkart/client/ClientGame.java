@@ -28,6 +28,7 @@ public class ClientGame {
 
     private Client client;
 
+    private Lobby lobby;
     private Countdown countdown;
     private Map map;
     private Camera camera;
@@ -55,11 +56,10 @@ public class ClientGame {
         map.getRoad().addPathMarker(new RoadPathMarker(new Point(1000, 100), 200));
 
         map.getRoad().addPoint(new Point(200, 200));
-        map.getGameObjects().add(new BoostPad(new Point(700,65),90));
-        map.getGameObjects().add(new BoostPad(new Point(700,215),90));
+        map.getGameObjects().add(new BoostPad(new Point(700, 150), 90));
         map.getRoad().addPoint(new Point(2000, 200));
         map.getRoad().addPoint(new Point(2050, 175));
-        map.getGameObjects().add(new OilPuddle(new Point(2160,122)));
+        map.getGameObjects().add(new OilPuddle(new Point(2160, 122)));
         map.getRoad().addPoint(new Point(2300, 0));
         map.getRoad().addPoint(new Point(2450, -350));
         map.getRoad().addPoint(new Point(2450, -450));
@@ -72,7 +72,7 @@ public class ClientGame {
         map.getRoad().addPoint(new Point(1550, -1250));
         map.getRoad().addPoint(new Point(1550, -1350));
         map.getRoad().addPoint(new Point(1600, -1450));
-        map.getGameObjects().add(new OilPuddle(new Point(2967,-1980)));
+        map.getGameObjects().add(new OilPuddle(new Point(2967, -1980)));
         map.getRoad().addPoint(new Point(3000, -1600));
         map.getRoad().addPoint(new Point(3050, -1625));
         map.getRoad().addPoint(new Point(3250, -1750));
@@ -97,7 +97,7 @@ public class ClientGame {
         map.getRoad().addPoint(new Point(3500, -4450));
         map.getRoad().addPoint(new Point(3450, -4600));
         map.getRoad().addPoint(new Point(3400, -4650));
-        map.getGameObjects().add(new BoostPad(new Point(3000,-4600),270));
+        map.getGameObjects().add(new BoostPad(new Point(3150, -4700), 270));
         map.getRoad().addPoint(new Point(2000, -4650));
         map.getRoad().addPoint(new Point(1950, -4600));
         map.getRoad().addPoint(new Point(1900, -4550));
@@ -109,8 +109,19 @@ public class ClientGame {
         map.getRoad().addPoint(new Point(1700, -4075));
         map.getRoad().addPoint(new Point(1650, -4050));
         map.getRoad().addPoint(new Point(1600, -4025));
+        map.getGameObjects().add(new BoostPad(new Point(1360, -4440), 180));
+        map.getGameObjects().add(new BoostPad(new Point(1360, -4540), 180));
+        map.getGameObjects().add(new BoostPad(new Point(1360, -4640), 180));
+        map.getGameObjects().add(new BoostPad(new Point(1410, -4440), 180));
+        map.getGameObjects().add(new BoostPad(new Point(1410, -4540), 180));
+        map.getGameObjects().add(new BoostPad(new Point(1410, -4640), 180));
+        map.getGameObjects().add(new BoostPad(new Point(1460, -4440), 180));
+        map.getGameObjects().add(new BoostPad(new Point(1460, -4540), 180));
+        map.getGameObjects().add(new BoostPad(new Point(1460, -4640), 180));
+        map.getGameObjects().add(new Tree(new Point(1360, -4640)));
         map.getRoad().addPoint(new Point(1350, -4025));
         map.getRoad().addPoint(new Point(1250, -4075));
+        map.getGameObjects().add(new BoostPad(new Point(790, -4100), 0));
         map.getRoad().addPoint(new Point(1200, -4100));
         map.getRoad().addPoint(new Point(1100, -4600));
         map.getRoad().addPoint(new Point(1050, -5000));
@@ -307,6 +318,8 @@ public class ClientGame {
 
         if (countdown != null) {
             countdown.drawCountdown(canvas.getGraphicsContext2D());
+        }else{
+            lobby.drawLobby(car, map.getAllGameObjectsFromType(ClientOtherCar.class));
         }
     }
 
