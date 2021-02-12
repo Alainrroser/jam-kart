@@ -122,15 +122,16 @@ public class SceneCreateGame extends Scene {
     private void createGame() {
         int port = Integer.parseInt(inputPort.getText());
 
-        ServerGame serverGame = new ServerGame();
-        serverGame.start(port);
-        app.setServerGame(serverGame);
+        ServerGame serverGame = new ServerGame(app.getNavigator());
 
         SceneGame newScene = (SceneGame) app.getNavigator().getScene(SceneType.GAME);
         ClientGame clientGame = new ClientGame(newScene.getCanvas(), newScene.getKeyEventHandler(), app.getNavigator(), app);
         clientGame.load();
 
         app.getNavigator().navigateTo(SceneType.GAME, true);
+
+        serverGame.start(port);
+        app.setServerGame(serverGame);
 
         clientGame.start("localhost", port, inputName.getText());
         app.setClientGame(clientGame);

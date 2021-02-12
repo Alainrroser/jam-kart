@@ -10,8 +10,9 @@ public class ClientOtherCar extends GameObject {
     private Image image;
     private String name;
 
-    public ClientOtherCar(int id) {
+    public ClientOtherCar(int id, String name) {
         this.id = id;
+        this.name = name;
         image = new Image(getClass().getResourceAsStream("/car_" + id + ".png"));
     }
 
@@ -19,11 +20,11 @@ public class ClientOtherCar extends GameObject {
     public void draw(GraphicsContext context) {
         context.save();
 
-        context.translate(getPosition().getX() + Constants.SIZE / 2, getPosition().getY() + Constants.SIZE / 2);
+        context.translate(getPosition().getX() + Constants.CAR_SIZE / 2, getPosition().getY() + Constants.CAR_SIZE / 2);
         context.rotate(rotation);
-        context.translate(-(getPosition().getX() + Constants.SIZE / 2), -(getPosition().getY() + Constants.SIZE / 2));
+        context.translate(-(getPosition().getX() + Constants.CAR_SIZE / 2), -(getPosition().getY() + Constants.CAR_SIZE / 2));
 
-        context.drawImage(image, getPosition().getX(), getPosition().getY(), Constants.SIZE, Constants.SIZE);
+        context.drawImage(image, getPosition().getX(), getPosition().getY(), Constants.CAR_SIZE, Constants.CAR_SIZE);
 
         context.restore();
     }

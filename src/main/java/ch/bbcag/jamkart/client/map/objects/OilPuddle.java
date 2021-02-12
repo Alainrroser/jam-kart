@@ -7,6 +7,8 @@ import javafx.scene.paint.Color;
 
 public class OilPuddle extends GameObject {
 
+    public static final float SIZE = 100.0f;
+
     public OilPuddle(Point position) {
         setPosition(position);
     }
@@ -14,7 +16,7 @@ public class OilPuddle extends GameObject {
     @Override
     public void draw(GraphicsContext context) {
         context.setFill(Color.BLACK);
-        context.fillOval(getPosition().getX(), getPosition().getY(), Constants.SIZE, Constants.SIZE);
+        context.fillOval(getPosition().getX(), getPosition().getY(), SIZE, SIZE);
     }
 
     @Override

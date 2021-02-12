@@ -1,6 +1,10 @@
 package ch.bbcag.jamkart.server;
 
 import ch.bbcag.jamkart.Constants;
+import ch.bbcag.jamkart.NetErrorMessages;
+import ch.bbcag.jamkart.client.graphics.scenes.Navigator;
+import ch.bbcag.jamkart.client.graphics.scenes.SceneBackToStart;
+import ch.bbcag.jamkart.client.graphics.scenes.SceneType;
 import ch.bbcag.jamkart.common.GameLoop;
 import ch.bbcag.jamkart.net.Connection;
 import ch.bbcag.jamkart.net.Message;
@@ -13,11 +17,17 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ServerGame {
+    private Navigator navigator;
+
     private Server server;
     private float timer = 0;
     private List<ServerCar> carList = new CopyOnWriteArrayList<>();
     private int id = 0;
     private boolean startMessageSent = false;
+
+    public ServerGame(Navigator navigator) {
+        this.navigator = navigator;
+    }
 
     public void start(int port) {
         try {
@@ -25,19 +35,25 @@ public class ServerGame {
             server.setServerMessageHandler(this::processMessage);
             server.start();
         } catch (IOException e) {
-            e.printStackTrace();
+            String message = NetErrorMessages.COULDNT_CREATE_SERVER;
+            ((SceneBackToStart) navigator.getScene(SceneType.BACK_TO_START)).setMessage(message);
+            navigator.navigateTo(SceneType.BACK_TO_START, true);
+
+            System.err.println("couldn't start server");
         }
 
-        new GameLoop() {
-            @Override
-            public void update(float deltaTimeInSec) {
-                timer += deltaTimeInSec;
-                if (timer >= Constants.NETWORK_TICK_TIME) {
-                    networkTick();
-                    timer = 0;
+        if(server != null) {
+            new GameLoop() {
+                @Override
+                public void update(float deltaTimeInSec) {
+                    timer += deltaTimeInSec;
+                    if (timer >= Constants.NETWORK_TICK_TIME) {
+                        networkTick();
+                        timer = 0;
+                    }
                 }
-            }
-        }.start();
+            }.start();
+        }
     }
 
     private void networkTick() {
@@ -52,7 +68,6 @@ public class ServerGame {
 
             if (car.getConnection().isDisconnected()) {
                 carList.remove(car);
-                System.out.println();
                 Message disconnectedMessage = new Message(MessageType.DISCONNECTED);
                 disconnectedMessage.addValue("id", car.getId());
                 for (ServerCar otherCar : carList) {

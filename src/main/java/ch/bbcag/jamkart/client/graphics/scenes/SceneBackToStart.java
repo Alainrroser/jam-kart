@@ -16,9 +16,7 @@ import javafx.scene.text.TextAlignment;
 public class SceneBackToStart extends Scene {
     private static VBox rootNode = new VBox(10.0f);
 
-    private static final String MESSAGE =
-            "Konnte nicht mit dem Server verbinden!\n" +
-            "Bitte überprüfe die IP-Adresse und den Port";
+    private Text errorMessage;
 
     public SceneBackToStart(JamKartApp app) {
         super(rootNode);
@@ -36,7 +34,7 @@ public class SceneBackToStart extends Scene {
         background.setPadding(new Insets(50, 0, 50, 0));
         background.setAlignment(Pos.CENTER);
 
-        Text errorMessage = new Text(MESSAGE);
+        errorMessage = new Text();
         errorMessage.setTextAlignment(TextAlignment.CENTER);
         background.getChildren().add(errorMessage);
 
@@ -54,5 +52,9 @@ public class SceneBackToStart extends Scene {
 
         mainMenuBtn.setOnAction(e -> app.getNavigator().navigateTo(SceneType.START, false));
         rootNode.setMinSize(Constants.START_WINDOW_WIDTH, Constants.START_WINDOW_HEIGHT);
+    }
+
+    public void setMessage(String message) {
+        errorMessage.setText(message);
     }
 }

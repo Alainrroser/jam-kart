@@ -2,7 +2,9 @@ package ch.bbcag.jamkart.client;
 
 import ch.bbcag.jamkart.Constants;
 import ch.bbcag.jamkart.JamKartApp;
+import ch.bbcag.jamkart.NetErrorMessages;
 import ch.bbcag.jamkart.client.graphics.scenes.Navigator;
+import ch.bbcag.jamkart.client.graphics.scenes.SceneBackToStart;
 import ch.bbcag.jamkart.client.graphics.scenes.SceneType;
 import ch.bbcag.jamkart.client.map.Map;
 import ch.bbcag.jamkart.client.map.objects.*;
@@ -179,7 +181,10 @@ public class ClientGame {
             client.start();
             sendJoinMessage();
         } catch (IOException e) {
+            String message = NetErrorMessages.COULDNT_INIT_CONNECTION;
+            ((SceneBackToStart) navigator.getScene(SceneType.BACK_TO_START)).setMessage(message);
             navigator.navigateTo(SceneType.BACK_TO_START, true);
+
             System.err.println("couldn't connect to server");
         }
     }
@@ -209,7 +214,8 @@ public class ClientGame {
                 }
 
                 if (otherCar == null) {
-                    otherCar = new ClientOtherCar(id);
+                    otherCar = new ClientOtherCar(id, message.getValue("name"));
+                    System.out.println(otherCar.getName());
                     map.getGameObjects().add(otherCar);
                 }
 
@@ -258,12 +264,17 @@ public class ClientGame {
         for (GameObject gameObject : map.getGameObjects()) {
             gameObject.update(deltaTimeInSec);
         }
-        camera.setX(car.getPosition().getX() - (float) (canvas.getWidth() / 2) + Constants.SIZE / 2);
-        camera.setY(car.getPosition().getY() - (float) (canvas.getHeight() / 2) + Constants.SIZE / 2);
+        camera.setX(car.getPosition().getX() - (float) (canvas.getWidth() / 2) + Constants.CAR_SIZE / 2);
+        camera.setY(car.getPosition().getY() - (float) (canvas.getHeight() / 2) + Constants.CAR_SIZE / 2);
 
         if (client.isDisconnected()) {
             stop();
+
+            String message = NetErrorMessages.CONNECTION_LOST;
+            ((SceneBackToStart) navigator.getScene(SceneType.BACK_TO_START)).setMessage(message);
             navigator.navigateTo(SceneType.BACK_TO_START, true);
+
+            System.err.println("connection lost");
         }
     }
 
