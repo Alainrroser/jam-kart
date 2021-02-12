@@ -18,6 +18,7 @@ public class ServerGame {
     private float timer = 0;
     private List<ServerCar> carList = new CopyOnWriteArrayList<>();
     private int id = 0;
+    private boolean startMessageSent = false;
 
     public void start(int port) {
         try {
@@ -103,5 +104,16 @@ public class ServerGame {
 
     public void stop() {
         server.close();
+    }
+
+    public void sendMessageStartGame() {
+        if (!startMessageSent) {
+            for (ServerCar car : carList) {
+                Message message = new Message(MessageType.START_GAME);
+                car.getConnection().sendMessage(message);
+            }
+            startMessageSent = true;
+        }
+
     }
 }

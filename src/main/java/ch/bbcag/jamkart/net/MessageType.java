@@ -4,5 +4,6 @@ public enum MessageType {
     JOIN_GAME,
     UPDATE,
     ID,
-    DISCONNECTED
+    DISCONNECTED,
+    START_GAME
 }

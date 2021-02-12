@@ -1,5 +1,6 @@
 package ch.bbcag.jamkart.client;
 
+import ch.bbcag.jamkart.JamKartApp;
 import ch.bbcag.jamkart.client.graphics.scenes.Navigator;
 import ch.bbcag.jamkart.client.graphics.scenes.SceneType;
 import ch.bbcag.jamkart.client.map.Map;
@@ -29,12 +30,15 @@ public class ClientGame {
 
     private GameLoop loop;
 
+    private JamKartApp app;
+
     private static final Image GRASS = new Image(ClientGame.class.getResourceAsStream("/grass.png"));
 
-    public ClientGame(Canvas canvas, KeyEventHandler keyEventHandler, Navigator navigator) {
+    public ClientGame(Canvas canvas, KeyEventHandler keyEventHandler, Navigator navigator, JamKartApp app) {
         this.canvas = canvas;
         this.keyEventHandler = keyEventHandler;
         this.navigator = navigator;
+        this.app = app;
     }
 
     public void load() {
@@ -211,6 +215,8 @@ public class ClientGame {
                     }
                 }
                 break;
+            case START_GAME:
+                countdown = new Countdown(canvas);
             default:
                 break;
         }
@@ -228,6 +234,12 @@ public class ClientGame {
     }
 
     private void update(float deltaTimeInSec) {
+        if (app.getServerGame() != null && countdown == null) {
+            if (keyEventHandler.isSpacePressed()) {
+                app.getServerGame().sendMessageStartGame();
+            }
+        }
+
         if (countdown != null) {
             countdown.update(deltaTimeInSec);
         }
