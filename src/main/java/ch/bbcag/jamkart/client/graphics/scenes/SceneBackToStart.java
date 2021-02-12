@@ -1,23 +1,19 @@
 package ch.bbcag.jamkart.client.graphics.scenes;
 
+import ch.bbcag.jamkart.Constants;
 import ch.bbcag.jamkart.JamKartApp;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
 public class SceneBackToStart extends Scene {
-    private JamKartApp app;
     private static VBox rootNode = new VBox(10.0f);
 
     private static final String MESSAGE =
@@ -26,7 +22,6 @@ public class SceneBackToStart extends Scene {
 
     public SceneBackToStart(JamKartApp app) {
         super(rootNode);
-        this.app = app;
 
         rootNode.setAlignment(Pos.CENTER);
         rootNode.setStyle(
@@ -58,6 +53,6 @@ public class SceneBackToStart extends Scene {
         rootNode.getChildren().add(background);
 
         mainMenuBtn.setOnAction(e -> app.getNavigator().navigateTo(SceneType.START, false));
-        rootNode.setMinSize(800, 600);
+        rootNode.setMinSize(Constants.START_WINDOW_WIDTH, Constants.START_WINDOW_HEIGHT);
     }
 }

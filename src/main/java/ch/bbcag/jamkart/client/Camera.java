@@ -25,8 +25,4 @@ public class Camera {
         position.setY(y);
     }
 
-    public void setPosition (Point position){
-        this.position = position;
-    }
-
 }

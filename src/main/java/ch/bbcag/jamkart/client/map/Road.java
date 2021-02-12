@@ -9,6 +9,8 @@ public class Road {
 
     private Polyline polyline = new Polyline();
     private static final float WIDTH = 300.0f;
+    private static final float LINE_WIDTH = 20;
+    private static final float LINE_DASHES = 100;
 
     public Road() {
         polyline.setStrokeWidth(WIDTH);
@@ -26,10 +28,12 @@ public class Road {
         int numberOfPoints = polyline.getPoints().size() / 2;
         double[] xPoints = new double[numberOfPoints];
         double[] yPoints = new double[numberOfPoints];
+        int x;
 
         for(int i = 0; i < numberOfPoints; i++) {
-            xPoints[i] = polyline.getPoints().get(i * 2);
-            yPoints[i] = polyline.getPoints().get(i * 2 + 1);
+            x = i * 2;
+            xPoints[i] = polyline.getPoints().get(x);
+            yPoints[i] = polyline.getPoints().get(x + 1);
         }
 
         context.setStroke(Color.GRAY);
@@ -38,8 +42,8 @@ public class Road {
         context.strokePolyline(xPoints, yPoints, numberOfPoints);
 
         context.setStroke(Color.WHITE);
-        context.setLineWidth(20);
-        context.setLineDashes(100);
+        context.setLineWidth(LINE_WIDTH);
+        context.setLineDashes(LINE_DASHES);
         context.strokePolyline(xPoints, yPoints, numberOfPoints);
     }
 

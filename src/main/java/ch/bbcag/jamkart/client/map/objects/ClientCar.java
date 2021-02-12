@@ -28,8 +28,6 @@ public class ClientCar extends GameObject {
 
     private boolean isControllable = false;
 
-    public static final float SIZE = 100.0f;
-
     private static final float ROTATION_SPEED = 180.0f;
     private static final float ROTATION_SPEED_OILED = 1440.0f;
 
@@ -43,9 +41,9 @@ public class ClientCar extends GameObject {
     private static final float DAMPING_FACTOR_GRASS = 3.0f;
 
     private static final float OIL_TIME = 1.0f;
-    private static final float OIL_COLLISION_DISTANCE = OilPuddle.SIZE;
+    private static final float OIL_COLLISION_DISTANCE = Constants.SIZE;
 
-    private static final float BOOST_PAD_COLLISION_DISTANCE = BoostPad.SIZE * 0.5f;
+    private static final float BOOST_PAD_COLLISION_DISTANCE = Constants.SIZE / 2 * 0.5f;
 
     public ClientCar(Map map, KeyEventHandler keyEventHandler, ClientGame clientGame) {
         this.map = map;
@@ -54,18 +52,18 @@ public class ClientCar extends GameObject {
     }
 
     public Point getCenter() {
-        return new Point(getPosition().getX() + SIZE / 2, getPosition().getY() + SIZE / 2);
+        return new Point(getPosition().getX() + Constants.SIZE / 2, getPosition().getY() + Constants.SIZE / 2);
     }
 
     @Override
     public void draw(GraphicsContext context) {
         context.save();
 
-        context.translate(getPosition().getX() + SIZE / 2, getPosition().getY() + SIZE / 2);
+        context.translate(getPosition().getX() + Constants.SIZE / 2, getPosition().getY() + Constants.SIZE / 2);
         context.rotate(rotation);
-        context.translate(-(getPosition().getX() + SIZE / 2), -(getPosition().getY() + SIZE / 2));
+        context.translate(-(getPosition().getX() + Constants.SIZE / 2), -(getPosition().getY() + Constants.SIZE / 2));
 
-        context.drawImage(image, getPosition().getX(), getPosition().getY(), SIZE, SIZE);
+        context.drawImage(image, getPosition().getX(), getPosition().getY(), Constants.SIZE, Constants.SIZE);
 
         context.restore();
     }
@@ -190,12 +188,11 @@ public class ClientCar extends GameObject {
         this.name = name;
     }
 
-    public boolean isControllable() {
-        return isControllable;
-    }
-
     public void setControllable(boolean isControllable) {
         this.isControllable = isControllable;
     }
 
+    public Image getImage() {
+        return image;
+    }
 }

@@ -1,5 +1,6 @@
 package ch.bbcag.jamkart.client.graphics.scenes;
 
+import ch.bbcag.jamkart.Constants;
 import ch.bbcag.jamkart.JamKartApp;
 import ch.bbcag.jamkart.client.ClientGame;
 import ch.bbcag.jamkart.client.graphics.scenes.validation.Validator;
@@ -95,7 +96,7 @@ public class SceneCreateGame extends Scene {
         rootNode.getChildren().add(pane);
         mainMenuBtn.setOnAction(e -> app.getNavigator().navigateTo(SceneType.START, false));
         createGame.setOnAction(e -> validateInputAndCreateGame(portError, nameError));
-        pane.setMinSize(800, 600);
+        pane.setMinSize(Constants.START_WINDOW_WIDTH, Constants.START_WINDOW_HEIGHT);
     }
 
     private void setErrorMessage(boolean isCorrect, Text errorMessage) {

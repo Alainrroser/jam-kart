@@ -2,7 +2,6 @@ package ch.bbcag.jamkart.client.map;
 
 import ch.bbcag.jamkart.client.map.objects.GameObject;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 

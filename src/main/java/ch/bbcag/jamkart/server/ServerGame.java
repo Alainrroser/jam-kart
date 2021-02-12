@@ -79,9 +79,10 @@ public class ServerGame {
         switch (message.getMessageType()) {
             case JOIN_GAME:
                 Message idMessage = new Message(MessageType.INITIAL_STATE);
+                int y = id * 50 + 65;
                 idMessage.addValue("id", id);
                 idMessage.addValue("x", 0);
-                idMessage.addValue("y", id * 50 + 65);
+                idMessage.addValue("y", y);
                 connection.sendMessage(idMessage);
 
                 carList.add(new ServerCar(connection, id, message.getValue("name")));

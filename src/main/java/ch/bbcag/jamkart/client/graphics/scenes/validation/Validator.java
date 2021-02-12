@@ -1,14 +1,16 @@
 package ch.bbcag.jamkart.client.graphics.scenes.validation;
 
-import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Validator {
+    private static final int MAX_PORT = 65535;
+    private static final int MIN_PORT = 1024;
+
     public static boolean validateIP(String ip) {
         if (ip.equals("localhost")) {
             return true;
-        }else{
+        } else {
             Pattern pattern;
             Matcher matcher;
             String IPADDRESS_PATTERN
@@ -23,7 +25,7 @@ public class Validator {
     }
 
     public static boolean validatePort(String port) {
-        return isNumeric(port) && Integer.parseInt(port) < 65535 && Integer.parseInt(port) > 1024;
+        return isNumeric(port) && Integer.parseInt(port) < MAX_PORT && Integer.parseInt(port) > MIN_PORT;
     }
 
     public static boolean isNumeric(String text) {
@@ -38,7 +40,7 @@ public class Validator {
         return true;
     }
 
-    public static boolean validateName(String name){
+    public static boolean validateName(String name) {
         return name.matches("(^[a-zA-Z0-9]([. _-](?![. _-])|[a-zA-Z0-9]){0,18}[a-zA-Z0-9]$)");
     }
 }

@@ -57,20 +57,8 @@ public class Connection extends Thread {
         }
     }
 
-    public MessageHandler getMessageHandler() {
-        return messageHandler;
-    }
-
     public void setMessageHandler(MessageHandler messageHandler) {
         this.messageHandler = messageHandler;
-    }
-
-    public String getIP() {
-        return socket.getInetAddress().toString();
-    }
-
-    public int getPort() {
-        return socket.getPort();
     }
 
     public boolean isDisconnected() {

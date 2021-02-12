@@ -1,5 +1,6 @@
 package ch.bbcag.jamkart.client.map.objects;
 
+import ch.bbcag.jamkart.Constants;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
@@ -18,11 +19,11 @@ public class ClientOtherCar extends GameObject {
     public void draw(GraphicsContext context) {
         context.save();
 
-        context.translate(getPosition().getX() + ClientCar.SIZE / 2, getPosition().getY() + ClientCar.SIZE / 2);
+        context.translate(getPosition().getX() + Constants.SIZE / 2, getPosition().getY() + Constants.SIZE / 2);
         context.rotate(rotation);
-        context.translate(-(getPosition().getX() + ClientCar.SIZE / 2), -(getPosition().getY() + ClientCar.SIZE / 2));
+        context.translate(-(getPosition().getX() + Constants.SIZE / 2), -(getPosition().getY() + Constants.SIZE / 2));
 
-        context.drawImage(image, getPosition().getX(), getPosition().getY(), ClientCar.SIZE, ClientCar.SIZE);
+        context.drawImage(image, getPosition().getX(), getPosition().getY(), Constants.SIZE, Constants.SIZE);
 
         context.restore();
     }
@@ -30,10 +31,6 @@ public class ClientOtherCar extends GameObject {
     @Override
     public void update(float deltaTimeInSeconds) {
 
-    }
-
-    public float getRotation() {
-        return rotation;
     }
 
     public void setRotation(float rotation) {
@@ -48,7 +45,7 @@ public class ClientOtherCar extends GameObject {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public Image getImage() {
+        return image;
     }
 }

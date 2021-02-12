@@ -1,5 +1,6 @@
 package ch.bbcag.jamkart.client;
 
+import ch.bbcag.jamkart.Constants;
 import ch.bbcag.jamkart.JamKartApp;
 import ch.bbcag.jamkart.client.graphics.scenes.Navigator;
 import ch.bbcag.jamkart.client.graphics.scenes.SceneType;
@@ -257,8 +258,8 @@ public class ClientGame {
         for (GameObject gameObject : map.getGameObjects()) {
             gameObject.update(deltaTimeInSec);
         }
-        camera.setX(car.getPosition().getX() - (float) (canvas.getWidth() / 2) + ClientCar.SIZE / 2);
-        camera.setY(car.getPosition().getY() - (float) (canvas.getHeight() / 2) + ClientCar.SIZE / 2);
+        camera.setX(car.getPosition().getX() - (float) (canvas.getWidth() / 2) + Constants.SIZE / 2);
+        camera.setY(car.getPosition().getY() - (float) (canvas.getHeight() / 2) + Constants.SIZE / 2);
 
         if (client.isDisconnected()) {
             stop();
@@ -270,9 +271,9 @@ public class ClientGame {
         canvas.getGraphicsContext2D().save();
 
         canvas.getGraphicsContext2D().translate(-camera.getX(), -camera.getY());
-        for (int y = -10000; y < 10000; y += 800) {
-            for (int x = -10000; x < 10000; x += 1500) {
-                canvas.getGraphicsContext2D().drawImage(GRASS, x, y, 1500, 800);
+        for (int y = -10000; y < 10000; y += Constants.GAME_WINDOW_HEIGHT) {
+            for (int x = -10000; x < 10000; x += Constants.GAME_WINDOW_WIDTH) {
+                canvas.getGraphicsContext2D().drawImage(GRASS, x, y, Constants.GAME_WINDOW_WIDTH, Constants.GAME_WINDOW_HEIGHT);
             }
         }
         map.getRoad().draw(canvas.getGraphicsContext2D());
