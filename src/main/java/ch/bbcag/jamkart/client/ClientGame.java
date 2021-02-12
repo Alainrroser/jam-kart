@@ -3,10 +3,7 @@ package ch.bbcag.jamkart.client;
 import ch.bbcag.jamkart.client.graphics.scenes.Navigator;
 import ch.bbcag.jamkart.client.graphics.scenes.SceneType;
 import ch.bbcag.jamkart.client.map.Map;
-import ch.bbcag.jamkart.client.map.objects.ClientCar;
-import ch.bbcag.jamkart.client.map.objects.ClientOtherCar;
-import ch.bbcag.jamkart.client.map.objects.GameObject;
-import ch.bbcag.jamkart.client.map.objects.OilPuddle;
+import ch.bbcag.jamkart.client.map.objects.*;
 import ch.bbcag.jamkart.common.GameLoop;
 import ch.bbcag.jamkart.net.Message;
 import ch.bbcag.jamkart.net.MessageType;
@@ -41,23 +38,121 @@ public class ClientGame {
     public void load() {
         map = new Map();
 
-        OilPuddle puddle = new OilPuddle();
-        puddle.setPosition(new Point(800, 200));
-        map.getGameObjects().add(puddle);
+        map.getGameObjects().add(new OilPuddle(new Point(350,200)));
+        map.getGameObjects().add(new BoostPad(new Point(250,200),90));
+
+        map.getRoad().addPoint(new Point(200, 200));
+        map.getRoad().addPoint(new Point(2000, 200));
+        map.getRoad().addPoint(new Point(2050, 175));
+        map.getRoad().addPoint(new Point(2300, 0));
+        map.getRoad().addPoint(new Point(2450, -350));
+        map.getRoad().addPoint(new Point(2450, -450));
+        map.getRoad().addPoint(new Point(2300, -850));
+        map.getRoad().addPoint(new Point(2050, -1050));
+        map.getRoad().addPoint(new Point(2000, -1075));
+        map.getRoad().addPoint(new Point(1700, -1075));
+
+        map.getRoad().addPoint(new Point(1650, -1100));
+        map.getRoad().addPoint(new Point(1600, -1150));
+        map.getRoad().addPoint(new Point(1550, -1250));
+        map.getRoad().addPoint(new Point(1550, -1350));
+        map.getRoad().addPoint(new Point(1600, -1450));
+        map.getRoad().addPoint(new Point(3000, -1600));
+
+        map.getRoad().addPoint(new Point(3050, -1625));
+        map.getRoad().addPoint(new Point(3250, -1750));
+        map.getRoad().addPoint(new Point(3400, -2050));
+        map.getRoad().addPoint(new Point(3400, -2150));
+        map.getRoad().addPoint(new Point(3250, -2450));
+
+        map.getRoad().addPoint(new Point(3000, -2450));
+        map.getRoad().addPoint(new Point(2950, -2500));
+        map.getRoad().addPoint(new Point(2900, -2600));
+        map.getRoad().addPoint(new Point(2900, -2700));
+        map.getRoad().addPoint(new Point(2950, -2800));
+        map.getRoad().addPoint(new Point(3000, -2900));
+
+        map.getRoad().addPoint(new Point(3400, -3000));
+        map.getRoad().addPoint(new Point(3450, -3050));
+        map.getRoad().addPoint(new Point(3500, -3100));
+        map.getRoad().addPoint(new Point(3550, -3200));
+        map.getRoad().addPoint(new Point(3600, -3400));
+        map.getRoad().addPoint(new Point(3650, -3650));
+        map.getRoad().addPoint(new Point(3650, -3750));
+        map.getRoad().addPoint(new Point(3600, -4000));
+        map.getRoad().addPoint(new Point(3550, -4250));
+        map.getRoad().addPoint(new Point(3500, -4450));
+        map.getRoad().addPoint(new Point(3450, -4600));
+        map.getRoad().addPoint(new Point(3400, -4650));
+        map.getRoad().addPoint(new Point(2000, -4650));
+
+        map.getRoad().addPoint(new Point(1950, -4600));
+        map.getRoad().addPoint(new Point(1900, -4550));
+        map.getRoad().addPoint(new Point(1850, -4475));
+        map.getRoad().addPoint(new Point(1800, -4400));
+        map.getRoad().addPoint(new Point(1750, -4300));
+        map.getRoad().addPoint(new Point(1750, -4100));
+        map.getRoad().addPoint(new Point(1700, -4075));
+        map.getRoad().addPoint(new Point(1650, -4050));
+        map.getRoad().addPoint(new Point(1600, -4025));
+        map.getRoad().addPoint(new Point(1350, -4025));
+        map.getRoad().addPoint(new Point(1250, -4075));
+        map.getRoad().addPoint(new Point(1200, -4100));
+        map.getRoad().addPoint(new Point(1100, -4600));
+        map.getRoad().addPoint(new Point(1050, -5000));
+        map.getRoad().addPoint(new Point(1000, -5050));
+        map.getRoad().addPoint(new Point(950, -5100));
+        map.getRoad().addPoint(new Point(900, -5150));
+        map.getRoad().addPoint(new Point(700, -5150));
+
+        map.getRoad().addPoint(new Point(650, -5100));
+        map.getRoad().addPoint(new Point(600, -5050));
+        map.getRoad().addPoint(new Point(550, -5000));
+        map.getRoad().addPoint(new Point(350, -2700));
+
+        map.getRoad().addPoint(new Point(300, -2550));
+        map.getRoad().addPoint(new Point(250, -2450));
+        map.getRoad().addPoint(new Point(100, -2400));
+        map.getRoad().addPoint(new Point(-100, -2350));
+        map.getRoad().addPoint(new Point(-300, -2250));
+        map.getRoad().addPoint(new Point(-300, -2050));
+
+        map.getRoad().addPoint(new Point(-250, -2000));
+        map.getRoad().addPoint(new Point(100, -1750));
+        map.getRoad().addPoint(new Point(150, -1700));
+        map.getRoad().addPoint(new Point(175, -1650));
+        map.getRoad().addPoint(new Point(175, -1600));
+        map.getRoad().addPoint(new Point(150, -1550));
+        map.getRoad().addPoint(new Point(100, -1500));
+        map.getRoad().addPoint(new Point(-300, -1275));
+        map.getRoad().addPoint(new Point(-315, -1265));
+        map.getRoad().addPoint(new Point(-330, -1250));
+        map.getRoad().addPoint(new Point(-345, -1225));
+        map.getRoad().addPoint(new Point(-345, -1200));
+        map.getRoad().addPoint(new Point(-325, -1150));
+        map.getRoad().addPoint(new Point(-290, -1100));
+        map.getRoad().addPoint(new Point(-225, -1050));
+        map.getRoad().addPoint(new Point(100, -1000));
+        map.getRoad().addPoint(new Point(125, -990));
+        map.getRoad().addPoint(new Point(145, -970));
+        map.getRoad().addPoint(new Point(160, -940));
+        map.getRoad().addPoint(new Point(160, -800));
+        map.getRoad().addPoint(new Point(135, -750));
+        map.getRoad().addPoint(new Point(110, -720));
+        map.getRoad().addPoint(new Point(90, -700));
+        map.getRoad().addPoint(new Point(-300, -500));
+        map.getRoad().addPoint(new Point(-325, -490));
+        map.getRoad().addPoint(new Point(-350, -450));
+        map.getRoad().addPoint(new Point(-350, 100));
+        map.getRoad().addPoint(new Point(-325, 150));
+        map.getRoad().addPoint(new Point(-300, 200));
+        map.getRoad().addPoint(new Point(200, 200));
+
 
         car = new ClientCar(map, keyEventHandler, this);
         car.setPosition(new Point(200, 200));
         map.getGameObjects().add(car);
 
-        map.getRoad().addPoint(new Point(0, 300));
-        map.getRoad().addPoint(new Point(1000, 300));
-        map.getRoad().addPoint(new Point(1500, 0));
-        map.getRoad().addPoint(new Point(1500, -500));
-        map.getRoad().addPoint(new Point(1000, -700));
-        map.getRoad().addPoint(new Point(1000, -1000));
-        map.getRoad().addPoint(new Point(1800, -1500));
-        map.getRoad().addPoint(new Point(2500, -1300));
-        map.getRoad().addPoint(new Point(2500, -500));
     }
 
     public void start(String ip, int port, String name) {
