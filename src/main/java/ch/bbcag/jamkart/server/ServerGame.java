@@ -9,7 +9,6 @@ import ch.bbcag.jamkart.net.server.Server;
 import ch.bbcag.jamkart.utils.Point;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -79,8 +78,10 @@ public class ServerGame {
     private void processMessage(Message message, Connection connection) {
         switch (message.getMessageType()) {
             case JOIN_GAME:
-                Message idMessage = new Message(MessageType.ID);
+                Message idMessage = new Message(MessageType.INITIAL_STATE);
                 idMessage.addValue("id", id);
+                idMessage.addValue("x", 0);
+                idMessage.addValue("y", id * 50 + 65);
                 connection.sendMessage(idMessage);
 
                 carList.add(new ServerCar(connection, id, message.getValue("name")));

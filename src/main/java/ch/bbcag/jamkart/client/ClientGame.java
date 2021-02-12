@@ -182,8 +182,9 @@ public class ClientGame {
 
     private void processMessage(Message message) {
         switch (message.getMessageType()) {
-            case ID:
+            case INITIAL_STATE:
                 car.setId(Integer.parseInt(message.getValue("id")));
+                car.setPosition(new Point(Integer.parseInt(message.getValue("x")), Integer.parseInt(message.getValue("y"))));
                 break;
             case UPDATE:
                 int id = Integer.parseInt(message.getValue("id"));
