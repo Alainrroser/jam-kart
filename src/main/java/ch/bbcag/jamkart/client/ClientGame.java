@@ -189,7 +189,7 @@ public class ClientGame {
             client.start();
             sendJoinMessage();
         } catch (IOException e) {
-            String message = NetErrorMessages.COULDNT_INIT_CONNECTION;
+            String message = NetErrorMessages.COULD_NOT_INIT_CONNECTION;
             ((SceneBackToStart) navigator.getScene(SceneType.BACK_TO_START)).setMessage(message);
             navigator.navigateTo(SceneType.BACK_TO_START, true);
 
