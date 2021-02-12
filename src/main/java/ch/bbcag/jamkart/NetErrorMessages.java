@@ -2,16 +2,17 @@ package ch.bbcag.jamkart;
 
 public class NetErrorMessages {
 
-    public static final String COULDNT_INIT_CONNECTION =
+    public static final String COULD_NOT_INIT_CONNECTION =
             "Konnte nicht mit dem Server verbinden!\n" +
-            "Bitte überprüfe die IP-Adresse und den Port";
+            "Bitte überprüfe die IP-Adresse und den Port.";
 
     public static final String CONNECTION_LOST =
             "Verbindung verloren!\n" +
-            "Vermutlich wurde der Server geschlossen";
+            "Vermutlich wurde der Server geschlossen\n" +
+            "oder das Spiel läuft bereits.";
 
-    public static final String COULDNT_CREATE_SERVER =
+    public static final String COULD_NOT_CREATE_SERVER =
             "Konnte keinen Server starten!\n" +
             "Bitte stelle sicher, dass kein anderer Server\n" +
-            "auf diesem Port läuft";
+            "auf diesem Port läuft.";
 }

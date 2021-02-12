@@ -17,16 +17,25 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ServerGame {
+
     private Navigator navigator;
 
     private Server server;
-    private float timer = 0;
-    private List<ServerCar> carList = new CopyOnWriteArrayList<>();
-    private int id = 0;
     private boolean startMessageSent = false;
+
+    private float timer = 0;
+
+    private List<ServerCar> carList = new CopyOnWriteArrayList<>();
+
+    private List<Integer> availableIdList = new CopyOnWriteArrayList<>();
 
     public ServerGame(Navigator navigator) {
         this.navigator = navigator;
+
+        int numberOfPlayers = 4;
+        for (int i = 0; i < numberOfPlayers; i++) {
+            availableIdList.add(i);
+        }
     }
 
     public void start(int port) {
@@ -35,7 +44,7 @@ public class ServerGame {
             server.setServerMessageHandler(this::processMessage);
             server.start();
         } catch (IOException e) {
-            String message = NetErrorMessages.COULDNT_CREATE_SERVER;
+            String message = NetErrorMessages.COULD_NOT_CREATE_SERVER;
             ((SceneBackToStart) navigator.getScene(SceneType.BACK_TO_START)).setMessage(message);
             navigator.navigateTo(SceneType.BACK_TO_START, true);
 
@@ -75,6 +84,7 @@ public class ServerGame {
                         otherCar.getConnection().sendMessage(disconnectedMessage);
                     }
                 }
+                availableIdList.add(0, car.getId());
             }
         }
     }
@@ -93,18 +103,22 @@ public class ServerGame {
     private void processMessage(Message message, Connection connection) {
         switch (message.getMessageType()) {
             case JOIN_GAME:
-                Message idMessage = new Message(MessageType.INITIAL_STATE);
-                int y = id * 50 + 65;
-                idMessage.addValue("id", id);
-                idMessage.addValue("x", 0);
-                idMessage.addValue("y", y);
-                connection.sendMessage(idMessage);
+                if (startMessageSent || availableIdList.isEmpty()) {
+                    connection.close();
+                } else {
+                    Message idMessage = new Message(MessageType.INITIAL_STATE);
+                    int y = availableIdList.get(0) * 50 + 65;
+                    idMessage.addValue("id", availableIdList.get(0));
+                    idMessage.addValue("x", 0);
+                    idMessage.addValue("y", y);
+                    connection.sendMessage(idMessage);
 
-                carList.add(new ServerCar(connection, id, message.getValue("name")));
-                id++;
+                    carList.add(new ServerCar(connection, availableIdList.get(0), message.getValue("name")));
+                    availableIdList.remove(0);
 
-                System.out.println("new player joined the game!");
-                System.out.println("name: " + message.getValue("name"));
+                    System.out.println("new player joined the game!");
+                    System.out.println("name: " + message.getValue("name"));
+                }
                 break;
             case UPDATE:
                 for (ServerCar car : carList) {
@@ -131,6 +145,5 @@ public class ServerGame {
             }
             startMessageSent = true;
         }
-
     }
 }
