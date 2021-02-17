@@ -75,8 +75,14 @@ public class GamePainter {
 
     private void drawLapIndicator(GraphicsContext context) {
         int currentLap = (game.getRoadPathTracker().getPassedLapCounter() + 1);
+        String lapIndicator;
 
-        String lapIndicator = "Runde " + currentLap + " / " + RoadPathTracker.NUMBER_OF_LAPS;
+        if (currentLap <= RoadPathTracker.NUMBER_OF_LAPS) {
+            lapIndicator = "Runde " + currentLap + " / " + RoadPathTracker.NUMBER_OF_LAPS;
+        } else {
+            lapIndicator = "Im Ziel";
+        }
+
         context.setFont(new Font(40));
         context.setFill(Color.BLACK);
         context.fillText(lapIndicator, 20, 50);

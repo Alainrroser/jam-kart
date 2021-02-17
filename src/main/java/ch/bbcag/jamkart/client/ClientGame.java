@@ -181,4 +181,7 @@ public class ClientGame {
         return roadPathTracker;
     }
 
+    public GameNetworking getNetworking() {
+        return networking;
+    }
 }

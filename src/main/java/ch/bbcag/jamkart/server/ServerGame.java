@@ -123,6 +123,15 @@ public class ServerGame {
                     }
                 }
                 break;
+            case TIME:
+                for (ServerCar car : carList) {
+                    if (car.getConnection() == connection) {
+                        String time = message.getValue("time");
+                        Message timeMessage = new Message(MessageType.TIME);
+                        timeMessage.addValue("time", time);
+                        sendMessageToOtherCars(car, timeMessage);
+                    }
+                }
             default:
                 break;
         }

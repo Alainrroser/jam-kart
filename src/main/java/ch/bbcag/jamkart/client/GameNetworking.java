@@ -35,6 +35,12 @@ public class GameNetworking {
         client.sendMessage(message);
     }
 
+    public void sendTimeMessage() {
+        Message timeMessage = new Message(MessageType.TIME);
+        timeMessage.addValue("time", game.getTimer().getTime());
+        client.sendMessage(timeMessage);
+    }
+
     private void processMessage(Message message) {
         switch (message.getMessageType()) {
             case INITIAL_STATE:

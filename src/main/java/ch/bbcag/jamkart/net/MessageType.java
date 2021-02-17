@@ -5,5 +5,6 @@ public enum MessageType {
     UPDATE,
     INITIAL_STATE,
     DISCONNECTED,
-    START_GAME
+    START_GAME,
+    TIME
 }

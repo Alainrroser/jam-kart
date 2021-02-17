@@ -1,6 +1,8 @@
 package ch.bbcag.jamkart.client.map;
 
 import ch.bbcag.jamkart.client.ClientGame;
+import ch.bbcag.jamkart.net.Message;
+import ch.bbcag.jamkart.net.MessageType;
 
 public class RoadPathTracker {
 
@@ -38,5 +40,6 @@ public class RoadPathTracker {
 
     private void endGame() {
         game.getTimer().stop();
+        game.getNetworking().sendTimeMessage();
     }
 }
