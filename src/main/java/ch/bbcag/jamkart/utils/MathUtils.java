@@ -1,5 +1,8 @@
 package ch.bbcag.jamkart.utils;
 
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+
 public class MathUtils {
 
     public static float sin(float angleInDegrees) {
@@ -22,4 +25,9 @@ public class MathUtils {
         return number * number;
     }
 
+    public static double getTextWidth(String text, Font font){
+        Text textBox = new Text(text);
+        textBox.setFont(font);
+        return textBox.getLayoutBounds().getWidth();
+    }
 }

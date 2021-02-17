@@ -14,8 +14,25 @@ public class MapLoader {
     }
 
     public void load() {
-        map.getRoad().addPathMarker(new RoadPathMarker(new Point(3300, -2050), 500));
-        map.getRoad().addPathMarker(new RoadPathMarker(new Point(1360, -4440), 800));
+        map.getRoad().addPathMarker(new RoadPathMarker(new Point(1100, 150), 300));
+        map.getRoad().addPathMarker(new RoadPathMarker(new Point(2100, 50), 300));
+        map.getRoad().addPathMarker(new RoadPathMarker(new Point(2300, -500), 300));
+        map.getRoad().addPathMarker(new RoadPathMarker(new Point(2000, -1100), 300));
+        map.getRoad().addPathMarker(new RoadPathMarker(new Point(2900, -1700), 300));
+        map.getRoad().addPathMarker(new RoadPathMarker(new Point(3050, -2450), 300));
+        map.getRoad().addPathMarker(new RoadPathMarker(new Point(3300, -3000), 300));
+        map.getRoad().addPathMarker(new RoadPathMarker(new Point(3600, -3800), 300));
+        map.getRoad().addPathMarker(new RoadPathMarker(new Point(3300, -4600), 300));
+        map.getRoad().addPathMarker(new RoadPathMarker(new Point(2000, -4600), 300));
+        map.getRoad().addPathMarker(new RoadPathMarker(new Point(1400, -4100), 300));
+        map.getRoad().addPathMarker(new RoadPathMarker(new Point(1000, -4700), 300));
+        map.getRoad().addPathMarker(new RoadPathMarker(new Point(750, -5200), 300));
+        map.getRoad().addPathMarker(new RoadPathMarker(new Point(400, -4200), 300));
+        map.getRoad().addPathMarker(new RoadPathMarker(new Point(400, -4200), 300));
+        map.getRoad().addPathMarker(new RoadPathMarker(new Point(430, -3300), 300));
+        map.getRoad().addPathMarker(new RoadPathMarker(new Point(200, -2500), 300));
+        map.getRoad().addPathMarker(new RoadPathMarker(new Point(150, -1650), 300));
+        map.getRoad().addPathMarker(new RoadPathMarker(new Point(100, -1000), 300));
         map.getRoad().addPathMarker(new RoadPathMarker(new Point(0, 200), 300));
 
         map.getRoad().addPoint(new Point(200, 200));
@@ -81,10 +98,23 @@ public class MapLoader {
         map.getGameObjects().add(new BoostPad(new Point(1460, -4440), 180));
         map.getGameObjects().add(new BoostPad(new Point(1460, -4540), 180));
         map.getGameObjects().add(new BoostPad(new Point(1460, -4640), 180));
-        map.getGameObjects().add(new Tree(new Point(1360, -4640)));
+        map.getGameObjects().add(new Tree(new Point(1320, -4700)));
+        map.getGameObjects().add(new Tree(new Point(1320, -4500)));
         map.getRoad().addPoint(new Point(1350, -4025));
         map.getRoad().addPoint(new Point(1250, -4075));
         map.getGameObjects().add(new BoostPad(new Point(790, -4100), 0));
+        map.getGameObjects().add(new BoostPad(new Point(790, -4200), 0));
+        map.getGameObjects().add(new BoostPad(new Point(790, -4300), 0));
+        map.getGameObjects().add(new BoostPad(new Point(790, -4400), 0));
+        map.getGameObjects().add(new BoostPad(new Point(790, -4500), 0));
+        map.getGameObjects().add(new BoostPad(new Point(790, -4600), 0));
+        map.getGameObjects().add(new BoostPad(new Point(790, -4700), 0));
+        map.getGameObjects().add(new BoostPad(new Point(790, -4800), 0));
+        map.getGameObjects().add(new Tree(new Point(700, -4900)));
+        map.getGameObjects().add(new Tree(new Point(700, -4700)));
+        map.getGameObjects().add(new Tree(new Point(700, -4500)));
+        map.getGameObjects().add(new Tree(new Point(700, -4300)));
+        map.getGameObjects().add(new Tree(new Point(700, -4100)));
         map.getRoad().addPoint(new Point(1200, -4100));
         map.getRoad().addPoint(new Point(1100, -4600));
         map.getRoad().addPoint(new Point(1050, -5000));
@@ -134,6 +164,10 @@ public class MapLoader {
         map.getRoad().addPoint(new Point(-300, -500));
         map.getRoad().addPoint(new Point(-325, -490));
         map.getRoad().addPoint(new Point(-350, -450));
+        map.getGameObjects().add(new BoostPad(new Point(0, -300),270));
+        map.getGameObjects().add(new BoostPad(new Point(100, -300),270));
+        map.getGameObjects().add(new Tree(new Point(-100, -400)));
+        map.getGameObjects().add(new Tree(new Point(0, -400)));
         map.getRoad().addPoint(new Point(-350, 100));
         map.getRoad().addPoint(new Point(-325, 150));
         map.getRoad().addPoint(new Point(-300, 200));

@@ -2,9 +2,11 @@ package ch.bbcag.jamkart.client.map.objects;
 
 import ch.bbcag.jamkart.Constants;
 import ch.bbcag.jamkart.utils.DrawingUtils;
+import ch.bbcag.jamkart.utils.MathUtils;
 import ch.bbcag.jamkart.utils.Point;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.text.Font;
 
 public class ClientOtherCar extends GameObject {
     private float rotation;
@@ -26,7 +28,11 @@ public class ClientOtherCar extends GameObject {
 
     @Override
     public void draw(GraphicsContext context) {
+        double nameWidth = MathUtils.getTextWidth(name, context.getFont());
+
         DrawingUtils.drawRotated(context, image, getPosition(), Constants.CAR_SIZE, Constants.CAR_SIZE, rotation);
+        context.setFont(new Font(24));
+        context.fillText(name, getPosition().getX() + Constants.CAR_SIZE / 2 - nameWidth / 2, getPosition().getY() + Constants.CAR_SIZE * 1.2);
     }
 
     @Override

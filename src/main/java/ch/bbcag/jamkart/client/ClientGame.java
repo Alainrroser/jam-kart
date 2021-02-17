@@ -136,7 +136,7 @@ public class ClientGame {
         }
         roadPathTracker.update();
 
-        camera.drawCamera(car, canvas);
+        camera.update(car, canvas);
 
         if (networking.isDisconnected()) {
             stop();

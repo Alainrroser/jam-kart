@@ -1,26 +1,31 @@
 package ch.bbcag.jamkart.client;
 
+import ch.bbcag.jamkart.Constants;
 import ch.bbcag.jamkart.JamKartApp;
 import ch.bbcag.jamkart.client.map.objects.ClientCar;
 import ch.bbcag.jamkart.client.map.objects.ClientOtherCar;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 
 import java.util.List;
 
-public class Lobby {
+public class EndScreen {
     private JamKartApp app;
 
-    public Lobby(JamKartApp app) {
+    public EndScreen(JamKartApp app) {
         this.app = app;
     }
 
-    public void drawLobby(GraphicsContext context, ClientCar car, List<ClientOtherCar> clientOtherCars) {
+    public void drawEndScreen(GraphicsContext context, ClientCar car, List<ClientOtherCar> clientOtherCars) {
         double imgPosX = 650;
         double imgPosY = 110;
         final double MARGIN = 60;
+        Image image = new Image(getClass().getResourceAsStream("/grass.png"));
+        context.drawImage(image, 0,0, Constants.GAME_WINDOW_WIDTH, Constants.GAME_WINDOW_HEIGHT);
 
         context.setFont(new Font(42));
         context.setFill(Color.BLACK);
@@ -35,8 +40,8 @@ public class Lobby {
         }
 
         if (app.getServerGame() != null) {
-            context.setFont(new Font(100));
-            context.fillText("Press space to start!", 270, 700);
+            context.setFont(new Font(80));
+            context.fillText("Press space to go back to main menu!", 270, 700);
         }
     }
 
