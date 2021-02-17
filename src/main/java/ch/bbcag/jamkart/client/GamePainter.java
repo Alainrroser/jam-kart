@@ -18,6 +18,7 @@ public class GamePainter {
     private ClientGame game;
 
     private Lobby lobby;
+    private EndScreen endScreen;
 
     private static final Image GRASS = new Image(ClientGame.class.getResourceAsStream("/grass.png"));
     private static final int HALF_GRASS_FIELD_SIZE = 8000;
@@ -25,6 +26,7 @@ public class GamePainter {
     public GamePainter(ClientGame game, JamKartApp app) {
         this.game = game;
         lobby = new Lobby(app);
+        endScreen = new EndScreen(app);
     }
 
     public void draw(GraphicsContext context) {
@@ -36,7 +38,7 @@ public class GamePainter {
         } else {
             drawLobby(context);
         }
-
+        
         drawTimer(context);
     }
 
@@ -104,6 +106,10 @@ public class GamePainter {
 
     private void drawLobby(GraphicsContext context) {
         lobby.drawLobby(context, game.getCar(), game.getMap().getAllGameObjectsFromType(ClientOtherCar.class));
+    }
+
+    private void drawEndScreen(GraphicsContext context){
+        endScreen.drawEndScreen(context, game.getCar(), game.getMap().getAllGameObjectsFromType(ClientOtherCar.class));
     }
 
 }

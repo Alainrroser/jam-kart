@@ -4,6 +4,7 @@ import ch.bbcag.jamkart.Constants;
 import ch.bbcag.jamkart.JamKartApp;
 import ch.bbcag.jamkart.client.map.objects.ClientCar;
 import ch.bbcag.jamkart.client.map.objects.ClientOtherCar;
+import ch.bbcag.jamkart.utils.MathUtils;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -15,6 +16,8 @@ import java.util.List;
 
 public class EndScreen {
     private JamKartApp app;
+    private String backToMain = "Press space to go back to main menu!";
+    private String finished = "Finished";
 
     public EndScreen(JamKartApp app) {
         this.app = app;
@@ -25,11 +28,13 @@ public class EndScreen {
         double imgPosY = 110;
         final double MARGIN = 60;
         Image image = new Image(getClass().getResourceAsStream("/grass.png"));
-        context.drawImage(image, 0,0, Constants.GAME_WINDOW_WIDTH, Constants.GAME_WINDOW_HEIGHT);
+        context.drawImage(image, 0, 0, Constants.GAME_WINDOW_WIDTH, Constants.GAME_WINDOW_HEIGHT);
+
+        context.setFont(new Font(80));
+        context.setFill(Color.BLACK);
+        context.fillText(finished, Constants.GAME_WINDOW_WIDTH / 2 - MathUtils.getTextWidth(finished, context.getFont()) / 2, 100);
 
         context.setFont(new Font(42));
-        context.setFill(Color.BLACK);
-
         context.drawImage(car.getImage(), imgPosX, 50, 50, 50);
         context.fillText(car.getName(), imgPosX + MARGIN, 90);
 
@@ -40,8 +45,8 @@ public class EndScreen {
         }
 
         if (app.getServerGame() != null) {
-            context.setFont(new Font(80));
-            context.fillText("Press space to go back to main menu!", 270, 700);
+            context.setFont(new Font(60));
+            context.fillText(backToMain, Constants.GAME_WINDOW_WIDTH / 2 - MathUtils.getTextWidth(backToMain, context.getFont()) / 2, 700);
         }
     }
 
