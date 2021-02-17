@@ -117,7 +117,7 @@ public class GamePainter {
 
     private void drawEndScreen(GraphicsContext context){
         List<ClientCar> cars = game.getMap().getAllGameObjectsFromType(ClientCar.class);
-        cars.sort((o1, o2) -> Float.compare(o2.getFinishTime(), o1.getFinishTime()));
+        cars.sort((o1, o2) -> Float.compare(o1.getFinishTime(), o2.getFinishTime()));
 
         endScreen.drawEndScreen(context,cars);
     }
