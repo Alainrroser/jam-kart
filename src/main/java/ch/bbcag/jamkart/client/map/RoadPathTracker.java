@@ -1,8 +1,6 @@
 package ch.bbcag.jamkart.client.map;
 
 import ch.bbcag.jamkart.client.ClientGame;
-import ch.bbcag.jamkart.net.Message;
-import ch.bbcag.jamkart.net.MessageType;
 
 public class RoadPathTracker {
 

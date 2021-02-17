@@ -38,6 +38,11 @@ public class ClientMyCar extends ClientCar {
 
     private static final float BOOST_PAD_COLLISION_DISTANCE = BoostPad.SIZE;
 
+    private static final float MIN_X = -5500;
+    private static final float MAX_X = 5500;
+    private static final float MIN_Y = -5500;
+    private static final float MAX_Y = 5500;
+
     public ClientMyCar(Map map, KeyEventHandler keyEventHandler) {
         this.map = map;
         this.keyEventHandler = keyEventHandler;
@@ -94,7 +99,7 @@ public class ClientMyCar extends ClientCar {
             velocity = velocity.normalized().scale(SPEED_OILED * (oilTimer / OIL_TIME));
         }
 
-        ristrictMovementByBorder();
+        restrictMovementByBorder();
 
         Direction movement = velocity.scale(deltaTimeInSec);
         getPosition().moveInDirection(movement);
@@ -150,20 +155,20 @@ public class ClientMyCar extends ClientCar {
         this.isControllable = isControllable;
     }
 
-    public void ristrictMovementByBorder() {
-        if (velocity.getY() > 0 && getPosition().getY() > 5500) {
+    public void restrictMovementByBorder() {
+        if (velocity.getY() > 0 && getPosition().getY() > MAX_Y) {
             velocity = new Direction(velocity.getX(), 0);
         }
 
-        if (velocity.getX() > 0 && getPosition().getX() > 5500) {
+        if (velocity.getX() > 0 && getPosition().getX() > MAX_X) {
             velocity = new Direction(0, velocity.getY());
         }
 
-        if (velocity.getY() < 0 && getPosition().getY() < -5500) {
+        if (velocity.getY() < 0 && getPosition().getY() < MIN_Y) {
             velocity = new Direction(velocity.getX(), 0);
         }
 
-        if (velocity.getX() < 0 && getPosition().getX() < -5500) {
+        if (velocity.getX() < 0 && getPosition().getX() < MIN_X) {
             velocity = new Direction(0, velocity.getY());
         }
     }

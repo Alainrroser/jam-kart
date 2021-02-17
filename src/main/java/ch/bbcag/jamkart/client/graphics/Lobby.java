@@ -1,4 +1,4 @@
-package ch.bbcag.jamkart.client;
+package ch.bbcag.jamkart.client.graphics;
 
 import ch.bbcag.jamkart.JamKartApp;
 import ch.bbcag.jamkart.client.map.objects.car.ClientMyCar;

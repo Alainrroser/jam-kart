@@ -2,11 +2,12 @@ package ch.bbcag.jamkart.client;
 
 import ch.bbcag.jamkart.JamKartApp;
 import ch.bbcag.jamkart.NetErrorMessages;
+import ch.bbcag.jamkart.client.graphics.GamePainter;
 import ch.bbcag.jamkart.client.map.MapLoader;
 import ch.bbcag.jamkart.client.map.objects.car.ClientMyCar;
-import ch.bbcag.jamkart.client.scenes.Navigator;
-import ch.bbcag.jamkart.client.scenes.SceneBackToStart;
-import ch.bbcag.jamkart.client.scenes.SceneType;
+import ch.bbcag.jamkart.scenes.Navigator;
+import ch.bbcag.jamkart.scenes.SceneBackToStart;
+import ch.bbcag.jamkart.scenes.SceneType;
 import ch.bbcag.jamkart.client.map.Map;
 import ch.bbcag.jamkart.client.map.RoadPathTracker;
 import ch.bbcag.jamkart.client.map.objects.*;

@@ -1,4 +1,4 @@
-package ch.bbcag.jamkart.client.scenes;
+package ch.bbcag.jamkart.scenes;
 
 import javafx.scene.Scene;
 import javafx.stage.Stage;

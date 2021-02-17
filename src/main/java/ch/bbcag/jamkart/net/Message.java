@@ -48,8 +48,6 @@ public class Message {
 
                 data.put(key, value);
             }
-
-            System.out.println(dataString);
         } catch (IndexOutOfBoundsException e) {
             System.err.println("couldn't decode message");
             System.out.println(dataString);

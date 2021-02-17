@@ -41,6 +41,16 @@ public class GameNetworking {
         client.sendMessage(timeMessage);
     }
 
+    private void sendMyState() {
+        Message message = new Message(MessageType.UPDATE);
+        message.addValue("x", game.getCar().getPosition().getX());
+        message.addValue("y", game.getCar().getPosition().getY());
+        message.addValue("rotation", game.getCar().getRotation());
+        message.addValue("progress", game.getCar().getProgress());
+
+        client.sendMessage(message);
+    }
+
     private void processMessage(Message message) {
         switch (message.getMessageType()) {
             case INITIAL_STATE:
@@ -137,16 +147,6 @@ public class GameNetworking {
             sendMyState();
             networkTickTimer = 0.0f;
         }
-    }
-
-    private void sendMyState() {
-        Message message = new Message(MessageType.UPDATE);
-        message.addValue("x", game.getCar().getPosition().getX());
-        message.addValue("y", game.getCar().getPosition().getY());
-        message.addValue("rotation", game.getCar().getRotation());
-        message.addValue("progress", game.getCar().getProgress());
-
-        client.sendMessage(message);
     }
 
     public boolean isDisconnected() {

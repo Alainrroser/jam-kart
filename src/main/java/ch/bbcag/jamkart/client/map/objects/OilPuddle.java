@@ -1,6 +1,5 @@
 package ch.bbcag.jamkart.client.map.objects;
 
-import ch.bbcag.jamkart.Constants;
 import ch.bbcag.jamkart.utils.Point;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;

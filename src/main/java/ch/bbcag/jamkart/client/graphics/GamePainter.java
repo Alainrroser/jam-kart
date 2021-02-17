@@ -1,7 +1,8 @@
-package ch.bbcag.jamkart.client;
+package ch.bbcag.jamkart.client.graphics;
 
 import ch.bbcag.jamkart.Constants;
 import ch.bbcag.jamkart.JamKartApp;
+import ch.bbcag.jamkart.client.ClientGame;
 import ch.bbcag.jamkart.client.map.RoadPathTracker;
 import ch.bbcag.jamkart.client.map.objects.GameObject;
 import ch.bbcag.jamkart.client.map.objects.car.ClientCar;
@@ -13,7 +14,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 import java.text.SimpleDateFormat;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -30,12 +30,11 @@ public class GamePainter {
     public GamePainter(ClientGame game, JamKartApp app) {
         this.game = game;
         lobby = new Lobby(app);
-        endScreen = new EndScreen(app);
+        endScreen = new EndScreen();
     }
 
     public void draw(GraphicsContext context) {
         drawMap(context);
-        drawLapIndicator(context);
 
         if (game.getCountdown() != null) {
             drawCountdown(context);
@@ -43,12 +42,13 @@ public class GamePainter {
             drawLobby(context);
         }
 
-        if (game.getCar().isFinished()){
+        if (game.getCar().isFinished()) {
             drawEndScreen(context);
+        } else {
+            drawLapIndicator(context);
+            drawTimer(context);
+            drawRank(context);
         }
-
-        drawTimer(context);
-        drawRank(context);
     }
 
     private void drawMap(GraphicsContext context) {
@@ -86,13 +86,7 @@ public class GamePainter {
 
     private void drawLapIndicator(GraphicsContext context) {
         int currentLap = (game.getRoadPathTracker().getPassedLapCounter() + 1);
-        String lapIndicator;
-
-        if (currentLap <= RoadPathTracker.NUMBER_OF_LAPS) {
-            lapIndicator = "Runde " + currentLap + " / " + RoadPathTracker.NUMBER_OF_LAPS;
-        } else {
-            lapIndicator = "Im Ziel";
-        }
+        String lapIndicator = "Runde " + currentLap + " / " + RoadPathTracker.NUMBER_OF_LAPS;
 
         context.setFont(new Font(40));
         context.setFill(Color.BLACK);

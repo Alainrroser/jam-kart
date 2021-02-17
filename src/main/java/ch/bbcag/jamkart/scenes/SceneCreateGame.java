@@ -1,9 +1,9 @@
-package ch.bbcag.jamkart.client.scenes;
+package ch.bbcag.jamkart.scenes;
 
 import ch.bbcag.jamkart.Constants;
 import ch.bbcag.jamkart.JamKartApp;
 import ch.bbcag.jamkart.client.ClientGame;
-import ch.bbcag.jamkart.client.scenes.validation.Validator;
+import ch.bbcag.jamkart.scenes.validation.Validator;
 import ch.bbcag.jamkart.server.ServerGame;
 import javafx.geometry.Insets;
 import javafx.scene.Group;

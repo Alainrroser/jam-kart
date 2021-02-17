@@ -8,8 +8,8 @@ public class NetErrorMessages {
 
     public static final String CONNECTION_LOST =
             "Verbindung verloren!\n" +
-            "Vermutlich wurde der Server geschlossen\n" +
-            "oder das Spiel läuft bereits.";
+            "Vermutlich wurde der Server geschlossen,\n" +
+            "das Spiel läuft bereits oder die Lobby ist voll.";
 
     public static final String COULD_NOT_CREATE_SERVER =
             "Konnte keinen Server starten!\n" +

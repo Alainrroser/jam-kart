@@ -1,7 +1,7 @@
 package ch.bbcag.jamkart;
 
 import ch.bbcag.jamkart.client.ClientGame;
-import ch.bbcag.jamkart.client.scenes.*;
+import ch.bbcag.jamkart.scenes.*;
 import ch.bbcag.jamkart.server.ServerGame;
 import javafx.application.Application;
 import javafx.scene.image.Image;

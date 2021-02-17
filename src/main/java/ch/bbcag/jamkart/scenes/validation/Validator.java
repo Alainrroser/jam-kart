@@ -1,4 +1,4 @@
-package ch.bbcag.jamkart.client.scenes.validation;
+package ch.bbcag.jamkart.scenes.validation;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
