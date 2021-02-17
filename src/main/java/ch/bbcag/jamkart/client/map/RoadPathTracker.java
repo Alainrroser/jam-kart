@@ -11,7 +11,7 @@ public class RoadPathTracker {
     private int nextPathMarkerIndex = 0;
     private int passedLapCounter = 0;
 
-    public static final int NUMBER_OF_LAPS = 3;
+    public static final int NUMBER_OF_LAPS = 1;
 
     public RoadPathTracker(ClientGame game) {
         this.game = game;
@@ -39,7 +39,11 @@ public class RoadPathTracker {
     }
 
     private void endGame() {
+        game.getCar().finish(game.getTimer().getTime());
+
         game.getTimer().stop();
         game.getNetworking().sendTimeMessage();
+        game.getCar().setControllable(false);
     }
+
 }

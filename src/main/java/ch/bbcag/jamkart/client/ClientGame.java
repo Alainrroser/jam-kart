@@ -1,29 +1,20 @@
 package ch.bbcag.jamkart.client;
 
-import ch.bbcag.jamkart.Constants;
 import ch.bbcag.jamkart.JamKartApp;
 import ch.bbcag.jamkart.NetErrorMessages;
 import ch.bbcag.jamkart.client.map.MapLoader;
+import ch.bbcag.jamkart.client.map.objects.car.ClientMyCar;
 import ch.bbcag.jamkart.client.scenes.Navigator;
 import ch.bbcag.jamkart.client.scenes.SceneBackToStart;
 import ch.bbcag.jamkart.client.scenes.SceneType;
 import ch.bbcag.jamkart.client.map.Map;
-import ch.bbcag.jamkart.client.map.RoadPathMarker;
 import ch.bbcag.jamkart.client.map.RoadPathTracker;
 import ch.bbcag.jamkart.client.map.objects.*;
 import ch.bbcag.jamkart.common.GameLoop;
-import ch.bbcag.jamkart.net.Message;
-import ch.bbcag.jamkart.net.MessageType;
-import ch.bbcag.jamkart.net.client.Client;
 import ch.bbcag.jamkart.utils.Point;
-import javafx.animation.Interpolator;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 
 import java.io.IOException;
-import java.sql.Time;
 
 public class ClientGame {
 
@@ -35,7 +26,7 @@ public class ClientGame {
 
     private Map map;
     private Camera camera;
-    private ClientCar car;
+    private ClientMyCar car;
 
     private RoadPathTracker roadPathTracker;
 
@@ -68,7 +59,7 @@ public class ClientGame {
         MapLoader loader = new MapLoader(map);
         loader.load();
 
-        car = new ClientCar(map, keyEventHandler, this);
+        car = new ClientMyCar(map, keyEventHandler, this);
         map.getGameObjects().add(car);
     }
 
@@ -157,7 +148,7 @@ public class ClientGame {
         networking.closeClient();
     }
 
-    public ClientCar getCar() {
+    public ClientMyCar getCar() {
         return car;
     }
 

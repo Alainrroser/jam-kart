@@ -1,18 +1,12 @@
-package ch.bbcag.jamkart.client.map.objects;
+package ch.bbcag.jamkart.client.map.objects.car;
 
 import ch.bbcag.jamkart.Constants;
-import ch.bbcag.jamkart.utils.DrawingUtils;
 import ch.bbcag.jamkart.utils.MathUtils;
 import ch.bbcag.jamkart.utils.Point;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 import javafx.scene.text.Font;
 
-public class ClientOtherCar extends GameObject {
-    private float rotation;
-    private int id;
-    private Image image;
-    private String name;
+public class ClientOtherCar extends ClientCar {
 
     private Point lastPosition;
     private Point nextPosition;
@@ -21,18 +15,19 @@ public class ClientOtherCar extends GameObject {
     private float interpolation = 0.0f;
 
     public ClientOtherCar(int id, String name) {
-        this.id = id;
-        this.name = name;
-        image = new Image(getClass().getResourceAsStream("/car_" + id + ".png"));
+        setId(id);
+        setName(name);
     }
 
     @Override
     public void draw(GraphicsContext context) {
-        double nameWidth = MathUtils.getTextWidth(name, context.getFont());
+        double nameWidth = MathUtils.getTextWidth(getName(), context.getFont());
+        double textX = getPosition().getX() + SIZE / 2 - nameWidth / 2;
+        double textY = getPosition().getY() + SIZE * 1.2;
 
-        DrawingUtils.drawRotated(context, image, getPosition(), Constants.CAR_SIZE, Constants.CAR_SIZE, rotation);
+        drawCarImage(context);
         context.setFont(new Font(24));
-        context.fillText(name, getPosition().getX() + Constants.CAR_SIZE / 2 - nameWidth / 2, getPosition().getY() + Constants.CAR_SIZE * 1.2);
+        context.fillText(getName(), textX, textY);
     }
 
     @Override
@@ -59,23 +54,8 @@ public class ClientOtherCar extends GameObject {
         this.lastPosition = new Point(getPosition().getX(), getPosition().getY());
         this.nextPosition = nextPosition;
 
-        this.lastRotation = rotation;
+        this.lastRotation = getRotation();
         this.nextRotation = nextRotation;
     }
 
-    public void setRotation(float rotation) {
-        this.rotation = rotation;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Image getImage() {
-        return image;
-    }
 }

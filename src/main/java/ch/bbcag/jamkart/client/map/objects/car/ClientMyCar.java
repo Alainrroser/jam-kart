@@ -1,27 +1,22 @@
-package ch.bbcag.jamkart.client.map.objects;
+package ch.bbcag.jamkart.client.map.objects.car;
 
-import ch.bbcag.jamkart.Constants;
 import ch.bbcag.jamkart.client.ClientGame;
 import ch.bbcag.jamkart.client.KeyEventHandler;
 import ch.bbcag.jamkart.client.map.Map;
-import ch.bbcag.jamkart.net.Message;
-import ch.bbcag.jamkart.net.MessageType;
+import ch.bbcag.jamkart.client.map.objects.BoostPad;
+import ch.bbcag.jamkart.client.map.objects.GameObject;
+import ch.bbcag.jamkart.client.map.objects.OilPuddle;
 import ch.bbcag.jamkart.utils.Direction;
-import ch.bbcag.jamkart.utils.DrawingUtils;
 import ch.bbcag.jamkart.utils.MathUtils;
 import ch.bbcag.jamkart.utils.Point;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 
-public class ClientCar extends GameObject {
+public class ClientMyCar extends ClientCar {
 
     private Map map;
     private KeyEventHandler keyEventHandler;
     private ClientGame clientGame;
 
-    private Image image;
-    private String name;
-    private float rotation = 90.0f;
     private Direction velocity = new Direction();
 
     private float oilTimer = 0.0f;
@@ -45,23 +40,21 @@ public class ClientCar extends GameObject {
 
     private static final float BOOST_PAD_COLLISION_DISTANCE = BoostPad.SIZE;
 
-    public ClientCar(Map map, KeyEventHandler keyEventHandler, ClientGame clientGame) {
+    public ClientMyCar(Map map, KeyEventHandler keyEventHandler, ClientGame clientGame) {
         this.map = map;
         this.keyEventHandler = keyEventHandler;
         this.clientGame = clientGame;
+
+        setRotation(90.0f);
     }
 
     public Point getCenter() {
-        return new Point(getPosition().getX() + Constants.CAR_SIZE / 2, getPosition().getY() + Constants.CAR_SIZE / 2);
+        return new Point(getPosition().getX() + SIZE / 2, getPosition().getY() + SIZE / 2);
     }
 
     @Override
     public void draw(GraphicsContext context) {
-        DrawingUtils.drawRotated(context, image, getPosition(), Constants.CAR_SIZE, Constants.CAR_SIZE, rotation);
-    }
-
-    public float getRotation() {
-        return rotation;
+        drawCarImage(context);
     }
 
     @Override
@@ -81,14 +74,14 @@ public class ClientCar extends GameObject {
     private void updateRotation(float deltaTimeInSec) {
         if(oilTimer <= 0.0f) {
             if(keyEventHandler.isRightPressed()) {
-                rotation += ROTATION_SPEED * deltaTimeInSec;
+                rotate(ROTATION_SPEED * deltaTimeInSec);
             }
 
             if(keyEventHandler.isLeftPressed()) {
-                rotation -= ROTATION_SPEED * deltaTimeInSec;
+                rotate(-ROTATION_SPEED * deltaTimeInSec);
             }
         } else {
-            rotation += ROTATION_SPEED_OILED * (oilTimer / OIL_TIME) * deltaTimeInSec;
+            rotate(ROTATION_SPEED_OILED * (oilTimer / OIL_TIME) * deltaTimeInSec);
         }
     }
 
@@ -96,7 +89,7 @@ public class ClientCar extends GameObject {
         if(oilTimer <= 0.0f) {
             float speed = getSpeed();
             Direction direction = new Direction();
-            direction.setFromAngleAndLength(rotation, speed);
+            direction.setFromAngleAndLength(getRotation(), speed);
             velocity = velocity.add(direction);
 
             applyDamping();
@@ -148,29 +141,14 @@ public class ClientCar extends GameObject {
                 if(distance < BOOST_PAD_COLLISION_DISTANCE && velocity.getLength() < SPEED_BOOST_PAD) {
                     float angle = ((BoostPad) object).getRotation();
                     velocity.setFromAngleAndLength(angle, SPEED_BOOST_PAD);
-                    rotation = angle;
+                    setRotation(angle);
                 }
             }
         }
-    }
-
-    public void setId(int id) {
-        image = new Image(getClass().getResourceAsStream("/car_" + id + ".png"));
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public void setControllable(boolean isControllable) {
         this.isControllable = isControllable;
     }
 
-    public Image getImage() {
-        return image;
-    }
 }

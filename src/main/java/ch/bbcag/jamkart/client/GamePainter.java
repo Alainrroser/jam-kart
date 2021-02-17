@@ -3,7 +3,7 @@ package ch.bbcag.jamkart.client;
 import ch.bbcag.jamkart.Constants;
 import ch.bbcag.jamkart.JamKartApp;
 import ch.bbcag.jamkart.client.map.RoadPathTracker;
-import ch.bbcag.jamkart.client.map.objects.ClientOtherCar;
+import ch.bbcag.jamkart.client.map.objects.car.ClientOtherCar;
 import ch.bbcag.jamkart.client.map.objects.GameObject;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;

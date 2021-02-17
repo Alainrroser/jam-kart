@@ -2,14 +2,12 @@ package ch.bbcag.jamkart.client;
 
 import ch.bbcag.jamkart.Constants;
 import ch.bbcag.jamkart.JamKartApp;
-import ch.bbcag.jamkart.client.map.objects.ClientCar;
-import ch.bbcag.jamkart.client.map.objects.ClientOtherCar;
+import ch.bbcag.jamkart.client.map.objects.car.ClientMyCar;
+import ch.bbcag.jamkart.client.map.objects.car.ClientOtherCar;
 import ch.bbcag.jamkart.utils.MathUtils;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 
 import java.util.List;
@@ -23,7 +21,7 @@ public class EndScreen {
         this.app = app;
     }
 
-    public void drawEndScreen(GraphicsContext context, ClientCar car, List<ClientOtherCar> clientOtherCars) {
+    public void drawEndScreen(GraphicsContext context, ClientMyCar car, List<ClientOtherCar> clientOtherCars) {
         double imgPosX = 650;
         double imgPosY = 110;
         final double MARGIN = 60;

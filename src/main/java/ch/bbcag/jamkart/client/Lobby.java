@@ -1,9 +1,8 @@
 package ch.bbcag.jamkart.client;
 
 import ch.bbcag.jamkart.JamKartApp;
-import ch.bbcag.jamkart.client.map.objects.ClientCar;
-import ch.bbcag.jamkart.client.map.objects.ClientOtherCar;
-import javafx.scene.canvas.Canvas;
+import ch.bbcag.jamkart.client.map.objects.car.ClientMyCar;
+import ch.bbcag.jamkart.client.map.objects.car.ClientOtherCar;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -17,7 +16,7 @@ public class Lobby {
         this.app = app;
     }
 
-    public void drawLobby(GraphicsContext context, ClientCar car, List<ClientOtherCar> clientOtherCars) {
+    public void drawLobby(GraphicsContext context, ClientMyCar car, List<ClientOtherCar> clientOtherCars) {
         double imgPosX = 650;
         double imgPosY = 110;
         final double MARGIN = 60;

@@ -1,7 +1,7 @@
 package ch.bbcag.jamkart.client;
 
 import ch.bbcag.jamkart.Constants;
-import ch.bbcag.jamkart.client.map.objects.ClientOtherCar;
+import ch.bbcag.jamkart.client.map.objects.car.ClientOtherCar;
 import ch.bbcag.jamkart.client.map.objects.GameObject;
 import ch.bbcag.jamkart.net.Message;
 import ch.bbcag.jamkart.net.MessageType;
