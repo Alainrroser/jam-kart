@@ -37,15 +37,23 @@ public class Message {
     }
 
     public void setMapFromString(String dataString) {
-        data.clear();
+        try {
+            data.clear();
 
-        String[] entries = dataString.split("\n");
-        for(String entry : entries) {
-            String[] keyValue = entry.split(":");
-            String key = keyValue[0];
-            String value = keyValue[1];
+            String[] entries = dataString.split("\n");
+            for(String entry : entries) {
+                String[] keyValue = entry.split(":");
+                String key = keyValue[0];
+                String value = keyValue[1];
 
-            data.put(key, value);
+                data.put(key, value);
+            }
+
+            System.out.println(dataString);
+        } catch (IndexOutOfBoundsException e) {
+            System.err.println("couldn't decode message");
+            System.out.println(dataString);
+            // Once got a bug that the server crashed but we weren't able to find out which message had the value ""
         }
     }
 
