@@ -14,8 +14,9 @@ public class MapLoader {
     }
 
     public void load() {
-        map.getRoad().addPathMarker(new RoadPathMarker(new Point(3400, -2050), 500));
-        map.getRoad().addPathMarker(new RoadPathMarker(new Point(-300, -200), 300));
+        map.getRoad().addPathMarker(new RoadPathMarker(new Point(3300, -2050), 500));
+        map.getRoad().addPathMarker(new RoadPathMarker(new Point(1360, -4440), 800));
+        map.getRoad().addPathMarker(new RoadPathMarker(new Point(0, 200), 300));
 
         map.getRoad().addPoint(new Point(200, 200));
         map.getGameObjects().add(new BoostPad(new Point(700, 150), 90));

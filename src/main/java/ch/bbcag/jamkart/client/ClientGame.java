@@ -136,8 +136,7 @@ public class ClientGame {
         }
         roadPathTracker.update();
 
-        camera.setX(car.getPosition().getX() - (float) (canvas.getWidth() / 2) + Constants.CAR_SIZE / 2);
-        camera.setY(car.getPosition().getY() - (float) (canvas.getHeight() / 2) + Constants.CAR_SIZE / 2);
+        camera.drawCamera(car, canvas);
 
         if (networking.isDisconnected()) {
             stop();
