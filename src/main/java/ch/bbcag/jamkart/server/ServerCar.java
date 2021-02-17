@@ -9,6 +9,7 @@ public class ServerCar {
     private Connection connection;
     private int id;
     private String name;
+    private int progress;
 
     public ServerCar(Connection connection, int id, String name) {
         this.connection = connection;
@@ -30,6 +31,14 @@ public class ServerCar {
 
     public void setRotation(float rotation) {
         this.rotation = rotation;
+    }
+
+    public int getProgress() {
+        return progress;
+    }
+
+    public void setProgress(int progress) {
+        this.progress = progress;
     }
 
     public Connection getConnection() {

@@ -70,4 +70,12 @@ public class KeyEventHandler implements EventHandler<KeyEvent> {
         return isSpacePressed;
     }
 
+    public void reset() {
+        isForwardPressed = false;
+        isBackwardPressed = false;
+        isLeftPressed = false;
+        isRightPressed = false;
+        isSpacePressed = false;
+    }
+
 }

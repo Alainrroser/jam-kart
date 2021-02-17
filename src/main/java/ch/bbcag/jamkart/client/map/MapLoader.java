@@ -14,25 +14,25 @@ public class MapLoader {
     }
 
     public void load() {
-        map.getRoad().addPathMarker(new RoadPathMarker(new Point(1100, 150), 300));
-        map.getRoad().addPathMarker(new RoadPathMarker(new Point(2100, 50), 300));
-        map.getRoad().addPathMarker(new RoadPathMarker(new Point(2300, -500), 300));
-        map.getRoad().addPathMarker(new RoadPathMarker(new Point(2000, -1100), 300));
-        map.getRoad().addPathMarker(new RoadPathMarker(new Point(2900, -1700), 300));
-        map.getRoad().addPathMarker(new RoadPathMarker(new Point(3050, -2450), 300));
-        map.getRoad().addPathMarker(new RoadPathMarker(new Point(3300, -3000), 300));
-        map.getRoad().addPathMarker(new RoadPathMarker(new Point(3600, -3800), 300));
-        map.getRoad().addPathMarker(new RoadPathMarker(new Point(3300, -4600), 300));
-        map.getRoad().addPathMarker(new RoadPathMarker(new Point(2000, -4600), 300));
-        map.getRoad().addPathMarker(new RoadPathMarker(new Point(1400, -4100), 300));
-        map.getRoad().addPathMarker(new RoadPathMarker(new Point(1000, -4700), 300));
-        map.getRoad().addPathMarker(new RoadPathMarker(new Point(750, -5200), 300));
-        map.getRoad().addPathMarker(new RoadPathMarker(new Point(400, -4200), 300));
-        map.getRoad().addPathMarker(new RoadPathMarker(new Point(430, -3300), 300));
-        map.getRoad().addPathMarker(new RoadPathMarker(new Point(200, -2500), 300));
-        map.getRoad().addPathMarker(new RoadPathMarker(new Point(150, -1650), 300));
-        map.getRoad().addPathMarker(new RoadPathMarker(new Point(100, -1000), 300));
-        map.getRoad().addPathMarker(new RoadPathMarker(new Point(0, 200), 300));
+        map.getRoad().addPathMarker(new RoadPathMarker(new Point(1100, 150),400));
+        map.getRoad().addPathMarker(new RoadPathMarker(new Point(2100, 50), 400));
+        map.getRoad().addPathMarker(new RoadPathMarker(new Point(2400, -500), 400));
+        map.getRoad().addPathMarker(new RoadPathMarker(new Point(2000, -1100), 400));
+        map.getRoad().addPathMarker(new RoadPathMarker(new Point(2900, -1700), 400));
+        map.getRoad().addPathMarker(new RoadPathMarker(new Point(3050, -2450), 400));
+        map.getRoad().addPathMarker(new RoadPathMarker(new Point(3300, -3000), 400));
+        map.getRoad().addPathMarker(new RoadPathMarker(new Point(3600, -3800), 400));
+        map.getRoad().addPathMarker(new RoadPathMarker(new Point(3300, -4600), 400));
+        map.getRoad().addPathMarker(new RoadPathMarker(new Point(2000, -4600), 400));
+        map.getRoad().addPathMarker(new RoadPathMarker(new Point(1400, -4100), 400));
+        map.getRoad().addPathMarker(new RoadPathMarker(new Point(1000, -4700), 400));
+        map.getRoad().addPathMarker(new RoadPathMarker(new Point(750, -5200), 400));
+        map.getRoad().addPathMarker(new RoadPathMarker(new Point(400, -4200), 400));
+        map.getRoad().addPathMarker(new RoadPathMarker(new Point(430, -3300), 400));
+        map.getRoad().addPathMarker(new RoadPathMarker(new Point(200, -2500), 400));
+        map.getRoad().addPathMarker(new RoadPathMarker(new Point(150, -1650), 700));
+        map.getRoad().addPathMarker(new RoadPathMarker(new Point(-100, -1000), 600));
+        map.getRoad().addPathMarker(new RoadPathMarker(new Point(0, 200), 400));
 
         map.getRoad().addPoint(new Point(200, 200));
         map.getGameObjects().add(new BoostPad(new Point(700, 150), 90));

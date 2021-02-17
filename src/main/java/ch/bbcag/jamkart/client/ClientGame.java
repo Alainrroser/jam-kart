@@ -68,6 +68,7 @@ public class ClientGame {
         createClient(ip, port);
 
         if (networking != null) {
+            keyEventHandler.reset();
             painter = new GamePainter(this, app);
             camera = new Camera(new Point(0, 0));
             timer = new GameTimer();
@@ -82,6 +83,8 @@ public class ClientGame {
             networking = new GameNetworking(this);
             networking.startClient(ip, port);
         } catch (IOException e) {
+            networking = null;
+
             String message = NetErrorMessages.COULD_NOT_INIT_CONNECTION;
             ((SceneBackToStart) navigator.getScene(SceneType.BACK_TO_START)).setMessage(message);
             navigator.navigateTo(SceneType.BACK_TO_START, true);
@@ -136,12 +139,22 @@ public class ClientGame {
             ((SceneBackToStart) navigator.getScene(SceneType.BACK_TO_START)).setMessage(message);
             navigator.navigateTo(SceneType.BACK_TO_START, true);
 
-            System.err.println("connection lost");
+            System.err.println("connection to server lost");
         } else {
             networking.update(deltaTimeInSec);
         }
-    }
 
+        if (car.isFinished()) {
+            if (keyEventHandler.isSpacePressed()) {
+                if (app.getServerGame() != null) {
+                    app.getServerGame().stop();
+                }
+
+                stop();
+                navigator.navigateTo(SceneType.START, true);
+            }
+        }
+    }
 
     public void stop() {
         loop.stop();

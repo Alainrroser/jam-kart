@@ -122,7 +122,7 @@ public class SceneCreateGame extends Scene {
     private void createGame() {
         int port = Integer.parseInt(inputPort.getText());
 
-        ServerGame serverGame = new ServerGame(app.getNavigator());
+        ServerGame serverGame = new ServerGame(app, app.getNavigator());
 
         SceneGame newScene = (SceneGame) app.getNavigator().getScene(SceneType.GAME);
         ClientGame clientGame = new ClientGame(newScene.getCanvas(), newScene.getKeyEventHandler(), app.getNavigator(), app);
@@ -131,9 +131,11 @@ public class SceneCreateGame extends Scene {
         app.getNavigator().navigateTo(SceneType.GAME, true);
 
         serverGame.start(port);
-        app.setServerGame(serverGame);
 
-        clientGame.start("localhost", port, inputName.getText());
-        app.setClientGame(clientGame);
+        if(serverGame.getServer() != null) {
+            clientGame.start("localhost", port, inputName.getText());
+        } else {
+            System.out.println("server hasn't been created, client won't be started");
+        }
     }
 }

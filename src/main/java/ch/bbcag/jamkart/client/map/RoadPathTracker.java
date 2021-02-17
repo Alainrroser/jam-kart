@@ -26,6 +26,7 @@ public class RoadPathTracker {
         float distance = game.getCar().getPosition().getDistanceTo(nextMarker.getPosition());
         if(distance <= nextMarker.getRadius()) {
             nextPathMarkerIndex++;
+            game.getCar().setProgress(game.getCar().getProgress() + 1);
         }
 
         if(nextPathMarkerIndex == game.getMap().getRoad().getPathMarkers().size()) {

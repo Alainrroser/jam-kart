@@ -5,10 +5,13 @@ import ch.bbcag.jamkart.net.Connection;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Server extends Thread {
     private ServerSocket serverSocket;
     private ServerMessageHandler serverMessageHandler;
+    private List<Connection> connections = new CopyOnWriteArrayList<>();
 
     public Server(int port) throws IOException {
         serverSocket = new ServerSocket(port);
@@ -16,6 +19,17 @@ public class Server extends Thread {
 
     @Override
     public void run() {
+        new Thread(() -> {
+            while (!serverSocket.isClosed()) {
+                for (Connection connection : connections) {
+                    if (connection.isDisconnected()) {
+                        System.out.println("client disconnected from server");
+                        connections.remove(connection);
+                    }
+                }
+            }
+        }).start();
+
         try {
             while (!serverSocket.isClosed()) {
                 Socket clientSocket = serverSocket.accept();
@@ -26,9 +40,10 @@ public class Server extends Thread {
                     }
                 });
                 connection.start();
+                connections.add(connection);
             }
         } catch (IOException e) {
-            System.err.println("Couldn't accept new client: " + e.getMessage());
+            System.err.println("couldn't accept new client: " + e.getMessage());
         }
     }
 
@@ -40,11 +55,20 @@ public class Server extends Thread {
         this.serverMessageHandler = serverMessageHandler;
     }
 
+    public boolean isRunning() {
+        return !serverSocket.isClosed();
+    }
+
     public void close() {
+        for (Connection connection : connections) {
+            connection.close();
+        }
+
         try {
             serverSocket.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 }

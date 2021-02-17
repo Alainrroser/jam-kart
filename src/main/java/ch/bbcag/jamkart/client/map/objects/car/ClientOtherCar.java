@@ -21,12 +21,13 @@ public class ClientOtherCar extends ClientCar {
 
     @Override
     public void draw(GraphicsContext context) {
+        context.setFont(new Font(24));
+
         double nameWidth = MathUtils.getTextWidth(getName(), context.getFont());
         double textX = getPosition().getX() + SIZE / 2 - nameWidth / 2;
         double textY = getPosition().getY() + SIZE * 1.2;
 
         drawCarImage(context);
-        context.setFont(new Font(24));
         context.fillText(getName(), textX, textY);
     }
 

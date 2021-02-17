@@ -1,6 +1,7 @@
 package ch.bbcag.jamkart.server;
 
 import ch.bbcag.jamkart.Constants;
+import ch.bbcag.jamkart.JamKartApp;
 import ch.bbcag.jamkart.NetErrorMessages;
 import ch.bbcag.jamkart.client.scenes.Navigator;
 import ch.bbcag.jamkart.client.scenes.SceneBackToStart;
@@ -18,10 +19,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ServerGame {
 
+    private JamKartApp app;
     private Navigator navigator;
 
     private Server server;
-    private boolean startMessageSent = false;
+    private boolean startMessageSent;
 
     private List<ServerCar> carList = new CopyOnWriteArrayList<>();
 
@@ -30,19 +32,27 @@ public class ServerGame {
 
     private float networkTickTimer = 0;
 
-    public ServerGame(Navigator navigator) {
+    public ServerGame(JamKartApp app, Navigator navigator) {
+        this.app = app;
         this.navigator = navigator;
-
-        for (int i = 0; i < NUMBER_OF_PLAYERS; i++) {
-            availableIdList.add(i);
-        }
     }
 
     public void start(int port) {
+        startMessageSent = false;
+        carList.clear();
+
+        availableIdList.clear();
+        for (int i = 0; i < NUMBER_OF_PLAYERS; i++) {
+            availableIdList.add(i);
+        }
+
         createServer(port);
 
         if(server != null) {
+            app.setServerGame(this);
             createLoop();
+        } else {
+            stop();
         }
     }
 
@@ -51,6 +61,8 @@ public class ServerGame {
             server = new Server(port);
             server.setServerMessageHandler(this::processMessage);
             server.start();
+
+            System.out.println("server started");
         } catch (IOException e) {
             String message = NetErrorMessages.COULD_NOT_CREATE_SERVER;
             ((SceneBackToStart) navigator.getScene(SceneType.BACK_TO_START)).setMessage(message);
@@ -95,6 +107,9 @@ public class ServerGame {
                     // We don't allow connections if the game has already started or
                     // if there are no available ids left
                     connection.close();
+                    System.out.println("new player rejected, there are no ids left or the game has already started");
+                    System.out.println(startMessageSent);
+                    System.out.println(availableIdList);
                 } else {
                     int y = availableIdList.get(0) * 50 + 65;
 
@@ -116,6 +131,7 @@ public class ServerGame {
                     if (car.getConnection() == connection) {
                         car.setPosition(new Point(Float.parseFloat(message.getValue("x")), Float.parseFloat(message.getValue("y"))));
                         car.setRotation(Float.parseFloat(message.getValue("rotation")));
+                        car.setProgress(Integer.parseInt(message.getValue("progress")));
 
                         // Send the cars state to the other players
                         Message serverUpdateMessage = createUpdateMessageForCar(car);
@@ -144,12 +160,18 @@ public class ServerGame {
         message.addValue("rotation", car.getRotation());
         message.addValue("name", car.getName());
         message.addValue("id", car.getId());
+        message.addValue("progress", car.getProgress());
 
         return message;
     }
 
     public void stop() {
-        server.close();
+        System.out.println("closing server...");
+        app.setServerGame(null);
+
+        if (server != null) {
+            server.close();
+        }
     }
 
     public void sendMessageStartGame() {
@@ -168,6 +190,10 @@ public class ServerGame {
                 otherCar.getConnection().sendMessage(message);
             }
         }
+    }
+
+    public Server getServer() {
+        return server;
     }
 
 }

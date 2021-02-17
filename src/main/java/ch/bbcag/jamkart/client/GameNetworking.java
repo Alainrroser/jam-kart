@@ -88,7 +88,9 @@ public class GameNetworking {
         float x = Float.parseFloat(message.getValue("x"));
         float y = Float.parseFloat(message.getValue("y"));
         float rotation = Float.parseFloat(message.getValue("rotation"));
+        int progress = Integer.parseInt(message.getValue("progress"));
         otherCar.interpolateState(new Point(x, y), rotation);
+        otherCar.setProgress(progress);
     }
 
     private void processDisconnected(Message message) {
@@ -142,6 +144,7 @@ public class GameNetworking {
         message.addValue("x", game.getCar().getPosition().getX());
         message.addValue("y", game.getCar().getPosition().getY());
         message.addValue("rotation", game.getCar().getRotation());
+        message.addValue("progress", game.getCar().getProgress());
 
         client.sendMessage(message);
     }

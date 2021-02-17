@@ -6,12 +6,14 @@ import ch.bbcag.jamkart.client.map.RoadPathTracker;
 import ch.bbcag.jamkart.client.map.objects.GameObject;
 import ch.bbcag.jamkart.client.map.objects.car.ClientCar;
 import ch.bbcag.jamkart.client.map.objects.car.ClientOtherCar;
+import ch.bbcag.jamkart.utils.MathUtils;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -46,6 +48,7 @@ public class GamePainter {
         }
 
         drawTimer(context);
+        drawRank(context);
     }
 
     private void drawMap(GraphicsContext context) {
@@ -104,6 +107,22 @@ public class GamePainter {
         context.setFont(new Font(40));
         context.setFill(Color.BLACK);
         context.fillText(timer, 20, 100);
+    }
+
+    private void drawRank(GraphicsContext context) {
+        context.setFont(new Font(80));
+
+        List<ClientCar> cars = game.getMap().getAllGameObjectsFromType(ClientCar.class);
+        cars.sort((c1, c2) -> Integer.compare(c2.getProgress(), c1.getProgress()));
+
+        int index = cars.indexOf(game.getCar());
+        int rank = index + 1;
+
+        String text = rank + " / " + cars.size();
+        double textWidth = MathUtils.getTextWidth(text, context.getFont());
+
+        context.setFill(Color.BLACK);
+        context.fillText(text, context.getCanvas().getWidth() - textWidth - 20, 100);
     }
 
     private void drawCountdown(GraphicsContext context) {

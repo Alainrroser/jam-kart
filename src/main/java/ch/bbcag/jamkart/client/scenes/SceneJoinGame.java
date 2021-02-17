@@ -148,6 +148,5 @@ public class SceneJoinGame extends Scene {
         app.getNavigator().navigateTo(SceneType.GAME, true);
 
         clientGame.start(inputIp.getText(), port, inputName.getText());
-        app.setClientGame(clientGame);
     }
 }

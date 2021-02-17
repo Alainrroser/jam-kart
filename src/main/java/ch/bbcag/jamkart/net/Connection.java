@@ -29,7 +29,7 @@ public class Connection extends Thread {
                 throw new IllegalArgumentException("The message has to contain a type");
             }
         } catch (IOException e) {
-            System.err.println("Couldn't write to socket");
+            System.err.println("couldn't write to socket: " + e.getMessage());
             disconnected = true;
         }
     }
@@ -52,7 +52,7 @@ public class Connection extends Thread {
                 readMessage();
             }
         } catch (IOException e) {
-            System.err.println("Couldn't read from socket");
+            System.err.println("couldn't read from socket: " + e.getMessage());
             disconnected = true;
         }
     }

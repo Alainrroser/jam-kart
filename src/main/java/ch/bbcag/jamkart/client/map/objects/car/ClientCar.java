@@ -16,6 +16,8 @@ public abstract class ClientCar extends GameObject {
     private boolean finished = false;
     private float finishTime = 0.0f;
 
+    private int progress = 0;
+
     public static final float SIZE = 100.0f;
 
     public String getName() {
@@ -62,6 +64,14 @@ public abstract class ClientCar extends GameObject {
     public void finish(float time) {
         this.finished = true;
         this.finishTime = time;
+    }
+
+    public int getProgress() {
+        return progress;
+    }
+
+    public void setProgress(int progress) {
+        this.progress = progress;
     }
 
     protected void drawCarImage(GraphicsContext context) {
