@@ -1,6 +1,5 @@
 package ch.bbcag.jamkart.client.map.objects.car;
 
-import ch.bbcag.jamkart.client.ClientGame;
 import ch.bbcag.jamkart.client.KeyEventHandler;
 import ch.bbcag.jamkart.client.map.Map;
 import ch.bbcag.jamkart.client.map.objects.BoostPad;
@@ -15,7 +14,6 @@ public class ClientMyCar extends ClientCar {
 
     private Map map;
     private KeyEventHandler keyEventHandler;
-    private ClientGame clientGame;
 
     private Direction velocity = new Direction();
 
@@ -40,10 +38,9 @@ public class ClientMyCar extends ClientCar {
 
     private static final float BOOST_PAD_COLLISION_DISTANCE = BoostPad.SIZE;
 
-    public ClientMyCar(Map map, KeyEventHandler keyEventHandler, ClientGame clientGame) {
+    public ClientMyCar(Map map, KeyEventHandler keyEventHandler) {
         this.map = map;
         this.keyEventHandler = keyEventHandler;
-        this.clientGame = clientGame;
 
         setRotation(90.0f);
     }
@@ -96,6 +93,8 @@ public class ClientMyCar extends ClientCar {
         } else {
             velocity = velocity.normalized().scale(SPEED_OILED * (oilTimer / OIL_TIME));
         }
+
+        ristrictMovementByBorder();
 
         Direction movement = velocity.scale(deltaTimeInSec);
         getPosition().moveInDirection(movement);
@@ -151,4 +150,21 @@ public class ClientMyCar extends ClientCar {
         this.isControllable = isControllable;
     }
 
+    public void ristrictMovementByBorder() {
+        if (velocity.getY() > 0 && getPosition().getY() > 2500) {
+            velocity = new Direction(velocity.getX(), 0);
+        }
+
+        if (velocity.getX() > 0 && getPosition().getX() > 2500) {
+            velocity = new Direction(0, velocity.getY());
+        }
+
+        if (velocity.getY() < 0 && getPosition().getY() < -2500) {
+            velocity = new Direction(velocity.getX(), 0);
+        }
+
+        if (velocity.getX() < 0 && getPosition().getX() < -2500) {
+            velocity = new Direction(0, velocity.getY());
+        }
+    }
 }

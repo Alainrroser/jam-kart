@@ -59,7 +59,7 @@ public class ClientGame {
         MapLoader loader = new MapLoader(map);
         loader.load();
 
-        car = new ClientMyCar(map, keyEventHandler, this);
+        car = new ClientMyCar(map, keyEventHandler);
         map.getGameObjects().add(car);
     }
 

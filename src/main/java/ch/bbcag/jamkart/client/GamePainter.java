@@ -3,16 +3,15 @@ package ch.bbcag.jamkart.client;
 import ch.bbcag.jamkart.Constants;
 import ch.bbcag.jamkart.JamKartApp;
 import ch.bbcag.jamkart.client.map.RoadPathTracker;
+import ch.bbcag.jamkart.client.map.objects.GameObject;
 import ch.bbcag.jamkart.client.map.objects.car.ClientCar;
 import ch.bbcag.jamkart.client.map.objects.car.ClientOtherCar;
-import ch.bbcag.jamkart.client.map.objects.GameObject;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 import java.text.SimpleDateFormat;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
