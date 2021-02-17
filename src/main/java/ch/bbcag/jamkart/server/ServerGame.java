@@ -126,9 +126,9 @@ public class ServerGame {
             case TIME:
                 for (ServerCar car : carList) {
                     if (car.getConnection() == connection) {
-                        String time = message.getValue("time");
                         Message timeMessage = new Message(MessageType.TIME);
-                        timeMessage.addValue("time", time);
+                        timeMessage.addValue("id", car.getId());
+                        timeMessage.addValue("time", message.getValue("time"));
                         sendMessageToOtherCars(car, timeMessage);
                     }
                 }

@@ -55,6 +55,9 @@ public class GameNetworking {
             case START_GAME:
                 processStartGame(message);
                 break;
+            case TIME:
+                processTime(message);
+                break;
             default:
                 break;
         }
@@ -72,14 +75,7 @@ public class GameNetworking {
         int id = Integer.parseInt(message.getValue("id"));
 
         // Find the other car that this id belongs to
-        ClientOtherCar otherCar = null;
-        for (GameObject gameObject : game.getMap().getGameObjects()) {
-            if (gameObject instanceof ClientOtherCar) {
-                if (((ClientOtherCar) gameObject).getId() == id) {
-                    otherCar = (ClientOtherCar) gameObject;
-                }
-            }
-        }
+        ClientOtherCar otherCar = getOtherCarFromId(id);
 
         // Create the other car if the id couldn't be found
         if (otherCar == null) {
@@ -110,6 +106,29 @@ public class GameNetworking {
         game.startCountdown();
     }
 
+    private void processTime(Message message) {
+        int id = Integer.parseInt(message.getValue("id"));
+        ClientOtherCar otherCar = getOtherCarFromId(id);
+
+        if(otherCar != null) {
+            float time = Float.parseFloat(message.getValue("time"));
+            otherCar.finish(time);
+            System.out.println("other car finished");
+        }
+    }
+
+    private ClientOtherCar getOtherCarFromId(int id) {
+        for (GameObject gameObject : game.getMap().getGameObjects()) {
+            if (gameObject instanceof ClientOtherCar) {
+                if (((ClientOtherCar) gameObject).getId() == id) {
+                    return (ClientOtherCar) gameObject;
+                }
+            }
+        }
+
+        return null;
+    }
+
     public void update(float deltaTimeInSec) {
         networkTickTimer += deltaTimeInSec;
         if (networkTickTimer >= Constants.NETWORK_TICK_TIME) {
@@ -128,11 +147,13 @@ public class GameNetworking {
     }
 
     public boolean isDisconnected() {
-        return client.isDisconnected();
+        return client == null || client.isDisconnected();
     }
 
     public void closeClient() {
-        client.close();
+        if (client != null) {
+            client.close();
+        }
     }
 
 }
