@@ -9,7 +9,7 @@ public class RoadPathTracker {
     private int nextPathMarkerIndex = 0;
     private int passedLapCounter = 0;
 
-    public static final int NUMBER_OF_LAPS = 1;
+    public static final int NUMBER_OF_LAPS = 3;
 
     public RoadPathTracker(ClientGame game) {
         this.game = game;
