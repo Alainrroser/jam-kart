@@ -16,12 +16,14 @@ import ch.bbcag.jamkart.net.Message;
 import ch.bbcag.jamkart.net.MessageType;
 import ch.bbcag.jamkart.net.client.Client;
 import ch.bbcag.jamkart.utils.Point;
+import javafx.animation.Interpolator;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 import java.io.IOException;
+import java.sql.Time;
 
 public class ClientGame {
 
@@ -29,7 +31,7 @@ public class ClientGame {
     private KeyEventHandler keyEventHandler;
     private Navigator navigator;
 
-    private Client client;
+    private GameNetworking networking;
 
     private Map map;
     private Camera camera;
@@ -41,6 +43,7 @@ public class ClientGame {
     private GamePainter painter;
 
     private Countdown countdown;
+    private GameTimer timer;
 
     private JamKartApp app;
 
@@ -73,76 +76,26 @@ public class ClientGame {
         car.setName(name);
         createClient(ip, port);
 
-        if (client != null) {
+        if (networking != null) {
             painter = new GamePainter(this, app);
-            camera = new Camera(new Point(100, 0));
-            roadPathTracker = new RoadPathTracker(map.getRoad(), car);
+            camera = new Camera(new Point(0, 0));
+            timer = new GameTimer();
+            roadPathTracker = new RoadPathTracker(this);
+
             createLoop();
         }
     }
 
     private void createClient(String ip, int port) {
         try {
-            client = new Client(ip, port);
-            client.setMessageHandler(this::processMessage);
-            client.start();
-            sendJoinMessage();
+            networking = new GameNetworking(this);
+            networking.startClient(ip, port);
         } catch (IOException e) {
             String message = NetErrorMessages.COULD_NOT_INIT_CONNECTION;
             ((SceneBackToStart) navigator.getScene(SceneType.BACK_TO_START)).setMessage(message);
             navigator.navigateTo(SceneType.BACK_TO_START, true);
 
             System.err.println("couldn't connect to server");
-        }
-    }
-
-    private void sendJoinMessage() {
-        Message message = new Message(MessageType.JOIN_GAME);
-        message.addValue("name", car.getName());
-        client.sendMessage(message);
-    }
-
-    private void processMessage(Message message) {
-        switch (message.getMessageType()) {
-            case INITIAL_STATE:
-                car.setId(Integer.parseInt(message.getValue("id")));
-                car.setPosition(new Point(Integer.parseInt(message.getValue("x")), Integer.parseInt(message.getValue("y"))));
-                break;
-            case UPDATE:
-                int id = Integer.parseInt(message.getValue("id"));
-                ClientOtherCar otherCar = null;
-
-                for (GameObject gameObject : map.getGameObjects()) {
-                    if (gameObject instanceof ClientOtherCar) {
-                        if (((ClientOtherCar) gameObject).getId() == id) {
-                            otherCar = (ClientOtherCar) gameObject;
-                        }
-                    }
-                }
-
-                if (otherCar == null) {
-                    otherCar = new ClientOtherCar(id, message.getValue("name"));
-                    System.out.println(otherCar.getName());
-                    map.getGameObjects().add(otherCar);
-                }
-
-                otherCar.setPosition(new Point(Float.parseFloat(message.getValue("x")), Float.parseFloat(message.getValue("y"))));
-                otherCar.setRotation(Float.parseFloat(message.getValue("rotation")));
-                break;
-            case DISCONNECTED:
-                int disconnectedId = Integer.parseInt(message.getValue("id"));
-                for (GameObject gameObject : map.getGameObjects()) {
-                    if (gameObject instanceof ClientOtherCar) {
-                        if (((ClientOtherCar) gameObject).getId() == disconnectedId) {
-                            map.getGameObjects().remove(gameObject);
-                        }
-                    }
-                }
-                break;
-            case START_GAME:
-                countdown = new Countdown(this);
-            default:
-                break;
         }
     }
 
@@ -157,6 +110,14 @@ public class ClientGame {
         loop.start();
     }
 
+    public void startCountdown() {
+        countdown = new Countdown(this);
+    }
+
+    public void startTimer() {
+        timer.start();
+    }
+
     private void update(float deltaTimeInSec) {
         if (app.getServerGame() != null && countdown == null) {
             if (keyEventHandler.isSpacePressed()) {
@@ -168,6 +129,8 @@ public class ClientGame {
             countdown.update(deltaTimeInSec);
         }
 
+        timer.update(deltaTimeInSec);
+
         for (GameObject gameObject : map.getGameObjects()) {
             gameObject.update(deltaTimeInSec);
         }
@@ -176,7 +139,7 @@ public class ClientGame {
         camera.setX(car.getPosition().getX() - (float) (canvas.getWidth() / 2) + Constants.CAR_SIZE / 2);
         camera.setY(car.getPosition().getY() - (float) (canvas.getHeight() / 2) + Constants.CAR_SIZE / 2);
 
-        if (client.isDisconnected()) {
+        if (networking.isDisconnected()) {
             stop();
 
             String message = NetErrorMessages.CONNECTION_LOST;
@@ -184,17 +147,15 @@ public class ClientGame {
             navigator.navigateTo(SceneType.BACK_TO_START, true);
 
             System.err.println("connection lost");
+        } else {
+            networking.update(deltaTimeInSec);
         }
     }
 
 
     public void stop() {
         loop.stop();
-        client.close();
-    }
-
-    public Client getClient() {
-        return client;
+        networking.closeClient();
     }
 
     public ClientCar getCar() {
@@ -211,6 +172,10 @@ public class ClientGame {
 
     public Countdown getCountdown() {
         return countdown;
+    }
+
+    public GameTimer getTimer() {
+        return timer;
     }
 
     public RoadPathTracker getRoadPathTracker() {

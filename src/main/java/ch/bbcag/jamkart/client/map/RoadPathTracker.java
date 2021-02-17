@@ -1,18 +1,18 @@
 package ch.bbcag.jamkart.client.map;
 
-import ch.bbcag.jamkart.client.map.objects.ClientCar;
+import ch.bbcag.jamkart.client.ClientGame;
 
 public class RoadPathTracker {
 
-    private Road road;
-    private ClientCar car;
+    private ClientGame game;
 
     private int nextPathMarkerIndex = 0;
     private int passedLapCounter = 0;
 
-    public RoadPathTracker(Road road, ClientCar car) {
-        this.road = road;
-        this.car = car;
+    public static final int NUMBER_OF_LAPS = 3;
+
+    public RoadPathTracker(ClientGame game) {
+        this.game = game;
     }
 
     public int getPassedLapCounter() {
@@ -20,15 +20,23 @@ public class RoadPathTracker {
     }
 
     public void update() {
-        RoadPathMarker nextMarker = road.getPathMarkers().get(nextPathMarkerIndex);
-        float distance = car.getPosition().getDistanceTo(nextMarker.getPosition());
+        RoadPathMarker nextMarker = game.getMap().getRoad().getPathMarkers().get(nextPathMarkerIndex);
+        float distance = game.getCar().getPosition().getDistanceTo(nextMarker.getPosition());
         if(distance <= nextMarker.getRadius()) {
             nextPathMarkerIndex++;
         }
 
-        if(nextPathMarkerIndex == road.getPathMarkers().size()) {
+        if(nextPathMarkerIndex == game.getMap().getRoad().getPathMarkers().size()) {
             passedLapCounter++;
             nextPathMarkerIndex = 0;
+
+            if(passedLapCounter >= NUMBER_OF_LAPS) {
+                endGame();
+            }
         }
+    }
+
+    private void endGame() {
+        game.getTimer().stop();
     }
 }

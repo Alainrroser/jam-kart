@@ -24,7 +24,6 @@ public class ClientCar extends GameObject {
     private float rotation = 90.0f;
     private Direction velocity = new Direction();
 
-    private float timer = 0.0f;
     private float oilTimer = 0.0f;
 
     private boolean isControllable = false;
@@ -76,12 +75,6 @@ public class ClientCar extends GameObject {
             }
 
             checkCollisions();
-        }
-
-        timer += deltaTimeInSec;
-        if (timer >= Constants.NETWORK_TICK_TIME) {
-            sendMyState();
-            timer = 0.0f;
         }
     }
 
@@ -159,15 +152,6 @@ public class ClientCar extends GameObject {
                 }
             }
         }
-    }
-
-    private void sendMyState() {
-        Message message = new Message(MessageType.UPDATE);
-        message.addValue("x", getPosition().getX());
-        message.addValue("y", getPosition().getY());
-        message.addValue("rotation", getRotation());
-
-        clientGame.getClient().sendMessage(message);
     }
 
     public void setId(int id) {

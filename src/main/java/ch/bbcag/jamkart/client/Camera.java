@@ -1,5 +1,6 @@
 package ch.bbcag.jamkart.client;
 
+import ch.bbcag.jamkart.client.map.objects.GameObject;
 import ch.bbcag.jamkart.utils.Point;
 
 public class Camera {

@@ -9,6 +9,7 @@ import javafx.scene.text.Text;
 public class Countdown {
     private ClientGame game;
     private float timer = 3;
+    private boolean finished = false;
 
     public Countdown(ClientGame game) {
         this.game = game;
@@ -40,8 +41,10 @@ public class Countdown {
     public void update(float deltaTimeInSec) {
         timer -= deltaTimeInSec;
 
-        if(timer <= 0.0f) {
+        if(timer <= 0.0f && !finished) {
             game.getCar().setControllable(true);
+            game.startTimer();
+            finished = true;
         }
     }
 }
