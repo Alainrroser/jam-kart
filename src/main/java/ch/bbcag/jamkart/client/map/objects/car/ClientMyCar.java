@@ -151,19 +151,19 @@ public class ClientMyCar extends ClientCar {
     }
 
     public void ristrictMovementByBorder() {
-        if (velocity.getY() > 0 && getPosition().getY() > 2500) {
+        if (velocity.getY() > 0 && getPosition().getY() > 5500) {
             velocity = new Direction(velocity.getX(), 0);
         }
 
-        if (velocity.getX() > 0 && getPosition().getX() > 2500) {
+        if (velocity.getX() > 0 && getPosition().getX() > 5500) {
             velocity = new Direction(0, velocity.getY());
         }
 
-        if (velocity.getY() < 0 && getPosition().getY() < -2500) {
+        if (velocity.getY() < 0 && getPosition().getY() < -5500) {
             velocity = new Direction(velocity.getX(), 0);
         }
 
-        if (velocity.getX() < 0 && getPosition().getX() < -2500) {
+        if (velocity.getX() < 0 && getPosition().getX() < -5500) {
             velocity = new Direction(0, velocity.getY());
         }
     }
