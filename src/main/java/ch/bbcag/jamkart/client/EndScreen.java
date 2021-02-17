@@ -2,6 +2,7 @@ package ch.bbcag.jamkart.client;
 
 import ch.bbcag.jamkart.Constants;
 import ch.bbcag.jamkart.JamKartApp;
+import ch.bbcag.jamkart.client.map.objects.car.ClientCar;
 import ch.bbcag.jamkart.client.map.objects.car.ClientMyCar;
 import ch.bbcag.jamkart.client.map.objects.car.ClientOtherCar;
 import ch.bbcag.jamkart.utils.MathUtils;
@@ -21,24 +22,22 @@ public class EndScreen {
         this.app = app;
     }
 
-    public void drawEndScreen(GraphicsContext context, ClientMyCar car, List<ClientOtherCar> clientOtherCars) {
+    public void drawEndScreen(GraphicsContext context, List<ClientCar> cars) {
         double imgPosX = 650;
         double imgPosY = 110;
         final double MARGIN = 60;
-        Image image = new Image(getClass().getResourceAsStream("/grass.png"));
-        context.drawImage(image, 0, 0, Constants.GAME_WINDOW_WIDTH, Constants.GAME_WINDOW_HEIGHT);
+        //Image image = new Image(getClass().getResourceAsStream("/grass.png"));
+       // context.drawImage(image, 0, 0, Constants.GAME_WINDOW_WIDTH, Constants.GAME_WINDOW_HEIGHT);
 
         context.setFont(new Font(80));
         context.setFill(Color.BLACK);
         context.fillText(finished, Constants.GAME_WINDOW_WIDTH / 2 - MathUtils.getTextWidth(finished, context.getFont()) / 2, 100);
 
         context.setFont(new Font(42));
-        context.drawImage(car.getImage(), imgPosX, 50, 50, 50);
-        context.fillText(car.getName(), imgPosX + MARGIN, 90);
 
-        for (ClientOtherCar clientOtherCar : clientOtherCars) {
-            context.drawImage(clientOtherCar.getImage(), imgPosX, imgPosY, 50, 50);
-            context.fillText(clientOtherCar.getName(), imgPosX + MARGIN, imgPosY + MARGIN / 2);
+        for (ClientCar car : cars) {
+            context.drawImage(car.getImage(), imgPosX, imgPosY, 50, 50);
+            context.fillText(car.getName(), imgPosX + MARGIN, imgPosY + MARGIN / 2);
             imgPosY += MARGIN;
         }
 

@@ -3,6 +3,7 @@ package ch.bbcag.jamkart.client;
 import ch.bbcag.jamkart.Constants;
 import ch.bbcag.jamkart.JamKartApp;
 import ch.bbcag.jamkart.client.map.RoadPathTracker;
+import ch.bbcag.jamkart.client.map.objects.car.ClientCar;
 import ch.bbcag.jamkart.client.map.objects.car.ClientOtherCar;
 import ch.bbcag.jamkart.client.map.objects.GameObject;
 import javafx.scene.canvas.GraphicsContext;
@@ -11,7 +12,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 
 public class GamePainter {
 
@@ -38,7 +41,11 @@ public class GamePainter {
         } else {
             drawLobby(context);
         }
-        
+
+        if (game.getCar().isFinished()){
+            drawEndScreen(context);
+        }
+
         drawTimer(context);
     }
 
@@ -109,7 +116,10 @@ public class GamePainter {
     }
 
     private void drawEndScreen(GraphicsContext context){
-        endScreen.drawEndScreen(context, game.getCar(), game.getMap().getAllGameObjectsFromType(ClientOtherCar.class));
+        List<ClientCar> cars = game.getMap().getAllGameObjectsFromType(ClientCar.class);
+        cars.sort((o1, o2) -> Float.compare(o2.getFinishTime(), o1.getFinishTime()));
+
+        endScreen.drawEndScreen(context,cars);
     }
 
 }

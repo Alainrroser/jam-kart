@@ -43,7 +43,7 @@ public class Road {
         double[] yPoints = new double[numberOfPoints];
         int x;
 
-        for(int i = 0; i < numberOfPoints; i++) {
+        for (int i = 0; i < numberOfPoints; i++) {
             x = i * 2;
             xPoints[i] = polyline.getPoints().get(x);
             yPoints[i] = polyline.getPoints().get(x + 1);
@@ -59,13 +59,13 @@ public class Road {
         context.setLineDashes(LINE_DASHES);
         context.strokePolyline(xPoints, yPoints, numberOfPoints);
 
-//        context.setFill(Color.color(1.0f, 0.0f, 0.0f, 0.5));
-//        for(RoadPathMarker marker : pathMarkers) {
-//            float mx = marker.getPosition().getX();
-//            float my = marker.getPosition().getY();
-//            float mRadius = marker.getRadius();
-//            context.fillOval(mx - mRadius, my - mRadius, mRadius * 2, mRadius * 2);
-//        }
+        context.setFill(Color.color(1.0f, 0.0f, 0.0f, 0.5));
+        for (RoadPathMarker marker : pathMarkers) {
+            float mx = marker.getPosition().getX();
+            float my = marker.getPosition().getY();
+            float mRadius = marker.getRadius();
+            context.fillOval(mx - mRadius, my - mRadius, mRadius * 2, mRadius * 2);
+        }
     }
 
 }

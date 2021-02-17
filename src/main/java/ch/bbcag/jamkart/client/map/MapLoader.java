@@ -28,7 +28,6 @@ public class MapLoader {
         map.getRoad().addPathMarker(new RoadPathMarker(new Point(1000, -4700), 300));
         map.getRoad().addPathMarker(new RoadPathMarker(new Point(750, -5200), 300));
         map.getRoad().addPathMarker(new RoadPathMarker(new Point(400, -4200), 300));
-        map.getRoad().addPathMarker(new RoadPathMarker(new Point(400, -4200), 300));
         map.getRoad().addPathMarker(new RoadPathMarker(new Point(430, -3300), 300));
         map.getRoad().addPathMarker(new RoadPathMarker(new Point(200, -2500), 300));
         map.getRoad().addPathMarker(new RoadPathMarker(new Point(150, -1650), 300));
@@ -38,11 +37,16 @@ public class MapLoader {
         map.getRoad().addPoint(new Point(200, 200));
         map.getGameObjects().add(new BoostPad(new Point(700, 150), 90));
         map.getRoad().addPoint(new Point(2000, 200));
-        map.getRoad().addPoint(new Point(2050, 175));
+        map.getRoad().addPoint(new Point(2050, 190));
+        map.getRoad().addPoint(new Point(2100, 175));
+        map.getRoad().addPoint(new Point(2200, 125));
+        map.getRoad().addPoint(new Point(2300, 50));
         map.getGameObjects().add(new OilPuddle(new Point(2160, 122)));
-        map.getRoad().addPoint(new Point(2300, 0));
+        map.getRoad().addPoint(new Point(2350, -50));
+        map.getRoad().addPoint(new Point(2400, -150));
         map.getRoad().addPoint(new Point(2450, -350));
         map.getRoad().addPoint(new Point(2450, -450));
+        map.getRoad().addPoint(new Point(2400, -650));
         map.getRoad().addPoint(new Point(2300, -850));
         map.getRoad().addPoint(new Point(2050, -1050));
         map.getRoad().addPoint(new Point(2000, -1075));
@@ -51,6 +55,7 @@ public class MapLoader {
         map.getRoad().addPoint(new Point(1600, -1150));
         map.getRoad().addPoint(new Point(1550, -1250));
         map.getRoad().addPoint(new Point(1550, -1350));
+        map.getRoad().addPoint(new Point(1575, -1400));
         map.getRoad().addPoint(new Point(1600, -1450));
         map.getGameObjects().add(new OilPuddle(new Point(2967, -1980)));
         map.getRoad().addPoint(new Point(3000, -1600));
@@ -109,7 +114,7 @@ public class MapLoader {
         map.getGameObjects().add(new BoostPad(new Point(790, -4500), 0));
         map.getGameObjects().add(new BoostPad(new Point(790, -4600), 0));
         map.getGameObjects().add(new BoostPad(new Point(790, -4700), 0));
-        map.getGameObjects().add(new BoostPad(new Point(790, -4800), 0));
+        map.getGameObjects().add(new BoostPad(new Point(750, -4800), 0));
         map.getGameObjects().add(new Tree(new Point(700, -4900)));
         map.getGameObjects().add(new Tree(new Point(700, -4700)));
         map.getGameObjects().add(new Tree(new Point(700, -4500)));
