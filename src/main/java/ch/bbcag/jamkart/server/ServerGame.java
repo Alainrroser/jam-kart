@@ -120,7 +120,7 @@ public class ServerGame {
             connection.close();
             System.out.println("new player rejected, there are no ids left or the game has already started");
         } else {
-            int y = availableIdList.get(0) * Constants.CAR_SPAWN_DISTANCE + Constants.CAR_SPAWN_FIRST_Y;
+            float y = availableIdList.get(0) * Constants.CAR_SPAWN_DISTANCE + Constants.CAR_SPAWN_FIRST_Y;
 
             Message idMessage = new Message(MessageType.INITIAL_STATE);
             idMessage.addValue("id", availableIdList.get(0));

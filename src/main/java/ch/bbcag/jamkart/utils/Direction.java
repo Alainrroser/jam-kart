@@ -14,11 +14,6 @@ public class Direction {
         this.y = y;
     }
 
-    public Direction(Direction other) {
-        this.x = other.x;
-        this.y = other.y;
-    }
-
     public float getX() {
         return x;
     }
