@@ -3,7 +3,6 @@ package ch.bbcag.jamkart.server;
 import ch.bbcag.jamkart.Constants;
 import ch.bbcag.jamkart.JamKartApp;
 import ch.bbcag.jamkart.NetErrorMessages;
-import ch.bbcag.jamkart.scenes.Navigator;
 import ch.bbcag.jamkart.scenes.SceneBackToStart;
 import ch.bbcag.jamkart.scenes.SceneType;
 import ch.bbcag.jamkart.common.GameLoop;
@@ -20,7 +19,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class ServerGame {
 
     private JamKartApp app;
-    private Navigator navigator;
 
     private Server server;
     private boolean startMessageSent;
@@ -32,9 +30,8 @@ public class ServerGame {
 
     private float networkTickTimer = 0;
 
-    public ServerGame(JamKartApp app, Navigator navigator) {
+    public ServerGame(JamKartApp app) {
         this.app = app;
-        this.navigator = navigator;
     }
 
     public void start(int port) {
@@ -65,8 +62,8 @@ public class ServerGame {
             System.out.println("server started");
         } catch (IOException e) {
             String message = NetErrorMessages.COULD_NOT_CREATE_SERVER;
-            ((SceneBackToStart) navigator.getScene(SceneType.BACK_TO_START)).setMessage(message);
-            navigator.navigateTo(SceneType.BACK_TO_START, true);
+            ((SceneBackToStart) app.getNavigator().getScene(SceneType.BACK_TO_START)).setMessage(message);
+            app.getNavigator().navigateTo(SceneType.BACK_TO_START, true);
 
             System.err.println("couldn't start server");
         }
@@ -122,8 +119,6 @@ public class ServerGame {
             // if there are no available ids left
             connection.close();
             System.out.println("new player rejected, there are no ids left or the game has already started");
-            System.out.println(startMessageSent);
-            System.out.println(availableIdList);
         } else {
             int y = availableIdList.get(0) * Constants.CAR_SPAWN_DISTANCE + Constants.CAR_SPAWN_FIRST_Y;
 

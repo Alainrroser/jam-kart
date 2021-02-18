@@ -1,6 +1,5 @@
 package ch.bbcag.jamkart.client.map.objects;
 
-import ch.bbcag.jamkart.Constants;
 import ch.bbcag.jamkart.utils.DrawingUtils;
 import ch.bbcag.jamkart.utils.Point;
 import javafx.scene.canvas.GraphicsContext;
@@ -25,7 +24,7 @@ public class BoostPad extends GameObject {
     }
 
     @Override
-    public void update(float deltaTimeInSeconds) {
+    public void update(float deltaTimeInSec) {
 
     }
 

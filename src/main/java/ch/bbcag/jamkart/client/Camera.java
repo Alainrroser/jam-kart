@@ -28,7 +28,7 @@ public class Camera {
         position.setY(y);
     }
 
-    public void update(ClientMyCar car, Canvas canvas){
+    public void update(ClientMyCar car, Canvas canvas) {
         setX(car.getPosition().getX() - (float) (canvas.getWidth() / 2) + ClientCar.SIZE / 2);
         setY(car.getPosition().getY() - (float) (canvas.getHeight() / 2) + ClientCar.SIZE / 2);
     }

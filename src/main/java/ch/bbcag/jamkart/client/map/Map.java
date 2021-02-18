@@ -20,11 +20,11 @@ public class Map {
     }
 
     @SuppressWarnings("unchecked")
-    public <T> List<T> getAllGameObjectsFromType(Class<T> classToFind){
-        List<T> resultList = new ArrayList<T>();
-        for (GameObject gameobject : gameObjects) {
-            if (classToFind.isInstance(gameobject))
-                resultList.add((T)gameobject);
+    public <T> List<T> getAllGameObjectsFromType(Class<T> classToFind) {
+        List<T> resultList = new ArrayList<>();
+        for (GameObject gameObject : gameObjects) {
+            if (classToFind.isInstance(gameObject))
+                resultList.add((T) gameObject);
         }
 
         return resultList;

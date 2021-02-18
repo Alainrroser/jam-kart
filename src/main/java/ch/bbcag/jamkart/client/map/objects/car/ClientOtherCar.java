@@ -32,8 +32,8 @@ public class ClientOtherCar extends ClientCar {
     }
 
     @Override
-    public void update(float deltaTimeInSeconds) {
-        interpolation += deltaTimeInSeconds / Constants.NETWORK_TICK_TIME;
+    public void update(float deltaTimeInSec) {
+        interpolation += deltaTimeInSec / Constants.NETWORK_TICK_TIME;
 
         if(interpolation <= 1.0f) {
             float x = interpolate(lastPosition.getX(), nextPosition.getX(), interpolation);

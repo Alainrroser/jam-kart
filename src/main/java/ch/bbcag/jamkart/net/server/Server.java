@@ -19,6 +19,7 @@ public class Server extends Thread {
 
     @Override
     public void run() {
+        // Remove all disconnected clients from the list
         new Thread(() -> {
             while (!serverSocket.isClosed()) {
                 for (Connection connection : connections) {
@@ -47,16 +48,8 @@ public class Server extends Thread {
         }
     }
 
-    public ServerMessageHandler getServerMessageHandler() {
-        return serverMessageHandler;
-    }
-
     public void setServerMessageHandler(ServerMessageHandler serverMessageHandler) {
         this.serverMessageHandler = serverMessageHandler;
-    }
-
-    public boolean isRunning() {
-        return !serverSocket.isClosed();
     }
 
     public void close() {

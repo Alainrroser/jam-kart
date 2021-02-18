@@ -126,15 +126,16 @@ public class SceneJoinGame extends Scene {
     }
 
     private void validateInputAndJoinGame(Text ipError, Text portError, Text nameError) {
-        if (Validator.validateIP(inputIp.getText()) && Validator.validatePort(inputPort.getText()) && Validator.validateName(inputName.getText())) {
-            setErrorMessage(true, ipError);
-            setErrorMessage(true, portError);
-            setErrorMessage(true, nameError);
+        boolean isIpValid = Validator.validateIP(inputIp.getText());
+        boolean isPortValid = Validator.validatePort(inputPort.getText());
+        boolean isNameValid = Validator.validateName(inputName.getText());
+
+        setErrorMessage(isIpValid, ipError);
+        setErrorMessage(isPortValid, portError);
+        setErrorMessage(isNameValid, nameError);
+
+        if (isIpValid && isPortValid && isNameValid) {
             joinGame();
-        } else {
-            setErrorMessage(Validator.validateIP(inputIp.getText()), ipError);
-            setErrorMessage(Validator.validatePort(inputPort.getText()), portError);
-            setErrorMessage(Validator.validateName(inputName.getText()), nameError);
         }
     }
 
@@ -142,7 +143,7 @@ public class SceneJoinGame extends Scene {
         int port = Integer.parseInt(inputPort.getText());
 
         SceneGame newScene = (SceneGame) app.getNavigator().getScene(SceneType.GAME);
-        ClientGame clientGame = new ClientGame(newScene.getCanvas(), newScene.getKeyEventHandler(), app.getNavigator(), app);
+        ClientGame clientGame = new ClientGame(newScene.getCanvas(), newScene.getKeyEventHandler(), app);
         clientGame.load();
 
         app.getNavigator().navigateTo(SceneType.GAME, true);

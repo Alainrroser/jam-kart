@@ -11,11 +11,11 @@ public class Navigator {
     private Stage stage;
     private Map<SceneType, Scene> sceneMap = new HashMap<>();
 
-    public Navigator(Stage stage){
+    public Navigator(Stage stage) {
         this.stage = stage;
     }
 
-    public void navigateTo(SceneType sceneType, boolean centerStage){
+    public void navigateTo(SceneType sceneType, boolean centerStage) {
         stage.setScene(sceneMap.get(sceneType));
         stage.show();
 
@@ -24,7 +24,7 @@ public class Navigator {
         }
     }
 
-    public void registerScene(SceneType sceneType, Scene scene){
+    public void registerScene(SceneType sceneType, Scene scene) {
         sceneMap.put(sceneType, scene);
     }
 

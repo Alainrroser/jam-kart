@@ -22,7 +22,7 @@ public class Connection extends Thread {
     public void sendMessage(Message message) {
         try {
             String data = message.getStringFromMap();
-            if (data.contains(Message.TYPE)) {
+            if (message.getData().containsKey(Message.TYPE)) {
                 dataOutputStream.writeUTF(data);
                 dataOutputStream.flush();
             } else {
@@ -35,10 +35,11 @@ public class Connection extends Thread {
     }
 
     private void readMessage() throws IOException {
-        if (socket.getInputStream().available() > 0) {
+        if (socket.getInputStream().available() > 0) { // Are there more than 0 bytes available?
             Message message = new Message();
             String data = dataInputStream.readUTF();
             message.setMapFromString(data);
+
             if (messageHandler != null) {
                 messageHandler.handle(message);
             }

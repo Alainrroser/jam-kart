@@ -3,15 +3,14 @@ package ch.bbcag.jamkart.client;
 import ch.bbcag.jamkart.JamKartApp;
 import ch.bbcag.jamkart.NetErrorMessages;
 import ch.bbcag.jamkart.client.graphics.GamePainter;
+import ch.bbcag.jamkart.client.map.Map;
 import ch.bbcag.jamkart.client.map.MapLoader;
+import ch.bbcag.jamkart.client.map.RoadPathTracker;
+import ch.bbcag.jamkart.client.map.objects.GameObject;
 import ch.bbcag.jamkart.client.map.objects.car.ClientMyCar;
-import ch.bbcag.jamkart.scenes.Navigator;
+import ch.bbcag.jamkart.common.GameLoop;
 import ch.bbcag.jamkart.scenes.SceneBackToStart;
 import ch.bbcag.jamkart.scenes.SceneType;
-import ch.bbcag.jamkart.client.map.Map;
-import ch.bbcag.jamkart.client.map.RoadPathTracker;
-import ch.bbcag.jamkart.client.map.objects.*;
-import ch.bbcag.jamkart.common.GameLoop;
 import ch.bbcag.jamkart.utils.Point;
 import javafx.scene.canvas.Canvas;
 
@@ -21,7 +20,6 @@ public class ClientGame {
 
     private Canvas canvas;
     private KeyEventHandler keyEventHandler;
-    private Navigator navigator;
 
     private GameNetworking networking;
 
@@ -39,19 +37,10 @@ public class ClientGame {
 
     private JamKartApp app;
 
-    public ClientGame(Canvas canvas, KeyEventHandler keyEventHandler, Navigator navigator, JamKartApp app) {
+    public ClientGame(Canvas canvas, KeyEventHandler keyEventHandler, JamKartApp app) {
         this.canvas = canvas;
         this.keyEventHandler = keyEventHandler;
-        this.navigator = navigator;
         this.app = app;
-
-        /*
-        TODO: This class needs some serious refactoring.
-        My hope is that this TODO won't be forgotten
-        and thus won't appear in the final source code.
-
-        Please.
-        */
      }
 
     public void load() {
@@ -87,8 +76,8 @@ public class ClientGame {
             networking = null;
 
             String message = NetErrorMessages.COULD_NOT_INIT_CONNECTION;
-            ((SceneBackToStart) navigator.getScene(SceneType.BACK_TO_START)).setMessage(message);
-            navigator.navigateTo(SceneType.BACK_TO_START, true);
+            ((SceneBackToStart) app.getNavigator().getScene(SceneType.BACK_TO_START)).setMessage(message);
+            app.getNavigator().navigateTo(SceneType.BACK_TO_START, true);
 
             System.err.println("couldn't connect to server");
         }
@@ -137,8 +126,8 @@ public class ClientGame {
             stop();
 
             String message = NetErrorMessages.CONNECTION_LOST;
-            ((SceneBackToStart) navigator.getScene(SceneType.BACK_TO_START)).setMessage(message);
-            navigator.navigateTo(SceneType.BACK_TO_START, true);
+            ((SceneBackToStart) app.getNavigator().getScene(SceneType.BACK_TO_START)).setMessage(message);
+            app.getNavigator().navigateTo(SceneType.BACK_TO_START, true);
 
             System.err.println("connection to server lost");
         } else {
@@ -152,7 +141,7 @@ public class ClientGame {
                 }
 
                 stop();
-                navigator.navigateTo(SceneType.START, true);
+                app.getNavigator().navigateTo(SceneType.START, true);
             }
         }
     }

@@ -1,8 +1,8 @@
 package ch.bbcag.jamkart.client;
 
 import ch.bbcag.jamkart.Constants;
-import ch.bbcag.jamkart.client.map.objects.car.ClientOtherCar;
 import ch.bbcag.jamkart.client.map.objects.GameObject;
+import ch.bbcag.jamkart.client.map.objects.car.ClientOtherCar;
 import ch.bbcag.jamkart.net.Message;
 import ch.bbcag.jamkart.net.MessageType;
 import ch.bbcag.jamkart.net.client.Client;
@@ -63,7 +63,7 @@ public class GameNetworking {
                 processDisconnected(message);
                 break;
             case START_GAME:
-                processStartGame(message);
+                processStartGame();
                 break;
             case TIME:
                 processTime(message);
@@ -105,16 +105,14 @@ public class GameNetworking {
 
     private void processDisconnected(Message message) {
         int disconnectedId = Integer.parseInt(message.getValue("id"));
-        for (GameObject gameObject : game.getMap().getGameObjects()) {
-            if (gameObject instanceof ClientOtherCar) {
-                if (((ClientOtherCar) gameObject).getId() == disconnectedId) {
-                    game.getMap().getGameObjects().remove(gameObject);
-                }
-            }
+        ClientOtherCar otherCar = getOtherCarFromId(disconnectedId);
+
+        if (otherCar != null) {
+            game.getMap().getGameObjects().remove(otherCar);
         }
     }
 
-    private void processStartGame(Message message) {
+    private void processStartGame() {
         game.startCountdown();
     }
 

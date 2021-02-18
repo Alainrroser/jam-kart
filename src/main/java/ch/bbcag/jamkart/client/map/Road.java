@@ -41,10 +41,9 @@ public class Road {
         int numberOfPoints = polyline.getPoints().size() / 2;
         double[] xPoints = new double[numberOfPoints];
         double[] yPoints = new double[numberOfPoints];
-        int x;
 
         for (int i = 0; i < numberOfPoints; i++) {
-            x = i * 2;
+            int x = i * 2;
             xPoints[i] = polyline.getPoints().get(x);
             yPoints[i] = polyline.getPoints().get(x + 1);
         }

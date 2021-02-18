@@ -19,7 +19,7 @@ public class OilPuddle extends GameObject {
     }
 
     @Override
-    public void update(float deltaTimeInSeconds) {
+    public void update(float deltaTimeInSec) {
 
     }
 }

@@ -108,13 +108,14 @@ public class SceneCreateGame extends Scene {
     }
 
     private void validateInputAndCreateGame(Text portError, Text nameError) {
-        if (Validator.validatePort(inputPort.getText()) && Validator.validateName(inputName.getText())) {
-            setErrorMessage(true, portError);
-            setErrorMessage(true, nameError);
+        boolean isPortValid = Validator.validatePort(inputPort.getText());
+        boolean isNameValid = Validator.validateName(inputName.getText());
+
+        setErrorMessage(isPortValid, portError);
+        setErrorMessage(isNameValid, nameError);
+
+        if (isPortValid && isNameValid) {
             createGame();
-        } else {
-            setErrorMessage(Validator.validatePort(inputPort.getText()), portError);
-            setErrorMessage(Validator.validateName(inputName.getText()), nameError);
         }
     }
 
@@ -122,10 +123,10 @@ public class SceneCreateGame extends Scene {
     private void createGame() {
         int port = Integer.parseInt(inputPort.getText());
 
-        ServerGame serverGame = new ServerGame(app, app.getNavigator());
+        ServerGame serverGame = new ServerGame(app);
 
         SceneGame newScene = (SceneGame) app.getNavigator().getScene(SceneType.GAME);
-        ClientGame clientGame = new ClientGame(newScene.getCanvas(), newScene.getKeyEventHandler(), app.getNavigator(), app);
+        ClientGame clientGame = new ClientGame(newScene.getCanvas(), newScene.getKeyEventHandler(), app);
         clientGame.load();
 
         app.getNavigator().navigateTo(SceneType.GAME, true);
