@@ -15,6 +15,8 @@ public class JamKartApp extends Application {
     private ClientGame clientGame;
     private ServerGame serverGame;
 
+    private MediaPlayer mediaPlayer; // Must be added here so it doesn't get collected by garbage collector
+
     @Override
     public void start(Stage primaryStage) {
         navigator = new Navigator(primaryStage);
@@ -25,6 +27,7 @@ public class JamKartApp extends Application {
         navigator.registerScene(SceneType.BACK_TO_START, new SceneBackToStart(this));
         navigator.navigateTo(SceneType.START, true);
 
+        primaryStage.setTitle("JAM-Kart");
         primaryStage.setResizable(false);
         primaryStage.getIcons().add(new Image("/icon.png")); // Setting the window icon
 
@@ -34,8 +37,7 @@ public class JamKartApp extends Application {
     private void startMusic() {
         try {
             Media music = new Media(getClass().getResource("/music.wav").toURI().toString());
-            // Must be added here so it doesn't get collected by garbage collector
-            MediaPlayer mediaPlayer = new MediaPlayer(music);
+            mediaPlayer = new MediaPlayer(music);
             mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE); // Enable looping
             mediaPlayer.play();
         } catch(Exception e) {
