@@ -13,8 +13,6 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 public class GamePainter {
@@ -94,9 +92,7 @@ public class GamePainter {
     }
 
     private void drawTimer(GraphicsContext context) {
-        SimpleDateFormat format = new SimpleDateFormat("mm:ss");
-        long timeInMillis = (long) (game.getTimer().getTime() * 1000);
-        String timer = format.format(new Date(timeInMillis));
+        String timer = MathUtils.formatTimer(game.getTimer().getTime());
 
         context.setFont(new Font(40));
         context.setFill(Color.BLACK);
@@ -106,9 +102,11 @@ public class GamePainter {
     private void drawRank(GraphicsContext context) {
         context.setFont(new Font(80));
 
+        // Sort the list of cars by their progress
         List<ClientCar> cars = game.getMap().getAllGameObjectsFromType(ClientCar.class);
         cars.sort((c1, c2) -> Integer.compare(c2.getProgress(), c1.getProgress()));
 
+        // The index in the list + 1 is the rank of my car
         int index = cars.indexOf(game.getCar());
         int rank = index + 1;
 
@@ -128,10 +126,11 @@ public class GamePainter {
     }
 
     private void drawEndScreen(GraphicsContext context){
+        // Sort the list of cars by their finish time
         List<ClientCar> cars = game.getMap().getAllGameObjectsFromType(ClientCar.class);
         cars.sort((o1, o2) -> Float.compare(o1.getFinishTime(), o2.getFinishTime()));
 
-        endScreen.drawEndScreen(context,cars);
+        endScreen.drawEndScreen(context, cars);
     }
 
 }

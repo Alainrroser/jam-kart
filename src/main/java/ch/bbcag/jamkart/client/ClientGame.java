@@ -57,6 +57,8 @@ public class ClientGame {
         car.setName(name);
         createClient(ip, port);
 
+        // Only create all other objects if the GameNetworking has been created
+        // Otherwise the client has no connection to the server and no game is possible
         if (networking != null) {
             keyEventHandler.reset();
             painter = new GamePainter(this, app);
@@ -103,6 +105,8 @@ public class ClientGame {
     }
 
     private void update(float deltaTimeInSec) {
+        // Start the game if we are the server, the countdown hasn't been started
+        // and the space key is pressed
         if (app.getServerGame() != null && countdown == null) {
             if (keyEventHandler.isSpacePressed()) {
                 app.getServerGame().sendMessageStartGame();
@@ -123,6 +127,7 @@ public class ClientGame {
         camera.update(car, canvas);
 
         if (networking.isDisconnected()) {
+            // Stop the game and navigate back to the main menu
             stop();
 
             String message = NetErrorMessages.CONNECTION_LOST;
@@ -135,7 +140,10 @@ public class ClientGame {
         }
 
         if (car.isFinished()) {
+            // Return back to the main menu if the car has finished the game
+            // and the space key is pressed
             if (keyEventHandler.isSpacePressed()) {
+                // Don't forget to close the server when leaving if we are the server
                 if (app.getServerGame() != null) {
                     app.getServerGame().stop();
                 }
@@ -147,6 +155,7 @@ public class ClientGame {
     }
 
     public void stop() {
+        app.setClientGame(null);
         loop.stop();
         networking.closeClient();
     }

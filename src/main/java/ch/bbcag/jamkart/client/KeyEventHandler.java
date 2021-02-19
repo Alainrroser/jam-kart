@@ -71,6 +71,9 @@ public class KeyEventHandler implements EventHandler<KeyEvent> {
     }
 
     public void reset() {
+        // Reset all booleans because they might be in a wrong state
+        // when leaving and entering a scene again
+
         isForwardPressed = false;
         isBackwardPressed = false;
         isLeftPressed = false;

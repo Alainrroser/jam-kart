@@ -1,5 +1,6 @@
 package ch.bbcag.jamkart.client;
 
+import ch.bbcag.jamkart.utils.MathUtils;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -18,6 +19,8 @@ public class Countdown {
         String text = null;
         int roundedTimer = (int) Math.ceil(timer);
 
+        // Display "GO!" if the timer is equal to 0
+        // Otherwise we display only if the timer is greater than -1
         if (roundedTimer == 0) {
             text = "GO!";
         } else if(roundedTimer > -1) {
@@ -26,13 +29,14 @@ public class Countdown {
 
         context.setFont(new Font("Arial", 150));
 
-        Text textBox = new Text(text);
-        textBox.setFont(context.getFont());
-        double textWidth = textBox.getLayoutBounds().getWidth();
+        double textWidth = MathUtils.getTextWidth(text, context.getFont());
         double textX = context.getCanvas().getWidth() / 2 - textWidth / 2;
 
+        // Draw shadow
         context.setFill(Color.BLACK);
         context.fillText(text, textX, 210);
+
+        // Draw text
         context.setFill(Color.ORANGE);
         context.fillText(text, textX, 200);
     }

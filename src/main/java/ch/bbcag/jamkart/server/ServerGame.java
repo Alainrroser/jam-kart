@@ -120,15 +120,20 @@ public class ServerGame {
             connection.close();
             System.out.println("new player rejected, there are no ids left or the game has already started");
         } else {
+            // Calculate the y start position from the id
             float y = availableIdList.get(0) * Constants.CAR_SPAWN_DISTANCE + Constants.CAR_SPAWN_FIRST_Y;
 
+            // Send the ID and it's position to the client
             Message idMessage = new Message(MessageType.INITIAL_STATE);
             idMessage.addValue("id", availableIdList.get(0));
             idMessage.addValue("x", 0);
             idMessage.addValue("y", y);
             connection.sendMessage(idMessage);
 
+            // Add a new car to the list of all cars
             carList.add(new ServerCar(connection, availableIdList.get(0), message.getValue("name")));
+
+            // Remove the id from the list of available ids
             availableIdList.remove(0);
 
             System.out.println("new player joined the game!");
@@ -143,7 +148,7 @@ public class ServerGame {
                 car.setRotation(Float.parseFloat(message.getValue("rotation")));
                 car.setProgress(Integer.parseInt(message.getValue("progress")));
 
-                // Send the cars state to the other players
+                // Send the car's state to the other players
                 Message serverUpdateMessage = createUpdateMessageForCar(car);
                 sendMessageToOtherCars(car, serverUpdateMessage);
             }

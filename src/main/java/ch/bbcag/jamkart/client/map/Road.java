@@ -38,6 +38,11 @@ public class Road {
     }
 
     public void draw(GraphicsContext context) {
+        // Convert the list of x and y positions to a separate array
+        // for x and y positions because the "strokePolyline" method expects
+        // the latter as arguments but the "Polyline" class stores them
+        // as the former.
+
         int numberOfPoints = polyline.getPoints().size() / 2;
         double[] xPoints = new double[numberOfPoints];
         double[] yPoints = new double[numberOfPoints];
@@ -48,11 +53,13 @@ public class Road {
             yPoints[i] = polyline.getPoints().get(x + 1);
         }
 
+        // Draw the asphalt
         context.setStroke(Color.GRAY);
         context.setLineWidth(WIDTH);
         context.setLineDashes(0);
         context.strokePolyline(xPoints, yPoints, numberOfPoints);
 
+        // Draw the white dotted line
         context.setStroke(Color.WHITE);
         context.setLineWidth(LINE_WIDTH);
         context.setLineDashes(LINE_DASHES);
